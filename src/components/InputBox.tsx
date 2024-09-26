@@ -1,5 +1,5 @@
 import React from "react";
-import { InputProps } from "../types/props.types";
+import { InputProps } from "../types/common.types";
 
 
 const InputBox: React.FC<InputProps> = ({
@@ -30,9 +30,9 @@ const InputBox: React.FC<InputProps> = ({
             <option value="">
               Select your gender
             </option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-            <option value="other">Other</option>
+            <option value="m">Male</option>
+            <option value="f">Female</option>
+            <option value="o">Other</option>
           </select>
         </div>
       ) : (

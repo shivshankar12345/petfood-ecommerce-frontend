@@ -2,6 +2,10 @@ import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import InputBox from '../components/InputBox';
 import { IFormInput,LogInProps } from '../types/details.types';
+import axios from 'axios';
+import { baseURL } from '../env';
+import { useSelector } from 'react-redux';
+import { RootState } from '../Redux/store';
 
 const LogIn: React.FC<LogInProps> = ({ email }) => {
   const {
@@ -10,9 +14,21 @@ const LogIn: React.FC<LogInProps> = ({ email }) => {
     formState: { errors },
   } = useForm<IFormInput>();
 
-  const onSubmitDetails: SubmitHandler<IFormInput> = (data) => {
+  const {accessToken}=useSelector((state:RootState)=>state.auth)
+
+  const onSubmitDetails: SubmitHandler<IFormInput> = async (data) => {
     console.log(data);
     // Perform your form submission logic here (API call, etc.)
+    try{
+    const resp=await axios.patch(`${baseURL}/users/update`,{
+      name:data.name,
+      phone:data.phone,
+      gender:data.gender,
+    }, {headers:{Authorization:`Bearer ${accessToken}`}})
+  }
+    catch(error){
+      alert("Enter All Details");
+    }
   };
 
   console.log(errors);
@@ -30,8 +46,8 @@ const LogIn: React.FC<LogInProps> = ({ email }) => {
         register={registerDetails('name', {
           required: 'Name is required',
           minLength: {
-            value: 20,
-            message: 'Name must be at least 20 characters long',
+            value: 5,
+            message: 'Name must be at least 5 characters long',
           },
         })}
         handleSubmit={handleDetailsSubmit}

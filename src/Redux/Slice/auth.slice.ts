@@ -4,6 +4,7 @@ import { IntialState } from "../../types/login.types";
 const INITIAL_STATE:IntialState={
     accessToken:"",
     refreshToken:"",
+    // role:""
 }
 
 const authSlice=createSlice({

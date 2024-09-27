@@ -1,13 +1,26 @@
-import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import Sidebar from './Sidebar'; // Import the Sidebar component
 
-const Navbar: React.FC = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Sidebar state
-  const [searchQuery, setSearchQuery] = useState("");
+import React, { useState } from 'react';
+import { NavLink} from 'react-router-dom';
+// import { BrowserRouter as Router,Route, Routes  } from "react-router-dom";
+import Sidebar from './Sidebar'; // Assuming this is your existing sidebar
+import AdminSidebar from './AdminSidebar'; // Import the AdminSidebar component
+// import AdminPage from '../pages/AdminPage';
+
+interface NavbarProps {
+  role: string; // Role prop to determine visibility of the Admin button
+}
+
+const Navbar: React.FC<NavbarProps> = ({ role }) => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // State for the main sidebar
+  const [isAdminSidebarOpen, setIsAdminSidebarOpen] = useState(false); // State for the admin sidebar
+  const [searchQuery, setSearchQuery] = useState('');
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const toggleAdminSidebar = () => {
+    setIsAdminSidebarOpen(!isAdminSidebarOpen);
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -16,7 +29,7 @@ const Navbar: React.FC = () => {
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Search Query:", searchQuery);
+    console.log('Search Query:', searchQuery);
   };
 
   return (
@@ -84,6 +97,24 @@ const Navbar: React.FC = () => {
             >
               Cart
             </NavLink>
+
+            {/* Admin Button (Visible only if the role is admin or seller) */}
+            {(role === 'admin' || role === 'seller') && (
+              <NavLink to="/admin-dashboard">
+          <div className="flex justify-center">
+          <button
+  onClick={toggleAdminSidebar}
+  className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 transition duration-300"
+>
+  Admin
+</button>
+
+        </div>
+        </NavLink>
+        
+          
+          
+            )}
           </div>
 
           {/* Sidebar Toggle Button */}
@@ -107,10 +138,15 @@ const Navbar: React.FC = () => {
       </nav>
 
       {/* Sidebar */}
-      <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+      <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} toggleAdminSidebar={toggleAdminSidebar} role={role}/>
+
+      {/* Admin Sidebar */}
+    
+       {/* <AdminSidebar isOpen={isAdminSidebarOpen} toggleSidebar={toggleAdminSidebar} /> */}
     </>
   );
 };
 
 export default Navbar;
+
 

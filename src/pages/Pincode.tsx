@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Pincode = () => {
+const Pincode:React.FC = () => {
   return (
     <div>Pincode</div>
   )

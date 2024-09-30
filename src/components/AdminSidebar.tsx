@@ -1,43 +1,54 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import NavBar from './NavBar';
 
 const AdminSidebar: React.FC = () => {
-  return (
+  return ( 
     <div className="fixed top-18 left-0 h-full w-64 bg-gray-800 text-white z-50">
       <div className="p-4">
         <ul className="space-y-4">
           <li>
-            <NavLink to="/admin-dashboard" className="block hover:bg-gray-600 p-2">
-              Admin Dashboard
+             <NavLink
+            to="/admin-dashboard/manage-users"
+            className={({ isActive }) =>
+              isActive ? 'bg-gray-600 p-2 block' : 'p-2 block'
+            }
+          >
+            Manage Users
+          </NavLink>
+          </li>  
+          <li>
+            <NavLink to="/admin-dashboard/manage-sellers" className={({ isActive }) =>
+              isActive ? 'bg-gray-600 p-2 block' : 'p-2 block'
+            }>
+              Manage Sellers
             </NavLink>
           </li>
           <li>
-            <NavLink to="/manage-users" className="block hover:bg-gray-600 p-2">
-              Manage Users
+            <NavLink to="/admin-dashboard/roles" className={({ isActive }) =>
+              isActive ? 'bg-gray-600 p-2 block' : 'p-2 block'
+            }>
+              Roles
             </NavLink>
           </li>
           <li>
-            <NavLink to="/reports" className="block hover:bg-gray-600 p-2">
-              Reports
-            </NavLink>
-          </li>
-          <li>
-    <NavLink to="/audit-logs" className="block hover:bg-gray-600 p-2">
-      Audit Logs
+    <NavLink to="/admin-dashboard/permisions" className={({ isActive }) =>
+              isActive ? 'bg-gray-600 p-2 block' : 'p-2 block'
+            }>
+      Permissions
     </NavLink>
   </li>
   <li>
-    <NavLink to="/settings" className="block hover:bg-gray-600 p-2">
-      Settings
-    </NavLink>
-  </li>
-  <li>
-    <NavLink to="/notifications" className="block hover:bg-gray-600 p-2">
+    <NavLink to="/admin-dashboard/notifications" className={({ isActive }) =>
+              isActive ? 'bg-gray-600 p-2 block' : 'p-2 block'
+            }>
       Notifications
     </NavLink>
   </li>
   <li>
-    <NavLink to="/task-list" className="block hover:bg-gray-600 p-2">
+    <NavLink to="/admin-dashboard/task-management" className={({ isActive }) =>
+              isActive ? 'bg-gray-600 p-2 block' : 'p-2 block'
+            }>
       Task Management
     </NavLink>
   </li>

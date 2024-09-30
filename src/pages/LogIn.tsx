@@ -35,7 +35,6 @@ const LogIn: React.FC<LogInProps> = ({ email }) => {
 
   return (
     <div className="max-w-md mx-auto bg-white rounded-lg shadow-lg p-6 space-y-6">
-      {/* <h2 className="text-2xl font-semibold text-center text-gray-800">Sign Up</h2> */}
 
       {/* Name Input */}
       <InputBox

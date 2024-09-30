@@ -1,16 +1,16 @@
-
 import React, { useState } from 'react';
 import { NavLink} from 'react-router-dom';
 // import { BrowserRouter as Router,Route, Routes  } from "react-router-dom";
 import Sidebar from './Sidebar'; // Assuming this is your existing sidebar
-import AdminSidebar from './AdminSidebar'; // Import the AdminSidebar component
+import AdminSidebar from './AdminSidebar';
+//import AdminSidebar from './AdminSidebar'; // Import the AdminSidebar component
 // import AdminPage from '../pages/AdminPage';
 
 interface NavbarProps {
   role: string; // Role prop to determine visibility of the Admin button
 }
 
-const Navbar: React.FC<NavbarProps> = ({ role }) => {
+const Navbar: React.FC<NavbarProps> = ({ role}) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // State for the main sidebar
   const [isAdminSidebarOpen, setIsAdminSidebarOpen] = useState(false); // State for the admin sidebar
   const [searchQuery, setSearchQuery] = useState('');
@@ -80,6 +80,14 @@ const Navbar: React.FC<NavbarProps> = ({ role }) => {
               }
             >
               Contact
+            </NavLink> 
+            <NavLink
+              to="/cart"
+              className={({ isActive }) =>
+                `text-white hover:text-gray-200 transition duration-300 ${isActive ? 'font-bold' : ''}`
+              }
+            >
+              Cart
             </NavLink>
             <NavLink
               to="/signup"
@@ -89,14 +97,6 @@ const Navbar: React.FC<NavbarProps> = ({ role }) => {
             >
               Sign Up
             </NavLink>
-            <NavLink
-              to="/cart"
-              className={({ isActive }) =>
-                `text-white hover:text-gray-200 transition duration-300 ${isActive ? 'font-bold' : ''}`
-              }
-            >
-              Cart
-            </NavLink>
 
             {/* Admin Button (Visible only if the role is admin or seller) */}
             {(role === 'admin' || role === 'seller') && (
@@ -104,17 +104,13 @@ const Navbar: React.FC<NavbarProps> = ({ role }) => {
           <div className="flex justify-center">
           <button
   onClick={toggleAdminSidebar}
-  className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 transition duration-300"
->
+  className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 transition duration-300">
   Admin
 </button>
 
         </div>
         </NavLink>
-        
-          
-          
-            )}
+        )}
           </div>
 
           {/* Sidebar Toggle Button */}
@@ -141,8 +137,7 @@ const Navbar: React.FC<NavbarProps> = ({ role }) => {
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} toggleAdminSidebar={toggleAdminSidebar} role={role}/>
 
       {/* Admin Sidebar */}
-    
-       {/* <AdminSidebar isOpen={isAdminSidebarOpen} toggleSidebar={toggleAdminSidebar} /> */}
+      {isAdminSidebarOpen && <AdminSidebar />}
     </>
   );
 };

@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const Carousel = () => {
+const Carousel:React.FC = () => {
     //   const [images, setImages] = useState([]);
 //   const [currentIndex, setCurrentIndex] = useState(0);
 

@@ -13,11 +13,7 @@
   import Carousel from './components/Carousel';
 
   function App() {
-  // const axiosInstance=axios({baseURL:"http://localhost:8080/api"})
-  // axios.interceptors.request.use((request)=> request)
-  // axios.interceptors.response.use((response)=> response,(err)=>{
-  //   const {config, response} = err;
-  // })
+
   return <>
     <Router>
     <NavBar role="admin"  />

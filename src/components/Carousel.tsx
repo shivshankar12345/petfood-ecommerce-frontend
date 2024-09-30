@@ -1,22 +1,7 @@
 import { useState } from "react";
 
 const Carousel:React.FC = () => {
-    //   const [images, setImages] = useState([]);
-//   const [currentIndex, setCurrentIndex] = useState(0);
 
-//   // Fetch images from backend
-//   useEffect(() => {
-//     const fetchImages = async () => {
-//       try {
-//         const response = await axios.get("your-backend-endpoint");
-//         setImages(response.data); // Assuming the data is an array of image URLs
-//       } catch (error) {
-//         console.error("Error fetching images:", error);
-//       }
-//     };
-
-//     fetchImages();
-//   }, []);
   // Static array of image URLs for now
   const images = [
     "https://via.placeholder.com/1920x1080?text=Image+1",

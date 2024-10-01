@@ -12,4 +12,13 @@ export interface InputProps {
     value: string;
     disabled?: boolean;
   }
+  export interface NavbarProps {
+    role: string; 
+  }
+  
+  export interface SidebarProps {
+    isOpen: boolean;
+    toggleSidebar: () => void;
+    role: string; 
+  }
   

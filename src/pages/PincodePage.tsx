@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Pincode:React.FC = () => {
+const PincodePage:React.FC = () => {
   return (
     <div>Pincode</div>
   )
 }
 
-export default Pincode
+export default PincodePage;

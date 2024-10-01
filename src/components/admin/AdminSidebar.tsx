@@ -1,6 +1,5 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import NavBar from './NavBar';
 
 const AdminSidebar: React.FC = () => {
   return ( 
@@ -9,7 +8,7 @@ const AdminSidebar: React.FC = () => {
         <ul className="space-y-4">
           <li>
              <NavLink
-            to="/admin-dashboard/manage-users"
+            to="/admin-dashboard/manage-users" 
             className={({ isActive }) =>
               isActive ? 'bg-gray-600 p-2 block' : 'p-2 block'
             }

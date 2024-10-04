@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { User } from "../../types/user.types";
 import { columns as userTableColumns } from "../../components/Tables/UserTable"; // Reuse columns from UserTable
-
+import useAPIs from "../../hooks/useApi";
+ 
 const ManagerUserPage: React.FC = () => {
+  const { makeAPICallWithOutData } = useAPIs();
   // Mock data for users
   const mockUsers: User[] = [
     {
@@ -39,11 +41,11 @@ const ManagerUserPage: React.FC = () => {
       deleted_at: null, // Add deleted_at
     },
   ];
-
+ 
   const [users, setUsers] = useState<User[]>(mockUsers);
-
+ 
   const [actionLoading, setActionLoading] = useState<boolean>(false);
-
+ 
   // Mock Block/Unblock handler
   const handleBlockUnblock = (userId: string, block: boolean) => {
     setActionLoading(true);
@@ -54,7 +56,7 @@ const ManagerUserPage: React.FC = () => {
     );
     setActionLoading(false);
   };
-
+ 
   // Mock Verify/Unverify handler
   const handleVerifyUnverify = (userId: string, verify: boolean) => {
     setActionLoading(true);
@@ -65,7 +67,18 @@ const ManagerUserPage: React.FC = () => {
     );
     setActionLoading(false);
   };
-
+ 
+  async function fetchUsers() {
+    const response = await makeAPICallWithOutData(
+      "get",
+      "/admin-panel/getUsers"
+    );
+    console.log(users);
+    setUsers(response.response?.data?.users);
+  }
+  useEffect(() => {
+    fetchUsers();
+  }, []);
   // Add action buttons to the columns
   const columns = [
     ...userTableColumns, // Spread the columns from UserTable
@@ -91,7 +104,7 @@ const ManagerUserPage: React.FC = () => {
               Block
             </button>
           )}
-
+ 
           {/* Verify/Unverify Button */}
           {row.is_verfied ? (
             <button
@@ -117,11 +130,11 @@ const ManagerUserPage: React.FC = () => {
       button: true,
     },
   ];
-
+ 
   return (
     <div className="p-4">
       <h2 className="text-xl font-bold mb-4">Manage Users</h2>
-
+ 
       {/* DataTable Component */}
       <DataTable
         columns={columns}

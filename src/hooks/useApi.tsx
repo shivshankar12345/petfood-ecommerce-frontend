@@ -1,42 +1,35 @@
-import { useState, useEffect } from "react";
-import apiClient from "../api/apiClient";
+import axios from "axios";
+import { baseURL } from "../env";
 
-const useApi = (
-  endpoint: string,
-  method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
-  body = null,
-  dependencies = []
-) => {
-  const [data, setData] = useState(null);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const response = await apiClient({
-          url: endpoint,
-          method: method,
-          data: body,
-        });
-        setData(response.data);
-      } catch (error) {
-        if (error instanceof Error) {
-          setError(error.message);
-        } else {
-          setError("An unexpected error occurred.");
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [endpoint, method, body, ...dependencies]);
-
-  return { data, error, loading };
+const useAPIs = () => {
+  const makeAPICallWithData = async (
+    method: "post" | "put" | "patch",
+    path: string,
+    body: any,
+    headers?: any
+  ) => {
+    try {
+      const response = await axios[method](`${baseURL}${path}`, body, headers);
+      return { isError: false, response };
+    } catch (error) {
+      return { isError: true, error };
+    }
+  };
+ 
+  const makeAPICallWithOutData = async (
+    method: "get" | "delete",
+    path: string,
+    headers?: any
+  ) => {
+    try {
+      const response = await axios[method](`${baseURL}${path}`, headers);
+      return { isError: false, response };
+    } catch (error) {
+      return { isError: true, error };
+    }
+  };
+ 
+  return { makeAPICallWithData, makeAPICallWithOutData };
 };
-
-export default useApi;
+ 
+export default useAPIs;

@@ -8,7 +8,7 @@ const PincodeModal: React.FC<PincodeModalProps> = ({ isOpen, onClose }) => {
     e.preventDefault();
     // Handle the pincode submission logic here
     console.log('Pincode submitted:', pincode);
-    onClose(); // Close
+    onClose?onClose():""; // Close
   };
  
   if (!isOpen) return null;

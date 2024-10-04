@@ -3,6 +3,12 @@ import Sidebar from './Sidebar';
 import { NavbarProps } from '../types/common.types';
 import useNavbar from '../hooks/useNavBar';
 
+import Sidebar from './Sidebar'; 
+import { NavbarProps } from '../types/common.types';
+import useNavbar from '../hooks/useNavBar';
+import PincodeModal from '../pages/PincodePage';
+import { useState } from 'react';
+
 
 const Navbar: React.FC<NavbarProps> = ({ role}) => {
     const {

@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Cart:React.FC = () => {
+const CartPage:React.FC = () => {
   return (
     <div>Cart</div>
   )
 }
 
-export default Cart
+export default CartPage;

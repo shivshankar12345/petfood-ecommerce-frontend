@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ManageSellers: React.FC = () => {
+const ManageSellersPage: React.FC = () => {
   return (
     <div>
       <h1 className='text-center'>Manage Sellers</h1>
@@ -9,4 +9,4 @@ const ManageSellers: React.FC = () => {
   );
 };
 
-export default ManageSellers;
+export default ManageSellersPage;

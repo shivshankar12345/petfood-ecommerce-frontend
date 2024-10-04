@@ -1,5 +1,3 @@
-
-
 import React, { useState } from "react";
 import DataTable from "react-data-table-component";
 import { User } from "../../types/user.types";
@@ -41,7 +39,6 @@ const ManagerUserPage: React.FC = () => {
       deleted_at: null, // Add deleted_at
     },
   ];
-  
 
   const [users, setUsers] = useState<User[]>(mockUsers);
 
@@ -50,8 +47,8 @@ const ManagerUserPage: React.FC = () => {
   // Mock Block/Unblock handler
   const handleBlockUnblock = (userId: string, block: boolean) => {
     setActionLoading(true);
-    setUsers((prevUsers) =>
-      prevUsers.map((user) =>
+    setUsers(prevUsers =>
+      prevUsers.map(user =>
         user.id === userId ? { ...user, is_Blocked: block } : user
       )
     );
@@ -61,8 +58,8 @@ const ManagerUserPage: React.FC = () => {
   // Mock Verify/Unverify handler
   const handleVerifyUnverify = (userId: string, verify: boolean) => {
     setActionLoading(true);
-    setUsers((prevUsers) =>
-      prevUsers.map((user) =>
+    setUsers(prevUsers =>
+      prevUsers.map(user =>
         user.id === userId ? { ...user, is_verfied: verify } : user
       )
     );
@@ -136,44 +133,32 @@ const ManagerUserPage: React.FC = () => {
         subHeader
         subHeaderComponent={
           <div className="flex justify-between items-center">
-            <div className="text-gray-600">Total Users: {data.length}</div>
+            <div className="text-gray-600">Total Users: {users.length}</div>
             <button className="bg-indigo-500 text-white py-2 px-4 rounded-lg shadow hover:bg-indigo-600 transition duration-200">
               Add User
             </button>
           </div>
         }
-        noDataComponent={<div className="text-center py-4">No users found.</div>}
+        noDataComponent={
+          <div className="text-center py-4">No users found.</div>
+        }
         customStyles={{
           headCells: {
             style: {
-              backgroundColor: '#f3f4f6',
-              color: '#4b5563',
-              fontWeight: 'bold',
-              padding: '12px',
+              backgroundColor: "#f3f4f6",
+              color: "#4b5563",
+              fontWeight: "bold",
+              padding: "12px",
             },
           },
           cells: {
             style: {
-              padding: '12px',
+              padding: "12px",
             },
           },
         }}
       />
-=========
-import React from 'react';
-
-const ManageUsersPage: React.FC = () => {
-  return (
-    <div >
-      <h1 className='text-center'>Manage Users</h1>
-      {/* Manage Users page content */}
->>>>>>>>> Temporary merge branch 2
     </div>
   );
 };
-
-<<<<<<<<< Temporary merge branch 1
-export default ManageUserPage;
-=========
-export default ManageUsersPage;
->>>>>>>>> Temporary merge branch 2
+export default ManagerUserPage;

@@ -14,9 +14,6 @@ const persistedReducer = persistReducer(persistConfig, authReducers)
  
 export const store = configureStore({
   reducer: {
-
-     auth: persistedReducer
-
      auth: persistedReducer,
      products: productReducer,
 

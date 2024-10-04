@@ -24,6 +24,7 @@ const AdminSidebar: React.FC = () => {
             </NavLink>
           </li>
           <li>
+
             <NavLink to="/admin-dashboard/manage-product" className={({ isActive }) =>
               isActive ? 'bg-gray-600 p-2 block' : 'p-2 block'
             }>
@@ -31,6 +32,7 @@ const AdminSidebar: React.FC = () => {
             </NavLink>
           </li>
           <li>
+
             <NavLink to="/admin-dashboard/roles" className={({ isActive }) =>
               isActive ? 'bg-gray-600 p-2 block' : 'p-2 block'
             }>

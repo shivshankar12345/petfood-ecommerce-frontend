@@ -131,13 +131,49 @@ const ManagerUserPage: React.FC = () => {
         data={users}
         pagination
         highlightOnHover
-        striped
+        pointerOnHover
+        className="border border-gray-300 rounded-lg"
+        subHeader
+        subHeaderComponent={
+          <div className="flex justify-between items-center">
+            <div className="text-gray-600">Total Users: {data.length}</div>
+            <button className="bg-indigo-500 text-white py-2 px-4 rounded-lg shadow hover:bg-indigo-600 transition duration-200">
+              Add User
+            </button>
+          </div>
+        }
+        noDataComponent={<div className="text-center py-4">No users found.</div>}
+        customStyles={{
+          headCells: {
+            style: {
+              backgroundColor: '#f3f4f6',
+              color: '#4b5563',
+              fontWeight: 'bold',
+              padding: '12px',
+            },
+          },
+          cells: {
+            style: {
+              padding: '12px',
+            },
+          },
+        }}
       />
+=========
+import React from 'react';
 
-      {/* Action Loading Indicator */}
-      {actionLoading && <div>Performing action, please wait...</div>}
+const ManageUsersPage: React.FC = () => {
+  return (
+    <div >
+      <h1 className='text-center'>Manage Users</h1>
+      {/* Manage Users page content */}
+>>>>>>>>> Temporary merge branch 2
     </div>
   );
 };
 
-export default ManagerUserPage;
+<<<<<<<<< Temporary merge branch 1
+export default ManageUserPage;
+=========
+export default ManageUsersPage;
+>>>>>>>>> Temporary merge branch 2

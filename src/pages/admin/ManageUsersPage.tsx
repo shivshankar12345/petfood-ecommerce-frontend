@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { User } from "../../types/user.types";
 import { columns as userTableColumns } from "../../components/Tables/UserTable"; // Reuse columns from UserTable
+import useAPIs from "../../hooks/useApi";
 
 const ManagerUserPage: React.FC = () => {
+  const { makeAPICallWithOutData } = useAPIs();
   // Mock data for users
   const mockUsers: User[] = [
     {
@@ -20,7 +22,7 @@ const ManagerUserPage: React.FC = () => {
       is_Blocked: false,
       created_at: "2023-10-01T08:00:00Z",
       updated_at: "2023-10-01T08:00:00Z",
-      deleted_at: null, // Add deleted_at with null or actual date if deleted
+      deleted_at: null, 
     },
     {
       id: "2",
@@ -44,7 +46,7 @@ const ManagerUserPage: React.FC = () => {
 
   const [actionLoading, setActionLoading] = useState<boolean>(false);
 
-  // Mock Block/Unblock handler
+
   const handleBlockUnblock = (userId: string, block: boolean) => {
     setActionLoading(true);
     setUsers(prevUsers =>
@@ -55,7 +57,6 @@ const ManagerUserPage: React.FC = () => {
     setActionLoading(false);
   };
 
-  // Mock Verify/Unverify handler
   const handleVerifyUnverify = (userId: string, verify: boolean) => {
     setActionLoading(true);
     setUsers(prevUsers =>
@@ -66,14 +67,12 @@ const ManagerUserPage: React.FC = () => {
     setActionLoading(false);
   };
 
-  // Add action buttons to the columns
   const columns = [
-    ...userTableColumns, // Spread the columns from UserTable
+    ...userTableColumns,
     {
       name: "Actions",
       cell: (row: User) => (
         <div className="flex space-x-2">
-          {/* Block/Unblock Button */}
           {row.is_Blocked ? (
             <button
               className="bg-red-500 text-white px-2 py-1 rounded"
@@ -134,9 +133,6 @@ const ManagerUserPage: React.FC = () => {
         subHeaderComponent={
           <div className="flex justify-between items-center">
             <div className="text-gray-600">Total Users: {users.length}</div>
-            <button className="bg-indigo-500 text-white py-2 px-4 rounded-lg shadow hover:bg-indigo-600 transition duration-200">
-              Add User
-            </button>
           </div>
         }
         noDataComponent={

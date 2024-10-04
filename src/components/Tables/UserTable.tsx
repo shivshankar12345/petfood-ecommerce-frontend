@@ -1,4 +1,3 @@
-import React from "react";
 import DataTable from "react-data-table-component";
 import { User } from "../../types/user.types";
 
@@ -8,7 +7,7 @@ interface UserTableProps {
   error: string | null;
 }
 
-// Define and export columns to be reused elsewhere
+
 export const columns = [
   {
     name: "ID",

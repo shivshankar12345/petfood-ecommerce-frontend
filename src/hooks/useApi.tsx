@@ -1,42 +1,36 @@
-import { useState, useEffect } from "react";
-import apiClient from "../api/apiClient";
+import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 
-const useApi = (
-  endpoint: string,
-  method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
-  body = null,
-  dependencies = []
-) => {
-  const [data, setData] = useState(null);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+const baseurl = 'http://localhost:8080';
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const response = await apiClient({
-          url: endpoint,
-          method: method,
-          data: body,
-        });
-        setData(response.data);
-      } catch (error) {
-        if (error instanceof Error) {
-          setError(error.message);
-        } else {
-          setError("An unexpected error occurred.");
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
+const useApi = () =>{
+  const makeAPICallWithOutData = async<T = any,>(
+    method: "post" | "put"| "patch",
+    path: string,
+    body:T,
+    headers?:AxiosRequestConfig
+  ):Promise<{isError:boolean;response?:AxiosResponse;error?:any}> =>{
+    try{
+      const response = await axios[method](`${baseurl}${path}`,body, headers);
+      return {isError:false, response};
+    }
+    catch(error){
+      return {isError:true,error};
+    }
+  };
 
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [endpoint, method, body, ...dependencies]);
-
-  return { data, error, loading };
+  const makeAPICallWithData = async(
+    method: "get" |"delete",
+    path:string,
+    headers?: AxiosRequestConfig
+  ):Promise<{isError:boolean;response?:AxiosResponse;error?:any}> =>{
+    try{
+      const response = await axios[method](`${baseurl}${path}`, headers);
+      return {isError:false,response}
+    }
+    catch(error){
+      return {isError:true, error}
+    }
+  };
+   return {makeAPICallWithOutData, makeAPICallWithData};
 };
-
 export default useApi;

@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import { PincodeModalProps } from '../types/common.types';
-
+ 
 const PincodeModal: React.FC<PincodeModalProps> = ({ isOpen, onClose }) => {
   const [pincode, setPincode] = useState('');
-
+ 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Handle the pincode submission logic here
     console.log('Pincode submitted:', pincode);
-    onClose(); // Close 
+    onClose(); // Close
   };
-
+ 
   if (!isOpen) return null;
-
+ 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70">
       <div className="bg-white p-8 rounded-lg shadow-lg w-96">
@@ -46,6 +46,7 @@ const PincodeModal: React.FC<PincodeModalProps> = ({ isOpen, onClose }) => {
     </div>
   );
 };
-
+ 
 export default PincodeModal;
+
 

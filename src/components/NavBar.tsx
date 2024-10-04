@@ -1,15 +1,11 @@
 import { NavLink} from 'react-router-dom';
-import Sidebar from './Sidebar'; 
-import { NavbarProps } from '../types/common.types';
-import useNavbar from '../hooks/useNavBar';
-
-import Sidebar from './Sidebar'; 
+import Sidebar from './Sidebar';
 import { NavbarProps } from '../types/common.types';
 import useNavbar from '../hooks/useNavBar';
 import PincodeModal from '../pages/PincodePage';
 import { useState } from 'react';
-
-
+ 
+ 
 const Navbar: React.FC<NavbarProps> = ({ role}) => {
     const {
       isSidebarOpen,
@@ -18,6 +14,8 @@ const Navbar: React.FC<NavbarProps> = ({ role}) => {
       handleSearchChange,
       handleSearchSubmit,
     } = useNavbar();
+ 
+    const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <>
       {/* Navbar */}
@@ -31,7 +29,7 @@ const Navbar: React.FC<NavbarProps> = ({ role}) => {
             />
             <span className="text-white text-2xl font-bold">Website</span>
           </div>
-
+ 
           {/* Search Field */}
           <form onSubmit={handleSearchSubmit} className="hidden lg:flex items-center">
             <input
@@ -48,11 +46,12 @@ const Navbar: React.FC<NavbarProps> = ({ role}) => {
               Search
             </button>
           </form>
-
+ 
           {/* Desktop Menu */}
           <div className="hidden lg:flex space-x-6">
             <NavLink
               to="/pincode"
+              onClick={() => setIsModalOpen(true)}
               className={({ isActive }) =>
                 `text-white hover:text-gray-200 transition duration-300 ${isActive ? 'font-bold' : ''}`
               }
@@ -66,7 +65,7 @@ const Navbar: React.FC<NavbarProps> = ({ role}) => {
               }
             >
               Contact
-            </NavLink> 
+            </NavLink>
             <NavLink
               to="/cart"
               className={({ isActive }) =>
@@ -83,7 +82,7 @@ const Navbar: React.FC<NavbarProps> = ({ role}) => {
             >
               Sign Up
             </NavLink>
-
+ 
             {/* Admin Button (Visible only if the role is admin or seller) */}
             {(role === 'admin' || role === 'seller') && (
               <NavLink to="/admin-dashboard/*">
@@ -92,12 +91,12 @@ const Navbar: React.FC<NavbarProps> = ({ role}) => {
   className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 transition duration-300">
   Admin
 </button>
-
+ 
         </div>
         </NavLink>
         )}
           </div>
-
+ 
           {/* Sidebar Toggle Button */}
           <button className="lg:hidden text-white" onClick={toggleSidebar}>
             <svg
@@ -117,13 +116,18 @@ const Navbar: React.FC<NavbarProps> = ({ role}) => {
           </button>
         </div>
       </nav>
-
+ 
       {/* Sidebar */}
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar}  role={role}/>
+ 
+      {/* Pincode Modal */}
+      <PincodeModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </>
   );
 };
-
+ 
 export default Navbar;
-
-
+ 
+ 
+ 
+ 

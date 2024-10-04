@@ -3,6 +3,10 @@ import Sidebar from './Sidebar';
 import { NavbarProps } from '../types/common.types';
 import useNavbar from '../hooks/useNavBar';
 
+import PincodeModal from '../pages/PincodePage';
+import { useState } from 'react';
+
+
 
 const Navbar: React.FC<NavbarProps> = ({ role}) => {
     const {
@@ -12,6 +16,10 @@ const Navbar: React.FC<NavbarProps> = ({ role}) => {
       handleSearchChange,
       handleSearchSubmit,
     } = useNavbar();
+
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <>
       {/* Navbar */}
@@ -47,6 +55,7 @@ const Navbar: React.FC<NavbarProps> = ({ role}) => {
           <div className="hidden lg:flex space-x-6">
             <NavLink
               to="/pincode"
+              onClick={() => setIsModalOpen(true)}
               className={({ isActive }) =>
                 `text-white hover:text-gray-200 transition duration-300 ${isActive ? 'font-bold' : ''}`
               }
@@ -114,6 +123,11 @@ const Navbar: React.FC<NavbarProps> = ({ role}) => {
 
       {/* Sidebar */}
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar}  role={role}/>
+
+
+      {/* Pincode Modal */}
+      <PincodeModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+
     </>
   );
 };

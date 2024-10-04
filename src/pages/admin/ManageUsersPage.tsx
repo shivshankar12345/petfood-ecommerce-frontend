@@ -86,8 +86,7 @@ const ManageUserPage: React.FC = () => {
           },
         }}
       />
-    </div>
-  );
-};
 
 export default ManageUserPage;
+
+

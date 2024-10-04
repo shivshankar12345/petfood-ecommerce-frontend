@@ -1,14 +1,9 @@
 import React from 'react';
 import { NavLink } from "react-router-dom";
+import { SidebarProps } from '../types/common.types';
 
-interface SidebarProps {
-  isOpen: boolean;
-  toggleSidebar: () => void;
-  role: string; 
-  toggleAdminSidebar:()=>void;
-}
 
-const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar,role,toggleAdminSidebar }) => {
+const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar,role }) => {
   return (
     <div
       className={`fixed top-0 right-0 h-full w-64 bg-indigo-700 text-white transform transition-transform duration-300 ${
@@ -43,7 +38,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar,role,toggleAdmi
            {/* Admin Button (Visible only if the role is admin or seller) */}
            {(role === 'admin' || role === 'seller') && (<div  className="flex justify-center">
             <li>
-              <button  onClick={toggleAdminSidebar}
+              <button  
   className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 transition duration-300">
               <NavLink to="/admin-dashboard" className="block hover:bg-red-600 p-2">
                 Admin 

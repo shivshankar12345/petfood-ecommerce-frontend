@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Roles: React.FC = () => {
+const RolesPage: React.FC = () => {
   return (
     <div>
       <h1 className='text-center'>Roles</h1>
@@ -9,4 +9,4 @@ const Roles: React.FC = () => {
   );
 };
 
-export default Roles;
+export default RolesPage;

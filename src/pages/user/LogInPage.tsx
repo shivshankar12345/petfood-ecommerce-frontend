@@ -1,13 +1,13 @@
 import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import InputBox from '../components/InputBox';
-import { IFormInput,LogInProps } from '../types/details.types';
+import InputBox from '../../components/InputBox';
+import { IFormInput,LogInProps } from '../../types/details.types';
 import axios from 'axios';
-import { baseURL } from '../env';
+import { baseURL } from '../../env';
 import { useSelector } from 'react-redux';
-import { RootState } from '../Redux/store';
+import { RootState } from '../../Redux/store';
 
-const LogIn: React.FC<LogInProps> = ({ email }) => {
+const LogInPage: React.FC<LogInProps> = ({ email }) => {
   const {
     register: registerDetails,
     handleSubmit: handleDetailsSubmit,
@@ -25,6 +25,7 @@ const LogIn: React.FC<LogInProps> = ({ email }) => {
       phone:data.phone,
       gender:data.gender,
     }, {headers:{Authorization:`Bearer ${accessToken}`}})
+    console.log(resp);
   }
     catch(error){
       alert("Enter All Details");
@@ -107,4 +108,4 @@ const LogIn: React.FC<LogInProps> = ({ email }) => {
   );
 };
 
-export default LogIn;
+export default LogInPage;

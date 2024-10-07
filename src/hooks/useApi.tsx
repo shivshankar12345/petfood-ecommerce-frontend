@@ -1,36 +1,34 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import { baseURL } from "../env";
 
-const baseurl = 'http://localhost:8080';
-
-const useApi = () =>{
-  const makeAPICallWithOutData = async<T = any,>(
-    method: "post" | "put"| "patch",
+const useApi = () => {
+  const makeAPICallWithData = async <T = any,>(
+    method: "post" | "put" | "patch",
     path: string,
-    body:T,
-    headers?:AxiosRequestConfig
-  ):Promise<{isError:boolean;response?:AxiosResponse;error?:any}> =>{
-    try{
-      const response = await axios[method](`${baseurl}${path}`,body, headers);
-      return {isError:false, response};
-    }
-    catch(error){
-      return {isError:true,error};
+    body: T,
+    headers?: AxiosRequestConfig
+  ): Promise<{ isError: boolean; response?: AxiosResponse; error?: any }> => {
+    try {
+      const response = await axios[method](`${baseURL}${path}`, body, headers);
+      return { isError: false, response };
+    } catch (error) {
+      return { isError: true, error };
     }
   };
 
-  const makeAPICallWithData = async(
-    method: "get" |"delete",
-    path:string,
+  const makeAPICallWithOutData = async (
+    method: "get" | "delete",
+    path: string,
     headers?: AxiosRequestConfig
-  ):Promise<{isError:boolean;response?:AxiosResponse;error?:any}> =>{
-    try{
-      const response = await axios[method](`${baseurl}${path}`, headers);
-      return {isError:false,response}
-    }
-    catch(error){
-      return {isError:true, error}
+  ): Promise<{ isError: boolean; response?: AxiosResponse; error?: any }> => {
+    try {
+      const response = await axios[method](`${baseURL}${path}`, headers);
+      return { isError: false, response };
+    } catch (error) {
+      return { isError: true, error };
     }
   };
-   return {makeAPICallWithOutData, makeAPICallWithData};
+  return { makeAPICallWithData, makeAPICallWithOutData };
 };
+
 export default useApi;

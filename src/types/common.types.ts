@@ -27,10 +27,11 @@ export interface InputProps {
     type: string;
     name: string;
     value: string | number;
-    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
     required?: boolean;
     buttonLabel?: string; 
     onButtonClick?: () => void; 
+    register:any;
   }
   export interface PincodeModalProps {
     isOpen: boolean;

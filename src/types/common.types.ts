@@ -1,4 +1,4 @@
-import { SubmitHandler, UseFormHandleSubmit, UseFormRegister } from "react-hook-form";
+import { FieldError, SubmitHandler, UseFormHandleSubmit, UseFormRegister } from "react-hook-form";
 
 export interface InputProps {
     id: string;
@@ -26,11 +26,15 @@ export interface InputProps {
     label: string;
     type: string;
     name: string;
-    value: string | number;
-    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+    value?: string | number;
+     onChange?: (e: React.ChangeEvent<HTMLInputElement >) => void;
     required?: boolean;
     buttonLabel?: string; 
     onButtonClick?: () => void; 
+     accept?:string;
+     register:any;
+     error?: FieldError;
+     imagePreview?: string | null;
   }
   export interface PincodeModalProps {
     isOpen?: boolean;

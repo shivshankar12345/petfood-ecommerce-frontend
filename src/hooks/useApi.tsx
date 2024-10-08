@@ -1,13 +1,13 @@
-import axios from "axios";
+import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { baseURL } from "../env";
-
-const useAPIs = () => {
-  const makeAPICallWithData = async (
+ 
+const useApi = () => {
+  const makeAPICallWithData = async <T = any,>(
     method: "post" | "put" | "patch",
     path: string,
-    body: any,
-    headers?: any
-  ) => {
+    body: T,
+    headers?: AxiosRequestConfig
+  ): Promise<{ isError: boolean; response?: AxiosResponse; error?: any }> => {
     try {
       const response = await axios[method](`${baseURL}${path}`, body, headers);
       return { isError: false, response };
@@ -19,8 +19,8 @@ const useAPIs = () => {
   const makeAPICallWithOutData = async (
     method: "get" | "delete",
     path: string,
-    headers?: any
-  ) => {
+    headers?: AxiosRequestConfig
+  ): Promise<{ isError: boolean; response?: AxiosResponse; error?: any }> => {
     try {
       const response = await axios[method](`${baseURL}${path}`, headers);
       return { isError: false, response };
@@ -28,8 +28,8 @@ const useAPIs = () => {
       return { isError: true, error };
     }
   };
- 
   return { makeAPICallWithData, makeAPICallWithOutData };
 };
  
-export default useAPIs;
+export default useApi;
+ 

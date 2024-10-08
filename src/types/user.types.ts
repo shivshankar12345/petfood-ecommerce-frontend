@@ -10,8 +10,14 @@ export interface User {
   gst_num: string;
   is_verfied: boolean;
   is_Blocked: boolean;
-
+ 
   created_at: string;
   updated_at: string;
   deleted_at?: string | null;  // Making deleted_at optional
+}
+ 
+export interface UserTableProps {
+  users: User[];
+  loading: boolean;
+  error: string | null;
 }

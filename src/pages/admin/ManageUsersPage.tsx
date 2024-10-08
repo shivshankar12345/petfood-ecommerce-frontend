@@ -12,7 +12,7 @@ const ManageUsersPage: React.FC = () => {
   const fetchUsers = async () => {
     const { isError, response, error } = await makeAPICallWithOutData(
       "get",
-      "/admin-panel/getUsers"
+      "/admin-panel/getAllUsers"
     );
     if (isError) {
       seterror(error.message || "failed to fetch users");

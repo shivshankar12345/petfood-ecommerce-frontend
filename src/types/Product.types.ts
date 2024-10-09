@@ -12,11 +12,3 @@ export interface Product {
   updatedAt: string;
   imageUrl: string;
 }
-
-// export interface ProductImage {
-//   imageUrl: File;
-// }
-
-// export interface ProductImageUrl {
-//   imageUrl: string;
-// }

@@ -7,7 +7,7 @@ const AdminLayout: React.FC = () => {
   return (
   
     <div><AdminSidebar />
-       <div className="ml-64 p-4"> {/* Add margin to the main content */}
+       <div className="ml-64 p-4 "> {/* Add margin to the main content */}
         <Outlet /> {/* This renders the matched child routes */}
       </div>
 </div>

@@ -20,4 +20,6 @@ export interface UserTableProps {
   users: User[];
   loading: boolean;
   error: string | null;
+  selected:string
+  onUserChange: () => void;
 }

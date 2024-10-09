@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { baseURL } from "../env";
  
 const useApi = () => {
-  const makeAPICallWithData = async <T = any,>(
+  const makeAPICallWithData = async (
     method: "post" | "put" | "patch",
     path: string,
     body: T,

@@ -148,6 +148,7 @@ const handelInActive= async ()=>{
     <DataTable
       columns={columns}
       data={Array.isArray(users) ? users : []}
+      pagination
       highlightOnHover
       striped
       persistTableHead

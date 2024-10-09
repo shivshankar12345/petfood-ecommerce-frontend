@@ -1,14 +1,40 @@
 export interface Product {
-  id: number;
+  id?: string;
   name: string;
-  categoryId: number;
+  categoryId: string;
   price: number;
   description: string;
   stock: number;
-  petType: string;
+  imageUrl: string | File | null; // Allow for either a string URL or a File object
+  brandId?: number;
   sellerId: number;
-  brandId: string;
-  createdAt: string;
-  updatedAt: string;
-  imageUrl: string;
+  petType: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface ProductTableProps {
+  products: Product[];
+  loading: boolean;
+  error: string | null;
+  search: string
+}
+export interface ProductInputFieldProps {
+  label: string;
+  type: string;
+  value?: string | number;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  placeholder?: string;
+  min?: string | number;
+  max?: string | number;
+  rows?: number;
+  cols?: number;
+  accept?: string;
+  name:string;
+}
+export interface AddProductModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSubmit: (data: Product) => void; 
 }

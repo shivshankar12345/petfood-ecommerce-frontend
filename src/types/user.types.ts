@@ -15,7 +15,7 @@ export interface User {
   updated_at: string;
   deleted_at?: string | null;  // Making deleted_at optional
 }
- 
+
 export interface UserTableProps {
   users: User[];
   loading: boolean;

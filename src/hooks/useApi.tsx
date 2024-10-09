@@ -1,11 +1,11 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { baseURL } from "../env";
- 
+
 const useApi = () => {
-  const makeAPICallWithData = async (
+  const makeAPICallWithData = async(
     method: "post" | "put" | "patch",
     path: string,
-    body: T,
+    body: any,
     headers?: AxiosRequestConfig
   ): Promise<{ isError: boolean; response?: AxiosResponse; error?: any }> => {
     try {
@@ -15,7 +15,7 @@ const useApi = () => {
       return { isError: true, error };
     }
   };
- 
+
   const makeAPICallWithOutData = async (
     method: "get" | "delete",
     path: string,

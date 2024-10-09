@@ -39,66 +39,45 @@
 // export default ProductInputField;
 
 import React from "react";
-import { ProductInputFieldProps } from "../../types/common.types";
-
-// interface ProductInputFieldProps {
-//   label: string;
-//   type: string;
-//   name: string;
-//   value?: string | number;
-//   onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-//   required?: boolean;
-//   buttonLabel?: string;
-//   onButtonClick?: () => void;
-//   accept?: string;
-//   register: any;
-//   error?: FieldError;
-//   imagePreview?: string; // Include imagePreview
-// }
+import { ProductInputFieldProps } from "../../types/Product.types";
 
 const ProductInputField: React.FC<ProductInputFieldProps> = ({
   label,
   type,
-  name,
+  value,
   onChange,
-  required,
-  accept,
-  register,
-  error,
-  imagePreview,
+  onBlur,
+  placeholder,
+  accept, // This is specifically for file types
+  name, // Include name prop for identification
+  ...rest
 }) => {
   return (
     <div className="mb-4">
-      <label className="block text-sm font-medium text-gray-700">{label}</label>
-      {type === "textarea" ? (
-        <textarea
-          {...register(name, { required })}
-          onChange={onChange} // Add onChange here
-          className={`mt-1 block w-full border ${
-            error ? "border-red-500" : "border-gray-300"
-          } rounded p-2`}
-        />
-      ) : (
-        <input
-          type={type}
-          {...register(name, { required })}
-          onChange={onChange} // Add onChange here
-          accept={accept} // Use accept prop for file input
-          className={`mt-1 block w-full border ${
-            error ? "border-red-500" : "border-gray-300"
-          } rounded p-2`}
-        />
-      )}
-      {type === "file" &&
-        imagePreview && ( // Check for imagePreview to display
-          <img
-            src={imagePreview}
-            alt="Preview"
-            className="mt-2 w-32 h-32 object-cover rounded"
+        {type === "textarea" ? (
+          <>
+          <label className="block text-sm font-medium mb-2">{label}</label>
+          <textarea
+            name={name}
+            value={value}
+            onChange={onChange}
+            required={required}
+            className="border border-gray-300 rounded w-full px-3 py-2"
           />
+          </>
+        ) : ( <>
+          <label className="block text-sm font-medium mb-2">{label}</label>
+          <input
+            type={type}
+            name={name}
+            value={value}
+            onChange={onChange}
+            required={required}
+            className="border border-gray-300 rounded w-full px-3 py-2"
+          />
+          </>
         )}
-      {error && <span className="text-red-500 text-sm">{error.message}</span>}
-    </div>
+      </div>
   );
 };
 

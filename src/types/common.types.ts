@@ -22,21 +22,7 @@ export interface InputProps {
     role: string; 
   }
   
-  export interface ProductInputFieldProps {
-    label: string;
-    type: string;
-    name: string;
-    value?: string | number;
-     onChange?: (e: React.ChangeEvent<HTMLInputElement >) => void;
-    required?: boolean;
-    buttonLabel?: string; 
-    onButtonClick?: () => void; 
-     accept?:string;
-     register:any;
-     error?: FieldError;
-     imagePreview?: string | null;
-  }
-  export interface PincodeModalProps {
-    isOpen?: boolean;
-    onClose?: () => void;
+   export interface PincodeModalProps {
+    isOpen: boolean;
+    onClose: () => void;
   }

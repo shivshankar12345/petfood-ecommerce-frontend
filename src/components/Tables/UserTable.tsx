@@ -35,6 +35,7 @@ const UserTable: React.FC<UserTableProps> = ({ users, loading, error }) => {
     <DataTable
       columns={columns}
       data={Array.isArray(users) ? users : []}
+      data={Array.isArray(users) ? users : []}
       pagination
       highlightOnHover
       striped

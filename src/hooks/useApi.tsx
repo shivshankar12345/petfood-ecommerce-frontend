@@ -30,5 +30,6 @@ const useApi = () => {
   };
   return { makeAPICallWithData, makeAPICallWithOutData };
 };
-
+ 
 export default useApi;
+ 

@@ -1,3 +1,43 @@
+// import React from "react";
+// import { ProductInputFieldProps } from "../../types/common.types";
+
+// const ProductInputField: React.FC<ProductInputFieldProps> = ({ label, error,register,type, name, value, onChange, required,accept }) => {
+//   return (
+//     <div className="mb-4">
+//         {type === "textarea" ? (
+//           <>
+//           <label className="block text-sm font-medium mb-2">{label}</label>
+//           <textarea
+//             name={name}
+//             //value={value}
+//             // onChange={onChange}
+//             {...register(name, { required })}
+//             //required={required}
+//             className="border border-gray-300 rounded w-full px-3 py-2"
+//           />
+//            {error && <span className="text-red-500 text-sm">This field is required</span>}
+//           </>
+//         ) : ( <>
+//           <label className="block text-sm font-medium mb-2">{label}</label>
+//           <input
+//             type={type}
+//             name={name}
+//             //value={value}
+//             // onChange={onChange}
+//             {...register(name, { required })}
+//             //required={required}
+//             className="border border-gray-300 rounded w-full px-3 py-2"
+//             accept={accept}
+//           />
+//            {error && <span className="text-red-500 text-sm">This field is required</span>}
+//           </>
+//         )}
+//       </div>
+//   );
+// };
+
+// export default ProductInputField;
+
 import React from "react";
 import { ProductInputFieldProps } from "../../types/Product.types";
 
@@ -14,35 +54,30 @@ const ProductInputField: React.FC<ProductInputFieldProps> = ({
 }) => {
   return (
     <div className="mb-4">
-      <label className="block text-gray-700 font-bold mb-2" htmlFor={name}>
-        {label}
-      </label>
-      {type === "textarea" ? (
-        <textarea
-          id={name} // Adding an id for accessibility
-          className="border rounded w-full py-2 px-3 text-gray-700"
-          value={value as string} // Ensure this is string type
-          onChange={onChange}
-          onBlur={onBlur}
-          placeholder={placeholder}
-          name={name} // Include name prop
-          {...rest}
-        />
-      ) : (
-        <input
-          id={name} // Adding an id for accessibility
-          type={type}
-          className="border rounded w-full py-2 px-3 text-gray-700"
-          value={type !== "file" ? (value as string | number) : undefined} // file input doesn’t have a value
-          onChange={onChange}
-          onBlur={onBlur}
-          placeholder={placeholder}
-          accept={type === "file" ? accept : undefined} // Only use accept if it's a file type
-          name={name} // Include name prop
-          {...rest}
-        />
-      )}
-    </div>
+        {type === "textarea" ? (
+          <>
+          <label className="block text-sm font-medium mb-2">{label}</label>
+          <textarea
+            name={name}
+            value={value}
+            onChange={onChange}
+            required={required}
+            className="border border-gray-300 rounded w-full px-3 py-2"
+          />
+          </>
+        ) : ( <>
+          <label className="block text-sm font-medium mb-2">{label}</label>
+          <input
+            type={type}
+            name={name}
+            value={value}
+            onChange={onChange}
+            required={required}
+            className="border border-gray-300 rounded w-full px-3 py-2"
+          />
+          </>
+        )}
+      </div>
   );
 };
 

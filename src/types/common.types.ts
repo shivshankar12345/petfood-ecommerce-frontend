@@ -1,4 +1,4 @@
-import { SubmitHandler, UseFormHandleSubmit, UseFormRegister } from "react-hook-form";
+import { FieldError, SubmitHandler, UseFormHandleSubmit, UseFormRegister } from "react-hook-form";
 
 export interface InputProps {
     id: string;

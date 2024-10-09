@@ -4,11 +4,11 @@ import { setAccessToken, setRefreshToken } from "../Redux/Slice/auth.slice";
 import axios from "axios";
 import { baseURL } from "../env";
 import { IEmailInput, IOTPInput } from "../types/login.types";
+// import useApi from "./useApi";
 import useAPIs from "./useApi";
-
  
 const useSignUp = () => {
-  const { makeAPICallWithData} = useAPIs();
+  const { makeAPICallWithData, makeAPICallWithOutData } = useAPIs();
   const [step, setStep] = useState<"email" | "otp" | "details">("email");
   const [email, setEmail] = useState<string>("");
   const dispatch = useDispatch();
@@ -19,12 +19,6 @@ const useSignUp = () => {
  
     // Uncomment and modify according to your needs
     try {
-      // const response = await axios.post(`${baseURL}/users/sendOtp`, {
-      //   email: data.email,
-      // });
-      // const response = await useApi("/users/sendOtp", "GET", {
-      //   email: data.email,
-      // });
       const result = await makeAPICallWithData("post", "/users/sendOtp", {
         email: data.email,
       });

@@ -1,24 +1,24 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { User } from '../../types/user.types';
+import { Seller } from '../../types/seller.types';
 
-interface UserState {
-    users: User[];
+interface SellerState {
+    sellers: Seller[];
     loading: boolean;
     error: string | null;
 }
 
-const initialState: UserState = {
-    users: [],
+const initialState: SellerState = {
+    sellers: [],
     loading: false,
     error: null,
 };
 
-const userSlice = createSlice({
-    name: 'user',
+const sellerSlice = createSlice({
+    name: 'seller',
     initialState,
     reducers: {
-        setUsers: (state, action: PayloadAction<User[]>) => {
-            state.users = action.payload;
+        setSellers: (state, action: PayloadAction<Seller[]>) => {
+            state.sellers = action.payload;
             state.loading = false;
             state.error = null;
         },
@@ -32,6 +32,5 @@ const userSlice = createSlice({
     },
 });
 
-export const { setUsers, setLoading, setError } = userSlice.actions;
-export const userReducer = userSlice.reducer;
-
+export const { setSellers, setLoading, setError } = sellerSlice.actions;
+export const sellerReducer = sellerSlice.reducer;

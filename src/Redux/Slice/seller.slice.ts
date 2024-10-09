@@ -1,30 +1,3 @@
-// import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-// import { Seller } from '../../types/seller.types';
-// interface SellerState {
-//     sellers: Seller[];
-//     loading: boolean;
-//     error: string | null;
-// }
-
-// const initialState: SellerState = {
-//     sellers: [],
-//     loading: false,
-//     error: null,
-// };
-
-// const sellerSlice = createSlice({
-//     name: 'seller',
-//     initialState,
-//     reducers: {
-//         setSellers: (state, action: PayloadAction<Seller[]>) => {
-//             state.sellers = action.payload;
-//         },
-//     },
-// });
-
-// export const { setSellers } = sellerSlice.actions;
-// export const  sellerReducer = sellerSlice.reducer;
-
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Seller } from '../../types/seller.types';
 

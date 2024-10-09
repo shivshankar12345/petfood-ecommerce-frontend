@@ -20,7 +20,7 @@ const ManageProductPage: React.FC = () => {
   const [totalPages, setTotalPages] = useState<number>(1);
 
   // Use the debounced search term
-  const debouncedSearch = useDebounce(search, 1000); // 300 ms delay
+  const debouncedSearch = useDebounce(search, 3000); // 300 ms delay
 
   const fetchProducts = async () => {
     dispatch(setLoading(true));
@@ -58,17 +58,23 @@ const ManageProductPage: React.FC = () => {
   const handleAddProduct = async (productData: Product) => {
     try {
       const formData = new FormData();
-      Object.keys(productData).forEach(key => {
+      Object.keys(productData).forEach((key) => {
         const value = productData[key as keyof Product];
         if (key === "imageUrl" && value instanceof File) {
+          console.log("Appending image:", value); // Debugging line
           formData.append(key, value);
         } else if (typeof value === "string" || typeof value === "number") {
           formData.append(key, String(value));
         }
       });
-
+  
+      // Log the FormData content for debugging
+      formData.forEach((value, key) => {
+        console.log(key, value);
+      });
+  
       const { isError } = await makeAPICallWithData("post", "/products/createproducts", formData);
-
+  
       if (!isError) {
         fetchProducts(); // Refresh the product list
         setShowModal(false);
@@ -79,6 +85,7 @@ const ManageProductPage: React.FC = () => {
       dispatch(setError("An unexpected error occurred while adding the product"));
     }
   };
+  
 
   return (
     <div className="p-4">

@@ -4,11 +4,10 @@ import { setAccessToken, setRefreshToken } from "../Redux/Slice/auth.slice";
 import axios from "axios";
 import { baseURL } from "../env";
 import { IEmailInput, IOTPInput } from "../types/login.types";
-// import useApi from "./useApi";
 import useAPIs from "./useApi";
  
 const useSignUp = () => {
-  const { makeAPICallWithData, makeAPICallWithOutData } = useAPIs();
+  const { makeAPICallWithData } = useAPIs();
   const [step, setStep] = useState<"email" | "otp" | "details">("email");
   const [email, setEmail] = useState<string>("");
   const dispatch = useDispatch();
@@ -17,7 +16,7 @@ const useSignUp = () => {
     setEmail(data.email);
     setStep("otp");
  
-    // Uncomment and modify according to your needs
+
     try {
       const result = await makeAPICallWithData("post", "/users/sendOtp", {
         email: data.email,
@@ -30,7 +29,7 @@ const useSignUp = () => {
         localStorage.setItem("email", data.email);
         localStorage.setItem("otpId", response.data?.data.id);
         console.log(`Sending OTP to ${data.email}`);
-        // setOtpSent(true);
+   
         setStep("otp");
       }
     } catch (error) {
@@ -39,11 +38,7 @@ const useSignUp = () => {
   };
  
   const onSubmitOTP = async (data: IOTPInput) => {
-    // if (data.otp === "123456") {
-    //   setStep("details");
-    // } else {
-    //   alert("Invalid OTP. Please try again.");
-    // }
+   
  
     const resp = await axios.post(`${baseURL}/users/validateOtp`, {
       otp: data.otp,

@@ -1,84 +1,34 @@
-// import React from "react";
-// import { ProductInputFieldProps } from "../../types/common.types";
-
-// const ProductInputField: React.FC<ProductInputFieldProps> = ({ label, error,register,type, name, value, onChange, required,accept }) => {
-//   return (
-//     <div className="mb-4">
-//         {type === "textarea" ? (
-//           <>
-//           <label className="block text-sm font-medium mb-2">{label}</label>
-//           <textarea
-//             name={name}
-//             //value={value}
-//             // onChange={onChange}
-//             {...register(name, { required })}
-//             //required={required}
-//             className="border border-gray-300 rounded w-full px-3 py-2"
-//           />
-//            {error && <span className="text-red-500 text-sm">This field is required</span>}
-//           </>
-//         ) : ( <>
-//           <label className="block text-sm font-medium mb-2">{label}</label>
-//           <input
-//             type={type}
-//             name={name}
-//             //value={value}
-//             // onChange={onChange}
-//             {...register(name, { required })}
-//             //required={required}
-//             className="border border-gray-300 rounded w-full px-3 py-2"
-//             accept={accept}
-//           />
-//            {error && <span className="text-red-500 text-sm">This field is required</span>}
-//           </>
-//         )}
-//       </div>
-//   );
-// };
-
-// export default ProductInputField;
-
 import React from "react";
-import { ProductInputFieldProps } from "../../types/Product.types";
 
-const ProductInputField: React.FC<ProductInputFieldProps> = ({
-  label,
-  type,
-  value,
-  onChange,
-  onBlur,
-  placeholder,
-  accept, // This is specifically for file types
-  name, // Include name prop for identification
-  ...rest
-}) => {
-  return (
+interface ProductInputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  label: string;
+  type: string;
+  placeholder: string;
+}
+
+const ProductInputField = React.forwardRef<HTMLInputElement, ProductInputFieldProps>(
+  ({ label, type, placeholder, ...rest }, ref) => (
     <div className="mb-4">
-        {type === "textarea" ? (
-          <>
-          <label className="block text-sm font-medium mb-2">{label}</label>
-          <textarea
-            name={name}
-            value={value}
-            onChange={onChange}
-            required={required}
-            className="border border-gray-300 rounded w-full px-3 py-2"
-          />
-          </>
-        ) : ( <>
-          <label className="block text-sm font-medium mb-2">{label}</label>
-          <input
-            type={type}
-            name={name}
-            value={value}
-            onChange={onChange}
-            required={required}
-            className="border border-gray-300 rounded w-full px-3 py-2"
-          />
-          </>
-        )}
-      </div>
-  );
-};
+      <label className="block text-gray-700 font-bold mb-2">{label}</label>
+      {type === "textarea" ? (
+        <textarea
+          placeholder={placeholder}
+          ref={ref}
+          className="border rounded w-full py-2 px-3 text-gray-700"
+          {...rest}
+        />
+      ) : (
+        <input
+          type={type}
+          placeholder={placeholder}
+          ref={ref}
+          className="border rounded w-full py-2 px-3 text-gray-700"
+          {...rest}
+        />
+      )}
+    </div>
+  )
+);
 
+ProductInputField.displayName = "ProductInputField";
 export default ProductInputField;

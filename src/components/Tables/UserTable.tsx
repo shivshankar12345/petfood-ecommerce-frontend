@@ -1,6 +1,6 @@
 import DataTable from "react-data-table-component";
 import { User, UserTableProps } from "../../types/user.types";
- 
+
 const UserTable: React.FC<UserTableProps> = ({ users, loading, error }) => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -35,7 +35,6 @@ const UserTable: React.FC<UserTableProps> = ({ users, loading, error }) => {
     <DataTable
       columns={columns}
       data={Array.isArray(users) ? users : []}
-      data={Array.isArray(users) ? users : []}
       pagination
       highlightOnHover
       striped
@@ -43,5 +42,5 @@ const UserTable: React.FC<UserTableProps> = ({ users, loading, error }) => {
     />
   );
 };
- 
+
 export default UserTable;

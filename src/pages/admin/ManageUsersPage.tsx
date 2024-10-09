@@ -4,7 +4,7 @@ import { RootState } from "../../Redux/store"; // Assuming you have RootState de
 import UserTable from "../../components/Tables/UserTable";
 import useApi from "../../hooks/useApi";
 import { setUsers, setLoading, setError } from "../../Redux/Slice/user.slice"; // Import your user slice actions
-import { SearchBar, SellerStatusDropdown } from "../../components/admin/SearhBarDropDown";
+import { SearchBar, SellerStatusDropdown } from "../../components/admin/SearhBarDropdown";
 
 const ManageUsersPage: React.FC = () => {
   const { makeAPICallWithOutData } = useApi();

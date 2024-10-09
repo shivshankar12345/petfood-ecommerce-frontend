@@ -1,164 +1,59 @@
-import React, { useState } from "react";
-import DataTable from "react-data-table-component";
-import { User } from "../../types/user.types";
-import { columns as userTableColumns } from "../../components/Tables/UserTable"; // Reuse columns from UserTable
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../Redux/store"; // Assuming you have RootState defined in your Redux setup
+import UserTable from "../../components/Tables/UserTable";
+import useApi from "../../hooks/useApi";
+import { setUsers, setLoading, setError } from "../../Redux/Slice/user.slice"; // Import your user slice actions
+import { SearchBar, SellerStatusDropdown } from "../../components/admin/SearhBarDropDown";
 
-const ManagerUserPage: React.FC = () => {
-  // Mock data for users
-  const mockUsers: User[] = [
-    {
-      id: "1",
-      name: "John Doe",
-      email: "john@example.com",
-      phone: "1234567890",
-      gender: "Male",
-      role: "Admin",
-      pan_num: "ABCDE1234F",
-      rating: 4.5,
-      gst_num: "22ABCDE1234F1Z5",
-      is_verfied: true,
-      is_Blocked: false,
-      created_at: "2023-10-01T08:00:00Z",
-      updated_at: "2023-10-01T08:00:00Z",
-      deleted_at: null, // Add deleted_at with null or actual date if deleted
-    },
-    {
-      id: "2",
-      name: "Jane Smith",
-      email: "jane@example.com",
-      phone: "0987654321",
-      gender: "Female",
-      role: "Seller",
-      pan_num: "XYZAB5678C",
-      rating: 4.2,
-      gst_num: "33XYZAB5678C1Z3",
-      is_verfied: false,
-      is_Blocked: true,
-      created_at: "2023-09-15T08:00:00Z",
-      updated_at: "2023-10-02T08:00:00Z",
-      deleted_at: null, // Add deleted_at
-    },
-  ];
+const ManageUsersPage: React.FC = () => {
+  const { makeAPICallWithOutData } = useApi();
+  const dispatch = useDispatch();
 
-  const [users, setUsers] = useState<User[]>(mockUsers);
+  const { users, loading, error } = useSelector(
+    (state: RootState) => state.user
+  );
 
-  const [actionLoading, setActionLoading] = useState<boolean>(false);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [selectedStatus, setSelectedStatus] = useState<string>("active"); // Default to 'verified'
 
-  // Mock Block/Unblock handler
-  const handleBlockUnblock = (userId: string, block: boolean) => {
-    setActionLoading(true);
-    setUsers(prevUsers =>
-      prevUsers.map(user =>
-        user.id === userId ? { ...user, is_Blocked: block } : user
-      )
+  const fetchUsers = async () => {
+    dispatch(setLoading(true));
+
+    // API call
+    const { isError, response, error } = await makeAPICallWithOutData(
+      "get",
+      "/admin-panel/getAllUsers"
     );
-    setActionLoading(false);
+
+    if (isError) {
+      dispatch(setError(error.message || "Failed to fetch users"));
+    } else {
+      dispatch(setUsers(response?.data?.users || []));
+    }
+
+    dispatch(setLoading(false));
   };
 
-  // Mock Verify/Unverify handler
-  const handleVerifyUnverify = (userId: string, verify: boolean) => {
-    setActionLoading(true);
-    setUsers(prevUsers =>
-      prevUsers.map(user =>
-        user.id === userId ? { ...user, is_verfied: verify } : user
-      )
-    );
-    setActionLoading(false);
-  };
-
-  // Add action buttons to the columns
-  const columns = [
-    ...userTableColumns, // Spread the columns from UserTable
-    {
-      name: "Actions",
-      cell: (row: User) => (
-        <div className="flex space-x-2">
-          {/* Block/Unblock Button */}
-          {row.is_Blocked ? (
-            <button
-              className="bg-red-500 text-white px-2 py-1 rounded"
-              onClick={() => handleBlockUnblock(row.id, false)}
-              disabled={actionLoading}
-            >
-              Unblock
-            </button>
-          ) : (
-            <button
-              className="bg-gray-500 text-white px-2 py-1 rounded"
-              onClick={() => handleBlockUnblock(row.id, true)}
-              disabled={actionLoading}
-            >
-              Block
-            </button>
-          )}
-
-          {/* Verify/Unverify Button */}
-          {row.is_verfied ? (
-            <button
-              className="bg-yellow-500 text-white px-2 py-1 rounded"
-              onClick={() => handleVerifyUnverify(row.id, false)}
-              disabled={actionLoading}
-            >
-              Unverify
-            </button>
-          ) : (
-            <button
-              className="bg-green-500 text-white px-2 py-1 rounded"
-              onClick={() => handleVerifyUnverify(row.id, true)}
-              disabled={actionLoading}
-            >
-              Verify
-            </button>
-          )}
-        </div>
-      ),
-      ignoreRowClick: true,
-      allowOverflow: true,
-      button: true,
-    },
-  ];
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">Manage Users</h2>
+    <div>
+      <h1 className="text-center text-2xl font-bold mb-4">Manage Users</h1>
+      
+      <div className="flex justify-end items-center mb-4 space-x-4">
+        <SearchBar searchTerm={searchTerm} onSearch={setSearchTerm} placeholder={"Search user..."} type={"text"} />
+        <SellerStatusDropdown
+          selectedStatus={selectedStatus}
+          onStatusChange={setSelectedStatus}
+        />
+      </div>
 
-      {/* DataTable Component */}
-      <DataTable
-        columns={columns}
-        data={users}
-        pagination
-        highlightOnHover
-        pointerOnHover
-        className="border border-gray-300 rounded-lg"
-        subHeader
-        subHeaderComponent={
-          <div className="flex justify-between items-center">
-            <div className="text-gray-600">Total Users: {users.length}</div>
-            <button className="bg-indigo-500 text-white py-2 px-4 rounded-lg shadow hover:bg-indigo-600 transition duration-200">
-              Add User
-            </button>
-          </div>
-        }
-        noDataComponent={
-          <div className="text-center py-4">No users found.</div>
-        }
-        customStyles={{
-          headCells: {
-            style: {
-              backgroundColor: "#f3f4f6",
-              color: "#4b5563",
-              fontWeight: "bold",
-              padding: "12px",
-            },
-          },
-          cells: {
-            style: {
-              padding: "12px",
-            },
-          },
-        }}
-      />
+      <UserTable users={users} loading={loading} error={error} />
     </div>
   );
 };
-export default ManagerUserPage;
+
+export default ManageUsersPage;

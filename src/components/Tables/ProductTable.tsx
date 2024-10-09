@@ -10,43 +10,42 @@ const ProductTable: React.FC<ProductTableProps> = ({
   const columns: TableColumn<Product>[] = [
     {
       name: "ID",
-      selector: (row: Product) => row.id ?? "N/A", // Fallback to 'N/A' if undefined
+      selector: (row: Product) => row.id ?? "N/A",
       sortable: true,
     },
     {
       name: "Name",
-      selector: (row: Product) => row.name || "", // Returns an empty string if undefined
+      selector: (row: Product) => row.name || "",
       sortable: true,
     },
     {
       name: "Price",
-      selector: (row: Product) => row.price.toString(), // Convert number to string
+      selector: (row: Product) => row.price.toString(),
       sortable: true,
     },
     {
       name: "Category",
-      selector: (row: Product) => row.categoryId || "", // Returns an empty string if undefined
+      selector: (row: Product) => row.categoryId || "",
       sortable: true,
     },
     {
       name: "Stock",
-      selector: (row: Product) => row.stock.toString(), // Convert number to string
+      selector: (row: Product) => row.stock.toString(),
       sortable: true,
     },
     {
       name: "Description",
-      selector: (row: Product) => row.description || "", // Returns an empty string if undefined
+      selector: (row: Product) => row.description || "",
       sortable: false,
     },
     {
       name: "Image",
       cell: (row: Product) => {
         const imageUrl = typeof row.imageUrl === 'string' 
-          ? row.imageUrl // If it's a string, use it directly
+          ? row.imageUrl 
           : row.imageUrl 
-          ? URL.createObjectURL(row.imageUrl) // If it's a File, create a URL
-          : ""; // Fallback if no image
-
+          ? URL.createObjectURL(row.imageUrl) 
+          : "";
         return (
           <img
             src={imageUrl}
@@ -54,10 +53,9 @@ const ProductTable: React.FC<ProductTableProps> = ({
             style={{ width: "50px", height: "50px" }}
           />
         );
-      }, // Display image with specified dimensions
+      },
       sortable: false,
     },
-    
     {
       name: "Created At",
       selector: (row: Product) => {
@@ -81,7 +79,6 @@ const ProductTable: React.FC<ProductTableProps> = ({
     <DataTable
       columns={columns}
       data={Array.isArray(products) ? products : []}
-      pagination
       highlightOnHover
       pointerOnHover
       persistTableHead

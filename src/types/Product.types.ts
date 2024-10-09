@@ -17,6 +17,7 @@ export interface ProductTableProps {
   products: Product[];
   loading: boolean;
   error: string | null;
+  search: string
 }
 export interface ProductInputFieldProps {
   label: string;

@@ -4,7 +4,7 @@ import { Product } from "../../types/Product.types";
 interface ProductState {
   products: Product[];
   loading : boolean;
-  error: string | null;
+  error : string | null;
 }
 
 const initialState: ProductState = {
@@ -25,7 +25,7 @@ const productSlice = createSlice({
       state.products = action.payload; 
     },
 
-    setloading:(state, action:PayloadAction<boolean>)=>{
+    setLoading:(state, action:PayloadAction<boolean>)=>{
       state.loading = action.payload
     },
 
@@ -35,6 +35,6 @@ const productSlice = createSlice({
   },
 });
 
-export const { addProduct, setProducts,setError } = productSlice.actions;
+export const { addProduct, setProducts,setError , setLoading} = productSlice.actions;
 
 export const productReducer = productSlice.reducer;

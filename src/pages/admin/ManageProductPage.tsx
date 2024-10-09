@@ -1,88 +1,117 @@
 import React, { useEffect, useState } from "react";
 import ProductTable from "../../components/Tables/ProductTable";
 import useApi from "../../hooks/useApi";
-import AddProductModal from "./ProductModal"; // Importing the modal
+import AddProductModal from "./ProductModal";
 import { useDispatch, useSelector } from "react-redux";
-import { setProducts } from "../../Redux/Slice/Product.slice";
+import { setLoading, setProducts, setError } from "../../Redux/Slice/Product.slice";
 import { RootState } from "../../Redux/store";
 import { Product } from "../../types/Product.types";
+import { PaginationControls } from "../../components/PaginationControls";
+import useDebounce from "../../hooks/useDebounce"; // Import your debounce hook
 
 const ManageProductPage: React.FC = () => {
   const { makeAPICallWithOutData, makeAPICallWithData } = useApi();
   const dispatch = useDispatch();
-  const products = useSelector((state:RootState)=> state.products.products);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const [showModal, setShowModal] = useState<boolean>(false); 
+  const { products, loading, error } = useSelector((state: RootState) => state.products);
+
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [search, setSearch] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
+
+  // Use the debounced search term
+  const debouncedSearch = useDebounce(search, 1000); // 300 ms delay
 
   const fetchProducts = async () => {
+    dispatch(setLoading(true));
     try {
       const { isError, response, error } = await makeAPICallWithOutData(
         "get",
-        "/products/getAllproducts"
+        `/products/getAllproducts?page=${currentPage}&limit=5&search=${(debouncedSearch)}`
       );
 
       if (isError) {
-        setError(error?.message || "Failed to fetch products");
+        dispatch(setError(error?.message || "Failed to fetch products"));
       } else {
-        dispatch(setProducts(response?.data.data || []));
-        setError(null);
+        const { data, pagination } = response?.data || {};
+        dispatch(setProducts(data || []));
+        setTotalPages(pagination?.totalPages || 0);
+        dispatch(setError(null));
       }
     } catch (err) {
-      setError("An unexpected error occurred");
+      dispatch(setError("An unexpected error occurred"));
     } finally {
-      setLoading(false);
+      dispatch(setLoading(false));
     }
   };
 
+  // Trigger fetchProducts only when currentPage or debouncedSearch changes
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [currentPage, debouncedSearch]); // Updated to include debounced search
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value); // Update search state
+    setCurrentPage(1); // Reset to first page on new search
+  };
+
   const handleAddProduct = async (productData: Product) => {
     try {
       const formData = new FormData();
       Object.keys(productData).forEach(key => {
         const value = productData[key as keyof Product];
-        
-        // Check if this is the image field and convert it as needed
         if (key === "imageUrl" && value instanceof File) {
           formData.append(key, value);
-        } else if (typeof value === 'string' || typeof value === 'number') {
+        } else if (typeof value === "string" || typeof value === "number") {
           formData.append(key, String(value));
         }
       });
-  
-      const { isError } = await makeAPICallWithData(
-        "post",
-        "/products/createproducts",
-        formData
-      );
-  
-      if (isError) {
-        setError("Failed to add product");
-      } else {
-        fetchProducts();
+
+      const { isError } = await makeAPICallWithData("post", "/products/createproducts", formData);
+
+      if (!isError) {
+        fetchProducts(); // Refresh the product list
         setShowModal(false);
+      } else {
+        dispatch(setError("Failed to add product"));
       }
     } catch (err) {
-      console.error("Error adding product:", err);
-      setError("An unexpected error occurred while adding the product");
+      dispatch(setError("An unexpected error occurred while adding the product"));
     }
   };
-  
 
   return (
-    <>
-      <div>Manage Product</div>
-      <button onClick={() => setShowModal(true)}>ADD Product</button>
-      <ProductTable products={products} loading={loading} error={error} />
-
+    <div className="p-4">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-2xl font-bold">Manage Product</h2>
+        <button
+          onClick={() => setShowModal(true)}
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+        >
+          ADD Product
+        </button>
+      </div>
+      <div className="mb-4">
+        <input
+          type="text"
+          placeholder="Search products..."
+          value={search}
+          onChange={handleSearch} // Call handleSearch on change
+          className="p-2 border border-gray-300 rounded w-full"
+        />
+      </div>
+      <ProductTable products={products} loading={loading} error={error} search={debouncedSearch} /> {/* Pass debouncedSearch */}
+      <PaginationControls
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+      />
       <AddProductModal
         isOpen={showModal}
         onClose={() => setShowModal(false)}
         onSubmit={handleAddProduct}
       />
-    </>
+    </div>
   );
 };
 

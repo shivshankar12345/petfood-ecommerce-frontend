@@ -3,18 +3,17 @@ import { Seller, SellerTableProps } from "../../types/seller.types";
 import useApi from "../../hooks/useApi";
 import { useDispatch } from "react-redux";
 import { setError, setLoading } from "../../Redux/Slice/seller.slice";
-import { toast } from "react-toastify"; // Import toast
-//import { confirmApproval,confirmRejection } from "../../utils/Confirmation";
+import { toast } from "react-toastify"; 
 import Swal from "sweetalert2";
 
 const SellerTable: React.FC<SellerTableProps> = ({
   seller,
   loading,
   error,
-  onSellerChange, // Add this prop for refreshing the seller list
+  onSellerChange,
   selected,
 }) => {
-  const { makeAPICallWithData } = useApi(); // Use the method for calls with data
+  const { makeAPICallWithData } = useApi(); 
   const dispatch = useDispatch();
 
   // Function to confirm approval via SweetAlert2
@@ -29,7 +28,7 @@ const SellerTable: React.FC<SellerTableProps> = ({
       confirmButtonText: 'Yes, approve it!',
     }).then((result) => {
       if (result.isConfirmed) {
-        handleApprove(id); // Call approval function if confirmed
+        handleApprove(id); 
       }
     });
   };
@@ -46,7 +45,7 @@ const SellerTable: React.FC<SellerTableProps> = ({
       confirmButtonText: 'Yes, reject it!',
     }).then((result) => {
       if (result.isConfirmed) {
-        handleReject(id); // Call rejection function if confirmed
+        handleReject(id); 
       }
     });
   };
@@ -63,7 +62,6 @@ const SellerTable: React.FC<SellerTableProps> = ({
       if (!result.isError) {
         console.log(`Seller with ID ${id} approved`, result.response?.data);
         toast.success(`Seller Approved`); // Success toast
-        // Refresh the seller list after approval
         onSellerChange();
       } else {
         throw new Error(result.error?.message || "Failed to approve seller");
@@ -88,7 +86,6 @@ const SellerTable: React.FC<SellerTableProps> = ({
       if (!result.isError) {
         console.log(`Seller with ID ${id} rejected`, result.response?.data);
         toast.success(`Seller Rejected`); // Success toast
-        // Refresh the seller list after rejection
         onSellerChange();
       } else {
         throw new Error(result.error?.message || "Failed to reject seller");
@@ -150,7 +147,7 @@ const SellerTable: React.FC<SellerTableProps> = ({
       center: true,
     },
     {
-      name: "Actions", // New column for Approve/Reject buttons
+      name: "Actions", 
       cell: (row: Seller) =>
         selected === "verified" ? (
           <>

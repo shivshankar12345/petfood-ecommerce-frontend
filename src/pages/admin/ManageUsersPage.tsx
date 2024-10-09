@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../Redux/store"; // Assuming you have RootState defined in your Redux setup
+import { RootState } from "../../Redux/store"; 
 import UserTable from "../../components/Tables/UserTable";
 import useApi from "../../hooks/useApi";
-import { setUsers, setLoading, setError } from "../../Redux/Slice/user.slice"; // Import your user slice actions
+import { setUsers, setLoading, setError } from "../../Redux/Slice/user.slice"; 
 import {
   SearchBar,
   StatusDropdown,
@@ -27,7 +27,7 @@ const ManageUsersPage: React.FC = () => {
 
   const fetchUsers = async (
     status: string,
-    search: string = "",
+    search: string ="",
     limit = 10,
     page_num = 1
   ) => {
@@ -52,46 +52,29 @@ const ManageUsersPage: React.FC = () => {
     if (isError) {
       dispatch(setError(error.message || "Failed to fetch users"));
     } else {
+      console.log(response?.data?.users);
       dispatch(setUsers(response?.data?.users || []));
       setTotalPages(response?.data?.total_pages || 1);
       setCurrentPage(response?.data?.current_page || 1);
     }
 
     dispatch(setLoading(false));
-    // dispatch(setLoading(true));
-
-    // // API call
-    // const { isError, response, error } = await makeAPICallWithOutData(
-    //   "get",
-    //   "/admin-panel/getAllUsers"
-    // );
-
-    // if (isError) {
-    //   dispatch(setError(error.message || "Failed to fetch users"));
-    // } else {
-    //   dispatch(setUsers(response?.data?.users || []));
-    // }
-
-    // dispatch(setLoading(false));
   };
 
-  // useEffect(() => {
-  //   fetchUsers();
-  // }, []);
-
+  useEffect(() => {
+    setCurrentPage(1);
+    fetchUsers(selectedStatus, searchTerm, limit, 1);
+  }, [selectedStatus, searchTerm]);
+ 
   useEffect(() => {
     fetchUsers(selectedStatus, searchTerm, limit, currentPage);
-  }, [selectedStatus, searchTerm, currentPage, limit]);
-
+  }, [currentPage]);
   const handleUserChange = () => {
     fetchUsers(selectedStatus, searchTerm, limit, currentPage);
   };
-
   return (
     <div>
       <h1 className="text-center text-2xl font-bold mb-4">Manage Users</h1>
-      {/* flex justify-end items-center mb-4 space-x-4 */}
-      {/* Search bar and dropdown layout */}
       <div className="flex flex-col md:flex-row justify-between items-center mb-6 space-y-4 md:space-y-0">
         <SearchBar
           searchTerm={searchTerm}
@@ -118,7 +101,6 @@ const ManageUsersPage: React.FC = () => {
         totalPages={totalPages}
         onPageChange={(page: number) => {
           if (page > 0 && page <= totalPages) {
-            // Ensure the page number is valid
             setCurrentPage(page);
           }
         }}

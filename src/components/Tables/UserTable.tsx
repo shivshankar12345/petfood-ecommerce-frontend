@@ -8,7 +8,7 @@ import { setError, setLoading } from "../../Redux/Slice/user.slice";
  
 const UserTable: React.FC<UserTableProps> = ({ users, loading, error,selected,onUserChange }) => {
 
-  const { makeAPICallWithData,makeAPICallWithOutData } = useApi();
+  const { makeAPICallWithOutData } = useApi();
   const dispatch = useDispatch();
 
   const confirmActivation = () => {
@@ -114,7 +114,7 @@ const handelInActive= async ()=>{
       sortable: true,
     },
     {
-      name: "Actions", // New column for Approve/Reject buttons
+      name: "Actions", 
       cell: (row: User) =>
         selected === "all" ? (
           <>

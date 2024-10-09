@@ -1,5 +1,3 @@
-// components/SearchBarDropdown.tsx
-
 import React from "react";
 
 // SearchBar Component

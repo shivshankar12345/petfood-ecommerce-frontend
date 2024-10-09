@@ -13,14 +13,17 @@ import {
   StatusDropdown,
 } from "../../components/admin/SearhBarDropdown";
 import { PaginationControls } from "../../components/admin/Pagination";
+import useDebounce from "../../hooks/useDebounce";
 
 const ManageSellerPage: React.FC = () => {
   const { makeAPICallWithOutData } = useApi();
   const dispatch = useDispatch();
+ 
 
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [limit, setLimit] = useState<number>(10);
+
 
   // Redux state for sellers
   const { sellers, loading, error } = useSelector(
@@ -31,10 +34,12 @@ const ManageSellerPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [selectedStatus, setSelectedStatus] = useState<string>("verified"); // Default to 'verified'
 
+  const debouncedSearch = useDebounce(searchTerm, 1000)
+
   // Fetch sellers with pagination
   const fetchSellers = async (
     status: string,
-    search: string = "",
+    debouncedSearch: string = "",
     limit = 10,
     page_num = 1
   ) => {
@@ -42,9 +47,9 @@ const ManageSellerPage: React.FC = () => {
 
     let endpoint = "";
     if (status === "verified") {
-      endpoint = `/admin-panel/getVerifiedSeller?status=verified&search=${search}&limit=${limit}&page_num=${page_num}`;
+      endpoint = `/admin-panel/getVerifiedSeller?status=verified&search=${debouncedSearch}&limit=${limit}&page_num=${page_num}`;
     } else if (status === "pending") {
-      endpoint = `/admin-panel/getPendingSeller?search=${search}&limit=${limit}&page_num=${page_num}`;
+      endpoint = `/admin-panel/getPendingSeller?search=${debouncedSearch}&limit=${limit}&page_num=${page_num}`;
     }
 
     const { isError, response, error } = await makeAPICallWithOutData(
@@ -69,22 +74,34 @@ const ManageSellerPage: React.FC = () => {
     dispatch(setLoading(false));
   };
 
+  // useEffect(() => {
+  //   setCurrentPage(1);
+  //   fetchSellers(selectedStatus, searchTerm, limit, 1);
+  // }, [selectedStatus, searchTerm]);
+ 
+  // useEffect(() => {
+  //   fetchSellers(selectedStatus, searchTerm, limit, currentPage);
+  // }, [currentPage]);
+
   useEffect(() => {
-    fetchSellers(selectedStatus, searchTerm, limit, currentPage);
-  }, [selectedStatus, searchTerm, currentPage, limit]); // Added limit to dependency array
+    setCurrentPage(1);
+    fetchSellers(selectedStatus, debouncedSearch, limit, 1);
+  }, [selectedStatus, debouncedSearch]);
+ 
+  useEffect(() => {
+    fetchSellers(selectedStatus, debouncedSearch, limit, currentPage);
+  }, [currentPage]);
 
   const handleSellerChange = () => {
-    fetchSellers(selectedStatus, searchTerm, limit, currentPage);
+    fetchSellers(selectedStatus, debouncedSearch, limit, currentPage);
   };
 
   return (
     <div>
       <h1 className="text-center text-2xl font-bold mb-4">Manage Sellers</h1>
-      {/* flex justify-end items-center mb-4 space-x-4 */}
-      {/* Search bar and dropdown layout */}
       <div className="flex flex-col md:flex-row justify-between items-center mb-6 space-y-4 md:space-y-0">
         <SearchBar
-          searchTerm={searchTerm}
+          searchTerm={debouncedSearch}
           onSearch={setSearchTerm}
           placeholder={"Search seller..."}
           type={"text"}

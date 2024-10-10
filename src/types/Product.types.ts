@@ -36,5 +36,5 @@ export interface ProductInputFieldProps {
 export interface AddProductModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: Product) => void; 
+  onSubmit: (formData: FormData) => Promise<void>;
 }

@@ -9,7 +9,7 @@ type FormValues = {
   price: number;
   description: string;
   stock: number;
-  imageUrl: File | null; // Change to File or null for file input
+  imageUrl: FileList;
   brandId: number;
   sellerId: number;
   petType: string;
@@ -26,8 +26,19 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
     formState: { errors },
   } = useForm<FormValues>();
 
-  const submitHandler: SubmitHandler<FormValues> = (data) => {
-    onSubmit(data); // Call parent onSubmit
+  const submitHandler: SubmitHandler<FormValues> = data => {
+    const formData: any = new FormData();
+
+    Object.keys(data).forEach(key => {
+      const typedkey = key as keyof FormValues;
+      if (typedkey === "imageUrl") {
+        formData.append(key, data.imageUrl[0]);
+      } else {
+        formData.append(key, data[typedkey]);
+      }
+    });
+
+    onSubmit(formData);
   };
 
   if (!isOpen) return null;
@@ -69,7 +80,9 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
               valueAsNumber: true,
             })}
           />
-          {errors.price && <p className="text-red-500">{errors.price.message}</p>}
+          {errors.price && (
+            <p className="text-red-500">{errors.price.message}</p>
+          )}
 
           <ProductInputField
             label="Description"
@@ -87,32 +100,48 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
               valueAsNumber: true,
             })}
           />
-          {errors.stock && <p className="text-red-500">{errors.stock.message}</p>}
+          {errors.stock && (
+            <p className="text-red-500">{errors.stock.message}</p>
+          )}
 
-          <label className="block text-gray-700 font-bold mb-2">Image Upload</label>
+          <label className="block text-gray-700 font-bold mb-2">
+            Image Upload
+          </label>
           <input
             type="file"
             accept="image/*"
             {...register("imageUrl", { required: "Image file is required" })}
             className="border rounded w-full py-2 px-3 mb-4"
           />
-          {errors.imageUrl && <p className="text-red-500">{errors.imageUrl.message}</p>}
+          {errors.imageUrl && (
+            <p className="text-red-500">{errors.imageUrl.message}</p>
+          )}
 
           <ProductInputField
             label="Brand ID"
             type="number"
             placeholder="Enter brand ID"
-            {...register("brandId", { required: "Brand ID is required", valueAsNumber: true })}
+            {...register("brandId", {
+              required: "Brand ID is required",
+              valueAsNumber: true,
+            })}
           />
-          {errors.brandId && <p className="text-red-500">{errors.brandId.message}</p>}
+          {errors.brandId && (
+            <p className="text-red-500">{errors.brandId.message}</p>
+          )}
 
           <ProductInputField
             label="Seller ID"
             type="number"
             placeholder="Enter seller ID"
-            {...register("sellerId", { required: "Seller ID is required", valueAsNumber: true })}
+            {...register("sellerId", {
+              required: "Seller ID is required",
+              valueAsNumber: true,
+            })}
           />
-          {errors.sellerId && <p className="text-red-500">{errors.sellerId.message}</p>}
+          {errors.sellerId && (
+            <p className="text-red-500">{errors.sellerId.message}</p>
+          )}
 
           <label className="block text-gray-700 font-bold mb-2">Pet Type</label>
           <select
@@ -123,7 +152,9 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
             <option value="dogs">Dogs</option>
             <option value="cats">Cats</option>
           </select>
-          {errors.petType && <p className="text-red-500">{errors.petType.message}</p>}
+          {errors.petType && (
+            <p className="text-red-500">{errors.petType.message}</p>
+          )}
 
           <div className="flex justify-end mt-4">
             <button

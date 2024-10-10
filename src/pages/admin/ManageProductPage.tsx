@@ -5,29 +5,30 @@ import AddProductModal from "./ProductModal";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading, setProducts, setError } from "../../Redux/Slice/Product.slice";
 import { RootState } from "../../Redux/store";
-import { Product } from "../../types/Product.types";
-import { PaginationControls } from "../../components/PaginationControls";
-import useDebounce from "../../hooks/useDebounce"; // Import your debounce hook
+import useDebounce from "../../hooks/useDebounce";
+import TableLayout from "../../layout/TableLayout";
+import { FaPlus } from "react-icons/fa"; // Importing icons
 
 const ManageProductPage: React.FC = () => {
   const { makeAPICallWithOutData, makeAPICallWithData } = useApi();
   const dispatch = useDispatch();
-  const { products, loading, error } = useSelector((state: RootState) => state.products);
+  const { products, loading, error } = useSelector(
+    (state: RootState) => state.products
+  );
 
   const [showModal, setShowModal] = useState<boolean>(false);
   const [search, setSearch] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
 
-  // Use the debounced search term
-  const debouncedSearch = useDebounce(search, 3000); // 300 ms delay
+  const debouncedSearch = useDebounce(search, 300);
 
   const fetchProducts = async () => {
     dispatch(setLoading(true));
     try {
       const { isError, response, error } = await makeAPICallWithOutData(
         "get",
-        `/products/getAllproducts?page=${currentPage}&limit=5&search=${(debouncedSearch)}`
+        `/products/getAllproducts?page=${currentPage}&limit=5&search=${debouncedSearch}`
       );
 
       if (isError) {
@@ -45,80 +46,63 @@ const ManageProductPage: React.FC = () => {
     }
   };
 
-  // Trigger fetchProducts only when currentPage or debouncedSearch changes
   useEffect(() => {
     fetchProducts();
-  }, [currentPage, debouncedSearch]); // Updated to include debounced search
+  }, [currentPage, debouncedSearch]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value); // Update search state
-    setCurrentPage(1); // Reset to first page on new search
+    setSearch(e.target.value);
+    setCurrentPage(1);
   };
 
-  const handleAddProduct = async (productData: Product) => {
+  const handleAddProduct = async (formData: FormData) => {
     try {
-      const formData = new FormData();
-      Object.keys(productData).forEach((key) => {
-        const value = productData[key as keyof Product];
-        if (key === "imageUrl" && value instanceof File) {
-          console.log("Appending image:", value); // Debugging line
-          formData.append(key, value);
-        } else if (typeof value === "string" || typeof value === "number") {
-          formData.append(key, String(value));
-        }
-      });
-  
-      // Log the FormData content for debugging
-      formData.forEach((value, key) => {
-        console.log(key, value);
-      });
-  
-      const { isError } = await makeAPICallWithData("post", "/products/createproducts", formData);
-  
+      const { isError } = await makeAPICallWithData(
+        "post",
+        "/products/createproducts",
+        formData
+      );
+
       if (!isError) {
-        fetchProducts(); // Refresh the product list
+        fetchProducts();
         setShowModal(false);
       } else {
         dispatch(setError("Failed to add product"));
       }
     } catch (err) {
-      dispatch(setError("An unexpected error occurred while adding the product"));
+      dispatch(
+        setError("An unexpected error occurred while adding the product")
+      );
     }
   };
-  
 
   return (
-    <div className="p-4">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-2xl font-bold">Manage Product</h2>
-        <button
-          onClick={() => setShowModal(true)}
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
-        >
-          ADD Product
-        </button>
-      </div>
-      <div className="mb-4">
-        <input
-          type="text"
-          placeholder="Search products..."
-          value={search}
-          onChange={handleSearch} // Call handleSearch on change
-          className="p-2 border border-gray-300 rounded w-full"
-        />
-      </div>
-      <ProductTable products={products} loading={loading} error={error} search={debouncedSearch} /> {/* Pass debouncedSearch */}
-      <PaginationControls
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={setCurrentPage}
-      />
+    <TableLayout
+      title="Manage Product"
+      searchPlaceholder="Search products..."
+      searchValue={search}
+      onSearchChange={handleSearch}
+      currentPage={currentPage}
+      totalPages={totalPages}
+      onPageChange={(page) => setCurrentPage(page)}
+      error={error ?? undefined} 
+    >
+      <button
+        onClick={() => setShowModal(true)}
+        className="flex items-center bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300 mb-4"
+      >
+        <FaPlus className="mr-2" />
+        Add Product
+      </button>
+
+      <ProductTable products={products} loading={loading} error={error} search={debouncedSearch} />
+
       <AddProductModal
         isOpen={showModal}
         onClose={() => setShowModal(false)}
         onSubmit={handleAddProduct}
       />
-    </div>
+    </TableLayout>
   );
 };
 

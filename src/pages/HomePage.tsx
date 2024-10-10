@@ -1,7 +1,6 @@
-import React from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import React from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from 'swiper/modules';
-// Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -10,25 +9,16 @@ const HomePage: React.FC = () => {
   return (
     <div>
       {/* Welcome Section */}
-      <div
-        className="text-center text-white bg-cover bg-center bg-no-repeat bg-opacity-50 p-8 rounded"
-        style={{
-          backgroundImage: `url('https://images.unsplash.com/photo-1592194996308-cfbd2e8b3293?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80')`,
-          height: '60vh',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <h1 className="text-6xl font-extrabold mb-4 drop-shadow-lg">
+      <div className="text-center p-8 rounded" style={{ background: 'linear-gradient(45deg, #FF9A8B, #FF6A88, #FF99AC)', backgroundSize: 'cover',
+    backgroundPosition: 'center', }}>
+        <h1 className="text-5xl font-bold mb-4 text-white">
           Welcome to PetFood Haven
         </h1>
-        <p className="text-xl mb-6 font-light">
+        <p className="text-lg mb-6 text-white">
           Everything your pet needs, delivered to your door!
         </p>
-        <button className="bg-orange-500 text-white px-6 py-3 rounded-lg hover:bg-orange-600 transition duration-300 text-lg font-bold">
-          Shop Now
+        <button className="bg-orange-500 text-white px-6 py-3 rounded-lg hover:bg-orange-600 transition duration-300">
+          Shop Now 
         </button>
       </div>
 
@@ -51,7 +41,8 @@ const HomePage: React.FC = () => {
                 style={{
                   backgroundImage:
                     'url("https://supertails.com/cdn/shop/files/12th_oct_web_2-min_1600x.png?v=1728541127")',
-                  backgroundSize: 'contain',
+                  width: "100%",
+                  //backgroundSize: "contain",
                 }}
               ></div>
             </SwiperSlide>
@@ -63,7 +54,8 @@ const HomePage: React.FC = () => {
                 style={{
                   backgroundImage:
                     'url("https://supertails.com/cdn/shop/files/9th_oct_web_3-min_1600x.png?v=1728450246")',
-                  backgroundSize: 'contain',
+                  width: "100%",
+                  //backgroundSize: "contain",
                 }}
               ></div>
             </SwiperSlide>
@@ -75,7 +67,8 @@ const HomePage: React.FC = () => {
                 style={{
                   backgroundImage:
                     'url("https://supertails.com/cdn/shop/files/9th_oct_web_5-min_1600x.png?v=1728450245")',
-                  backgroundSize: 'contain',
+                  width: "100%",
+                  //backgroundSize: "contain",
                 }}
               ></div>
             </SwiperSlide>
@@ -90,9 +83,9 @@ const HomePage: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             <div className="relative overflow-hidden rounded-lg shadow-lg">
               <img
-                src="https://example.com/dog-food-image.jpg"
+                src="https://supertails.com/cdn/shop/files/7th_Oct_Popular_Categories-min_1429c56f-23c6-47b7-b6a7-3c0178c2fb9a_480x.png?v=1728279390"
                 alt="Dog Food"
-                className="h-60 w-full object-cover hover:scale-105 transition-transform duration-300"
+                className="h-90 w-full object-cover hover:scale-105 transition-transform duration-300"
               />
               <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                 <h3 className="text-white text-2xl font-bold">Dog Food</h3>
@@ -100,9 +93,9 @@ const HomePage: React.FC = () => {
             </div>
             <div className="relative overflow-hidden rounded-lg shadow-lg">
               <img
-                src="https://example.com/cat-food-image.jpg"
+                src="https://supertails.com/cdn/shop/files/7th_Oct_Popular_Categories-2-min_cbe23362-36e0-43ff-9e43-41ce998bf4aa_480x.png?v=1728279390"
                 alt="Cat Food"
-                className="h-60 w-full object-cover hover:scale-105 transition-transform duration-300"
+                className="h-90 w-full object-cover hover:scale-105 transition-transform duration-300"
               />
               <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                 <h3 className="text-white text-2xl font-bold">Cat Food</h3>
@@ -110,9 +103,9 @@ const HomePage: React.FC = () => {
             </div>
             <div className="relative overflow-hidden rounded-lg shadow-lg">
               <img
-                src="https://example.com/accessories-image.jpg"
+                src="https://supertails.com/cdn/shop/files/1st_July_Popular_Categories_125_1b8043d7-414b-4d76-9080-18803afa09a1_480x.png?v=1727781543"
                 alt="Accessories"
-                className="h-60 w-full object-cover hover:scale-105 transition-transform duration-300"
+                className="h-90 w-full object-cover hover:scale-105 transition-transform duration-300"
               />
               <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                 <h3 className="text-white text-2xl font-bold">Accessories</h3>
@@ -121,7 +114,7 @@ const HomePage: React.FC = () => {
           </div>
         </section>
 
-        {/* Featured Products */}
+        {/* Featured Products Section */}
         <section className="py-16 bg-gray-100">
           <h2 className="text-3xl font-semibold text-center mb-8">
             Featured Products
@@ -129,11 +122,12 @@ const HomePage: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
             <div className="border rounded-lg p-4 bg-white shadow-md">
               <img
-                src="https://example.com/featured-product1.jpg"
+                src="https://supertails.com/cdn/shop/files/Frame344684057_280x.png?v=1716445251"
                 alt="Product 1"
                 className="h-40 w-full object-cover rounded-md"
+                width={100}
               />
-              <h3 className="mt-2 text-lg font-bold">Delicious Dog Treats</h3>
+              <h3 className="mt-2 text-lg font-bold">Dog Kibble</h3>
               <p className="text-gray-600">$19.99</p>
               <button className="bg-orange-500 text-white px-4 py-2 mt-4 rounded hover:bg-orange-600 transition duration-300">
                 Add to Cart
@@ -141,21 +135,23 @@ const HomePage: React.FC = () => {
             </div>
             <div className="border rounded-lg p-4 bg-white shadow-md">
               <img
-                src="https://example.com/featured-product2.jpg"
+                src="https://supertails.com/cdn/shop/files/Frame_344684069_1.png?v=1718002649"
                 alt="Product 2"
                 className="h-40 w-full object-cover rounded-md"
+                width={100}
               />
-              <h3 className="mt-2 text-lg font-bold">Premium Cat Food</h3>
+              <h3 className="mt-2 text-lg font-bold">Cat Wet Food</h3>
               <p className="text-gray-600">$29.99</p>
               <button className="bg-orange-500 text-white px-4 py-2 mt-4 rounded hover:bg-orange-600 transition duration-300">
                 Add to Cart
               </button>
             </div>
             <div className="border rounded-lg p-4 bg-white shadow-md">
-              <img
-                src="https://example.com/featured-product3.jpg"
+               <img
+                src="https://cdn.shopify.com/s/files/1/0565/8021/0861/files/Combo_21.png?v=1696417035"
                 alt="Product 3"
                 className="h-40 w-full object-cover rounded-md"
+                height={100}
               />
               <h3 className="mt-2 text-lg font-bold">Pet Accessories Set</h3>
               <p className="text-gray-600">$39.99</p>
@@ -165,7 +161,7 @@ const HomePage: React.FC = () => {
             </div>
             <div className="border rounded-lg p-4 bg-white shadow-md">
               <img
-                src="https://example.com/featured-product4.jpg"
+                src="https://cdn.shopify.com/s/files/1/0565/8021/0861/products/Frame1-2022-05-14T125036.756-527280.png?v=1696545663"
                 alt="Product 4"
                 className="h-40 w-full object-cover rounded-md"
               />
@@ -183,6 +179,4 @@ const HomePage: React.FC = () => {
 };
 
 export default HomePage;
-
-
 

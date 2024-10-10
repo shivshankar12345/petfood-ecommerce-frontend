@@ -69,6 +69,7 @@ const handelInActive= async ()=>{
    try{
     const result=await makeAPICallWithOutData("get","/admin-panel/getInactiveUsers");
     if (!result.isError) {
+      console.log(`Seller with ID  approved`, result.response?.data);
       toast.success(`User Deactivated`);
       onUserChange();
     } else {
@@ -125,7 +126,7 @@ const handelInActive= async ()=>{
         ( row.is_active )  ? (  
           <>
             <button
-              onClick={() =>  confirmActivation()}
+              onClick={() =>  confirmDeactivation()}
               className="bg-red-500 text-white px-2 py-1 rounded"
             >
               In Active

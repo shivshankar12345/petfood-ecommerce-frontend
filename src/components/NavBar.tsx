@@ -1,4 +1,4 @@
-import { NavLink} from 'react-router-dom';
+import { NavLink, useNavigate} from 'react-router-dom';
 import Sidebar from './Sidebar';
 import { NavbarProps } from '../types/common.types';
 import useNavbar from '../hooks/useNavBar';
@@ -19,6 +19,11 @@ const Navbar: React.FC<NavbarProps> = ({ role}) => {
 
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const navigate=useNavigate();
+
+    const handleClick=()=>{
+      navigate("/");
+    }
 
   return (
     <>
@@ -27,11 +32,12 @@ const Navbar: React.FC<NavbarProps> = ({ role}) => {
         <div className="container mx-auto flex justify-between items-center">
           <div className="flex items-center space-x-4">
             <img
-              src="/path-to-your-logo.png" // Replace with your logo path
+              src="https://supertails.com/cdn/shop/files/supertails-logo-for-dark-theme_200x_2x_200x_2x_909b1df1-0f68-4734-9eeb-1d0e0a39c91f.webp?v=1705757214&width=200" // Replace with your logo path
               alt="Logo"
               className="h-8"
+              onClick={handleClick}
             />
-            <span className="text-white text-2xl font-bold">Website</span>
+            {/* <span className="text-white text-2xl font-bold">Website</span> */}
           </div>
  
           {/* Search Field */}

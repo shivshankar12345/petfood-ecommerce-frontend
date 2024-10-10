@@ -84,8 +84,8 @@ const ManageProductPage: React.FC = () => {
       onSearchChange={handleSearch}
       currentPage={currentPage}
       totalPages={totalPages}
-      onPageChange={(page) => setCurrentPage(page)}
-      error={error ?? undefined} 
+      onPageChange={(page: React.SetStateAction<number>) => setCurrentPage(page)}
+      error={error ?? undefined}
     >
       <button
         onClick={() => setShowModal(true)}

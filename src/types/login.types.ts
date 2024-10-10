@@ -1,10 +1,12 @@
 export interface IEmailInput {
-    email: string;
-  }
+  email: string;
+}
 export interface IOTPInput {
-    otp: string;
-  }
-export interface IntialState{
-    accessToken:string;
-    refreshToken:string,
+  otp: string;
+}
+export interface IntialState {
+  accessToken: string;
+  refreshToken: string;
+  role: string;
+  isAuth: boolean;
 }

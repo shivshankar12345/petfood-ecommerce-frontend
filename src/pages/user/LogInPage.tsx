@@ -23,16 +23,7 @@ const LogInPage: React.FC<LogInProps> = ({ email }) => {
     console.log(data);
     // Perform your form submission logic here (API call, etc.)
     try {
-      // const resp = await axios.patch(
-      //   `${baseURL}/users/update`,
-      //   {
-      //     name: data.name,
-      //     phone: data.phone,
-      //     gender: data.gender,
-      //   },
-      //   { headers: { Authorization: `Bearer ${accessToken}` } }
-      // );
-      const resp = await makeAPICallWithData(
+      await makeAPICallWithData(
         "patch",
         "/users/update",
         {

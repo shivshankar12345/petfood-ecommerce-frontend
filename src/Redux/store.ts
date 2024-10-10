@@ -13,14 +13,8 @@ import {
 import storage from "redux-persist/lib/storage";
 import { productReducer } from "./Slice/Product.slice";
 import { userReducer } from "./Slice/user.slice";
-
-import { configureStore } from '@reduxjs/toolkit'
-import { authReducers } from './Slice/auth.slice'
-import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist'
-import storage from 'redux-persist/lib/storage'
-import { productReducer } from './Slice/Product.slice'
 import { spinnerReducer } from './Slice/spinner.slice'
-import { userReducer } from './Slice/user.slice'
+
 import { sellerReducer } from './Slice/seller.slice'
  
  

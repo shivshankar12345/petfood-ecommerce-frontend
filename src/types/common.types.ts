@@ -23,6 +23,6 @@ export interface InputProps {
   }
   
    export interface PincodeModalProps {
-    isOpen: boolean;
-    onClose: () => void;
+    isOpen?: boolean;
+    onClose?: () => void;
   }

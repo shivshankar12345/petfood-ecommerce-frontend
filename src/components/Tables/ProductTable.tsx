@@ -6,6 +6,8 @@ const ProductTable: React.FC<ProductTableProps> = ({
   products,
   loading,
   error,
+  onEdit,
+  onDelete,
 }) => {
   const columns: TableColumn<Product>[] = [
     {
@@ -41,11 +43,12 @@ const ProductTable: React.FC<ProductTableProps> = ({
     {
       name: "Image",
       cell: (row: Product) => {
-        const imageUrl = typeof row.imageUrl === 'string' 
-          ? row.imageUrl 
-          : row.imageUrl 
-          ? URL.createObjectURL(row.imageUrl) 
-          : "";
+        const imageUrl =
+          typeof row.imageUrl === "string"
+            ? row.imageUrl
+            : row.imageUrl
+            ? URL.createObjectURL(row.imageUrl)
+            : "";
         return (
           <img
             src={imageUrl}
@@ -59,16 +62,43 @@ const ProductTable: React.FC<ProductTableProps> = ({
     {
       name: "Created At",
       selector: (row: Product) => {
-        return row.createdAt ? new Date(row.createdAt).toLocaleString() : "N/A";
+        return row.createdAt
+          ? new Date(row.createdAt).toLocaleString()
+          : "N/A";
       },
       sortable: true,
     },
     {
       name: "Updated At",
       selector: (row: Product) => {
-        return row.updatedAt ? new Date(row.updatedAt).toLocaleString() : "N/A";
+        return row.updatedAt
+          ? new Date(row.updatedAt).toLocaleString()
+          : "N/A";
       },
       sortable: true,
+    },
+    {
+      name: "Actions",
+      cell: (row: Product) => (
+        <div className="flex space-x-2">
+          {/* Uncomment to enable edit functionality */}
+          {/* <button
+            onClick={() => onEdit(row.id)}
+            className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 transition duration-200"
+          >
+            Edit
+          </button> */}
+          <button
+            onClick={() => onDelete(row.id)}
+            className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 transition duration-200"
+          >
+            Delete
+          </button>
+        </div>
+      ),
+      ignoreRowClick: true,
+      allowOverflow: true,
+      button: true,
     },
   ];
 
@@ -76,13 +106,16 @@ const ProductTable: React.FC<ProductTableProps> = ({
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <DataTable
-      columns={columns}
-      data={Array.isArray(products) ? products : []}
-      highlightOnHover
-      pointerOnHover
-      persistTableHead
-    />
+    <div style={{ maxHeight: "400px", overflowY: "auto" }}> {/* Fixed height for scrolling */}
+      <DataTable
+        columns={columns}
+        data={Array.isArray(products) ? products : []}
+        highlightOnHover
+        pointerOnHover
+        persistTableHead
+        className="w-full"
+      />
+    </div>
   );
 };
 

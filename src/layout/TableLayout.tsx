@@ -46,8 +46,10 @@ const TableLayout: React.FC<TableLayoutProps> = ({
 
       {error && <p className="text-red-600 mb-4">{error}</p>}
 
-      <div className="bg-gray-50 p-4 rounded-lg shadow-inner">
-        {children}
+      <div className="bg-gray-50 rounded-lg shadow-inner overflow-y-auto max-h-[400px]"> {/* Set max height for scrollbar */}
+        <div className="min-w-full">
+          {children}
+        </div>
       </div>
 
       <div className="mt-6 flex justify-center space-x-2">

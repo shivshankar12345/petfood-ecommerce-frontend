@@ -18,6 +18,8 @@ export interface ProductTableProps {
   loading: boolean;
   error: string | null;
   search: string
+  onEdit: (id: string) => void;  // Function to handle edit action, takes the product ID
+  onDelete: (id: string) => void; 
 }
 export interface ProductInputFieldProps {
   label: string;

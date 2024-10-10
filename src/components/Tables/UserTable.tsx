@@ -115,7 +115,7 @@ const handelInActive= async ()=>{
     },
     {
       name: "Actions", 
-      cell: (row: User) =>
+      cell: () =>
         selected === "all" ? (
           <>
             <button

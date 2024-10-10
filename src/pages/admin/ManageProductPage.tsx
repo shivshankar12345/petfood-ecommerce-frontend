@@ -8,6 +8,8 @@ import { RootState } from "../../Redux/store";
 import useDebounce from "../../hooks/useDebounce";
 import TableLayout from "../../layout/TableLayout";
 import { FaPlus } from "react-icons/fa"; // Importing icons
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ManageProductPage: React.FC = () => {
   const { makeAPICallWithOutData, makeAPICallWithData } = useApi();
@@ -21,7 +23,7 @@ const ManageProductPage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
 
-  const debouncedSearch = useDebounce(search, 300);
+  const debouncedSearch = useDebounce(search, 3000);
 
   const fetchProducts = async () => {
     dispatch(setLoading(true));
@@ -64,15 +66,51 @@ const ManageProductPage: React.FC = () => {
       );
 
       if (!isError) {
+        toast.success("Product added successfully!");
         fetchProducts();
         setShowModal(false);
       } else {
-        dispatch(setError("Failed to add product"));
+        toast.error("Failed to add product");
       }
     } catch (err) {
-      dispatch(
-        setError("An unexpected error occurred while adding the product")
+      toast.error("An unexpected error occurred while adding the product");
+    }
+  };
+
+  const handleEditProduct = async (formData: FormData, id: string) => {
+    try {
+      const { isError } = await makeAPICallWithData(
+        "put",
+        `/products/updateproducts/id=${id}`,
+        formData
       );
+
+      if (!isError) {
+        toast.success("Product updated successfully!");
+        fetchProducts();
+      } else {
+        toast.error("Failed to update product");
+      }
+    } catch (err) {
+      toast.error("An unexpected error occurred while updating the product");
+    }
+  };
+
+  const handleDeleteProduct = async (id: string) => {
+    try {
+      const { isError } = await makeAPICallWithOutData(
+        "delete",
+        `/products/delete?id=${id}`
+      );
+
+      if (!isError) {
+        toast.success("Product deleted successfully!");
+        fetchProducts();
+      } else {
+        toast.error("Failed to delete product");
+      }
+    } catch (err) {
+      toast.error("An unexpected error occurred while deleting the product");
     }
   };
 
@@ -95,13 +133,23 @@ const ManageProductPage: React.FC = () => {
         Add Product
       </button>
 
-      <ProductTable products={products} loading={loading} error={error} search={debouncedSearch} />
+      <div className="overflow-x-auto max-h-[400px]"> {/* Add max height to enable scrolling */}
+        <ProductTable
+          products={products}
+          loading={loading}
+          error={error}
+          onEdit={handleEditProduct} // Pass the edit handler
+          onDelete={handleDeleteProduct} // Pass the delete handler
+        />
+      </div>
 
       <AddProductModal
         isOpen={showModal}
         onClose={() => setShowModal(false)}
         onSubmit={handleAddProduct}
       />
+
+      <ToastContainer /> {/* Add the ToastContainer here */}
     </TableLayout>
   );
 };

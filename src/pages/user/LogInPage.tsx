@@ -7,7 +7,8 @@ import { baseURL } from "../../env";
 import { useSelector } from "react-redux";
 import { RootState } from "../../Redux/store";
 import { useNavigate } from "react-router-dom";
- 
+import useApi from "../../hooks/useApi";
+
 const LogInPage: React.FC<LogInProps> = ({ email }) => {
   const {
     register: registerDetails,
@@ -15,14 +16,25 @@ const LogInPage: React.FC<LogInProps> = ({ email }) => {
     formState: { errors },
   } = useForm<IFormInput>();
   const navigate = useNavigate();
+  const { makeAPICallWithData } = useApi();
   const { accessToken } = useSelector((state: RootState) => state.auth);
- 
+
   const onSubmitDetails: SubmitHandler<IFormInput> = async data => {
     console.log(data);
     // Perform your form submission logic here (API call, etc.)
     try {
-      const resp = await axios.patch(
-        `${baseURL}/users/update`,
+      // const resp = await axios.patch(
+      //   `${baseURL}/users/update`,
+      //   {
+      //     name: data.name,
+      //     phone: data.phone,
+      //     gender: data.gender,
+      //   },
+      //   { headers: { Authorization: `Bearer ${accessToken}` } }
+      // );
+      const resp = await makeAPICallWithData(
+        "patch",
+        "/users/update",
         {
           name: data.name,
           phone: data.phone,
@@ -30,15 +42,14 @@ const LogInPage: React.FC<LogInProps> = ({ email }) => {
         },
         { headers: { Authorization: `Bearer ${accessToken}` } }
       );
+      localStorage.removeItem("otpId");
+      localStorage.removeItem("email");
       navigate("/");
-      console.log(resp);
     } catch (error) {
       alert("Enter All Details");
     }
   };
- 
-  console.log(errors);
- 
+
   return (
     <div className="max-w-md mx-auto bg-white rounded-lg shadow-lg p-6 space-y-6">
       {/* Name Input */}
@@ -62,7 +73,7 @@ const LogInPage: React.FC<LogInProps> = ({ email }) => {
       {errors.name && (
         <span className="text-red-500 text-sm">{errors.name.message}</span>
       )}
- 
+
       {/* Email (Read-only) */}
       <InputBox
         id="email"
@@ -76,7 +87,7 @@ const LogInPage: React.FC<LogInProps> = ({ email }) => {
         buttonText=""
         disabled={true}
       />
- 
+
       {/* Phone Number Input */}
       <InputBox
         id="phone"
@@ -98,7 +109,7 @@ const LogInPage: React.FC<LogInProps> = ({ email }) => {
       {errors.phone && (
         <span className="text-red-500 text-sm">{errors.phone.message}</span>
       )}
- 
+
       {/* Gender Select */}
       <InputBox
         id="gender"
@@ -117,5 +128,5 @@ const LogInPage: React.FC<LogInProps> = ({ email }) => {
     </div>
   );
 };
- 
+
 export default LogInPage;

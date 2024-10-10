@@ -1,10 +1,9 @@
-
-import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 const useNavbar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const location = useLocation();
 
   const toggleSidebar = () => {
@@ -17,7 +16,7 @@ const useNavbar = () => {
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Search Query:', searchQuery);
+    console.log("Search Query:", searchQuery);
   };
 
   useEffect(() => {

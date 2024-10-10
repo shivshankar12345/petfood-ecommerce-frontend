@@ -17,7 +17,9 @@ export interface ProductTableProps {
   products: Product[];
   loading: boolean;
   error: string | null;
-  search: string
+  search?: string
+  // onEdit: (id: string) => void;  // Function to handle edit action, takes the product ID
+  onDelete: (id: string) => void; 
 }
 export interface ProductInputFieldProps {
   label: string;
@@ -36,5 +38,5 @@ export interface ProductInputFieldProps {
 export interface AddProductModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: Product) => void; 
+  onSubmit: (formData: FormData) => Promise<void>;
 }

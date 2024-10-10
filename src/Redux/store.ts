@@ -14,9 +14,9 @@ import storage from "redux-persist/lib/storage";
 import { productReducer } from "./Slice/Product.slice";
 import { spinnerReducer } from "./Slice/spinner.slice";
 import { userReducer } from "./Slice/user.slice";
-import { sellerReducer } from "./Slice/seller.slice";
-
-const persistConfig = {
+import { sellerReducer } from './Slice/seller.slice'
+ 
+ const persistConfig = {
   key: "root",
   storage,
 };

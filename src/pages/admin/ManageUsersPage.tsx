@@ -7,6 +7,7 @@ import { setUsers, setLoading, setError } from "../../Redux/Slice/user.slice";
 import {
   StatusDropdown,
 } from "../../components/admin/SearhBarDropdown";
+import TableLayout from "../../layout/TableLayout";
 
 const ManageUsersPage: React.FC = () => {
   const { makeAPICallWithOutData } = useApi();

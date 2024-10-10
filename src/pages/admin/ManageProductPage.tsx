@@ -77,24 +77,24 @@ const ManageProductPage: React.FC = () => {
     }
   };
 
-  const handleEditProduct = async (formData: FormData, id: string) => {
-    try {
-      const { isError } = await makeAPICallWithData(
-        "put",
-        `/products/updateproducts/id=${id}`,
-        formData
-      );
+  // const handleEditProduct = async (formData: FormData, id: string) => {
+  //   try {
+  //     const { isError } = await makeAPICallWithData(
+  //       "put",
+  //       `/products/updateproducts/id=${id}`,
+  //       formData
+  //     );
 
-      if (!isError) {
-        toast.success("Product updated successfully!");
-        fetchProducts();
-      } else {
-        toast.error("Failed to update product");
-      }
-    } catch (err) {
-      toast.error("An unexpected error occurred while updating the product");
-    }
-  };
+  //     if (!isError) {
+  //       toast.success("Product updated successfully!");
+  //       fetchProducts();
+  //     } else {
+  //       toast.error("Failed to update product");
+  //     }
+  //   } catch (err) {
+  //     toast.error("An unexpected error occurred while updating the product");
+  //   }
+  // };
 
   const handleDeleteProduct = async (id: string) => {
     try {
@@ -138,7 +138,7 @@ const ManageProductPage: React.FC = () => {
           products={products}
           loading={loading}
           error={error}
-          onEdit={handleEditProduct} // Pass the edit handler
+          // onEdit={handleEditProduct} // Pass the edit handler
           onDelete={handleDeleteProduct} // Pass the delete handler
         />
       </div>

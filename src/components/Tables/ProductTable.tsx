@@ -6,7 +6,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
   products,
   loading,
   error,
-  onEdit,
+  // onEdit,
   onDelete,
 }) => {
   const columns: TableColumn<Product>[] = [
@@ -89,7 +89,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
             Edit
           </button> */}
           <button
-            onClick={() => onDelete(row.id)}
+            onClick={() => onDelete(row.id as string)}
             className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 transition duration-200"
           >
             Delete

@@ -1,24 +1,40 @@
-import { NavLink} from 'react-router-dom';
-import Sidebar from './Sidebar';
-import { NavbarProps } from '../types/common.types';
-import useNavbar from '../hooks/useNavBar';
+import { NavLink, useNavigate } from "react-router-dom";
+import Sidebar from "./Sidebar";
+import useNavbar from "../hooks/useNavBar";
 
-import PincodeModal from '../pages/PincodePage';
-import { useState } from 'react';
+import PincodeModal from "../pages/PincodePage";
+import { useState } from "react";
 
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../Redux/store";
+import {
+  clearAccessToken,
+  clearRefreshToken,
+  clearRole,
+} from "../Redux/Slice/auth.slice";
 
+const Navbar: React.FC = () => {
+  const {
+    isSidebarOpen,
+    toggleSidebar,
+    searchQuery,
+    handleSearchChange,
+    handleSearchSubmit,
+  } = useNavbar();
+  const { role, isAuth } = useSelector((state: RootState) => state.auth);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-const Navbar: React.FC<NavbarProps> = ({ role}) => {
-    const {
-      isSidebarOpen,
-      toggleSidebar,
-      searchQuery,
-      handleSearchChange,
-      handleSearchSubmit,
-    } = useNavbar();
+  const handleClick = () => {
+    navigate("/");
+  };
 
-
-    const [isModalOpen, setIsModalOpen] = useState(false);
+  function handleLogout() {
+    dispatch(clearAccessToken());
+    dispatch(clearRefreshToken());
+    dispatch(clearRole());
+  }
 
   return (
     <>
@@ -27,15 +43,19 @@ const Navbar: React.FC<NavbarProps> = ({ role}) => {
         <div className="container mx-auto flex justify-between items-center">
           <div className="flex items-center space-x-4">
             <img
-              src="/path-to-your-logo.png" // Replace with your logo path
+              src="https://supertails.com/cdn/shop/files/supertails-logo-for-dark-theme_200x_2x_200x_2x_909b1df1-0f68-4734-9eeb-1d0e0a39c91f.webp?v=1705757214&width=200" // Replace with your logo path
               alt="Logo"
               className="h-8"
+              onClick={handleClick}
             />
-            <span className="text-white text-2xl font-bold">Website</span>
+            {/* <span className="text-white text-2xl font-bold">Website</span> */}
           </div>
- 
+
           {/* Search Field */}
-          <form onSubmit={handleSearchSubmit} className="hidden lg:flex items-center">
+          <form
+            onSubmit={handleSearchSubmit}
+            className="hidden lg:flex items-center"
+          >
             <input
               type="text"
               value={searchQuery}
@@ -50,14 +70,16 @@ const Navbar: React.FC<NavbarProps> = ({ role}) => {
               Search
             </button>
           </form>
- 
+
           {/* Desktop Menu */}
           <div className="hidden lg:flex space-x-6">
             <NavLink
               to="/pincode"
               onClick={() => setIsModalOpen(true)}
               className={({ isActive }) =>
-                `text-white hover:text-gray-200 transition duration-300 ${isActive ? 'font-bold' : ''}`
+                `text-white hover:text-gray-200 transition duration-300 ${
+                  isActive ? "font-bold" : ""
+                }`
               }
             >
               Pincode
@@ -65,7 +87,9 @@ const Navbar: React.FC<NavbarProps> = ({ role}) => {
             <NavLink
               to="/contact"
               className={({ isActive }) =>
-                `text-white hover:text-gray-200 transition duration-300 ${isActive ? 'font-bold' : ''}`
+                `text-white hover:text-gray-200 transition duration-300 ${
+                  isActive ? "font-bold" : ""
+                }`
               }
             >
               Contact
@@ -73,34 +97,50 @@ const Navbar: React.FC<NavbarProps> = ({ role}) => {
             <NavLink
               to="/cart"
               className={({ isActive }) =>
-                `text-white hover:text-gray-200 transition duration-300 ${isActive ? 'font-bold' : ''}`
+                `text-white hover:text-gray-200 transition duration-300 ${
+                  isActive ? "font-bold" : ""
+                }`
               }
             >
               Cart
             </NavLink>
-            <NavLink
-              to="/signup"
-              className={({ isActive }) =>
-                `text-white hover:text-gray-200 transition duration-300 ${isActive ? 'font-bold' : ''}`
-              }
-            >
-              Sign Up
-            </NavLink>
- 
+            {!isAuth ? (
+              <NavLink
+                to="/signup"
+                className={({ isActive }) =>
+                  `text-white hover:text-gray-200 transition duration-300 ${
+                    isActive ? "font-bold" : ""
+                  }`
+                }
+              >
+                Sign Up
+              </NavLink>
+            ) : (
+              <NavLink
+                to="#"
+                className={({ isActive }) =>
+                  `text-white hover:text-gray-200 transition duration-300 ${
+                    isActive ? "font-bold" : ""
+                  }`
+                }
+                onClick={handleLogout}
+              >
+                Signout
+              </NavLink>
+            )}
+
             {/* Admin Button (Visible only if the role is admin or seller) */}
-            {(role === 'admin' || role === 'seller') && (
+            {role === "admin" /*|| role === "seller"*/ && (
               <NavLink to="/admin-dashboard/*">
-          <div className="flex justify-center">
-          <button
-  className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 transition duration-300">
-  Admin
-</button>
- 
-        </div>
-        </NavLink>
-        )}
+                <div className="flex justify-center">
+                  <button className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 transition duration-300">
+                    Admin
+                  </button>
+                </div>
+              </NavLink>
+            )}
           </div>
- 
+
           {/* Sidebar Toggle Button */}
           <button className="lg:hidden text-white" onClick={toggleSidebar}>
             <svg
@@ -120,20 +160,21 @@ const Navbar: React.FC<NavbarProps> = ({ role}) => {
           </button>
         </div>
       </nav>
- 
-      {/* Sidebar */}
-      <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar}  role={role}/>
 
+      {/* Sidebar */}
+      <Sidebar
+        isOpen={isSidebarOpen}
+        toggleSidebar={toggleSidebar}
+        role={role}
+      />
 
       {/* Pincode Modal */}
-      <PincodeModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
-
+      <PincodeModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </>
   );
 };
- 
+
 export default Navbar;
- 
- 
- 
- 

@@ -5,13 +5,18 @@ import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import { setError, setLoading } from "../../Redux/Slice/user.slice";
- 
-const UserTable: React.FC<UserTableProps> = ({ users, loading, error,selected,onUserChange }) => {
 
-  const { makeAPICallWithOutData } = useApi();
+const UserTable: React.FC<UserTableProps> = ({
+  users,
+  loading,
+  error,
+  selected,
+  onUserChange,
+}) => {
+  const { makeAPICallWithOutData, makeAPICallWithData } = useApi();
   const dispatch = useDispatch();
 
-  const confirmActivation = () => {
+  const confirmActivation = (id: string) => {
     Swal.fire({
       title: "Are you sure?",
       text: "You want to activate this user!",
@@ -20,14 +25,14 @@ const UserTable: React.FC<UserTableProps> = ({ users, loading, error,selected,on
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, activate it!",
-    }).then((result) => {
+    }).then(result => {
       if (result.isConfirmed) {
-        handelActive();
+        handelActive(id);
       }
     });
   };
 
-  const confirmDeactivation = () => {
+  const confirmDeactivation = (id: string) => {
     Swal.fire({
       title: "Are you sure?",
       text: "You want to deactivate this user!",
@@ -36,54 +41,58 @@ const UserTable: React.FC<UserTableProps> = ({ users, loading, error,selected,on
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, deactivate it!",
-    }).then((result) => {
+    }).then(result => {
       if (result.isConfirmed) {
-        handelInActive();
+        handelInActive(id);
       }
     });
   };
 
-
-
-const handelActive= async ()=>{
-  dispatch(setLoading(true));
-  try {
-    const result = await makeAPICallWithOutData("get", "/admin-panel/getActiveUsers");
-    if (!result.isError) {
-      toast.success(`User Activated`);
-      onUserChange();
-    } else {
-      throw new Error(result.error?.message || "Failed to activate user");
+  const handelActive = async (id: string) => {
+    dispatch(setLoading(true));
+    try {
+      const result = await makeAPICallWithData(
+        "patch",
+        "/admin-panel/modifyUser",
+        { id, is_active: true }
+      );
+      if (!result.isError) {
+        toast.success(`User Activated`);
+        onUserChange();
+      } else {
+        throw new Error(result.error?.message || "Failed to activate user");
+      }
+    } catch (err: any) {
+      toast.error(err.message || "Failed to activate user");
+      dispatch(setError(err.message || "Failed to activate user"));
+    } finally {
+      dispatch(setLoading(false));
     }
-  } catch (err: any) {
-    toast.error(err.message || "Failed to activate user");
-    dispatch(setError(err.message || "Failed to activate user"));
-  } finally {
-    dispatch(setLoading(false));
-  }
-}
+  };
 
+  const handelInActive = async (id: string) => {
+    dispatch(setLoading(true));
+    try {
+      const result = await makeAPICallWithData(
+        "patch",
+        "/admin-panel/modifyUser",
+        { id, is_active: false }
+      );
 
-const handelInActive= async ()=>{
-   dispatch(setLoading(true));
-   try{
-    const result=await makeAPICallWithOutData("get","/admin-panel/getInactiveUsers");
-    if (!result.isError) {
-      toast.success(`User Deactivated`);
-      onUserChange();
-    } else {
-      throw new Error(result.error?.message || "Failed to deactivate user");
+      if (!result.isError) {
+        console.log(`Seller with ID approved`, result.response?.data);
+        toast.success(`User Deactivated`);
+        onUserChange();
+      } else {
+        throw new Error(result.error?.message || "Failed to deactivate user");
+      }
+    } catch (err: any) {
+      toast.error(err.message || "Failed to deactivate user");
+      dispatch(setError(err.message || "Failed to deactivate user"));
+    } finally {
+      dispatch(setLoading(false));
     }
-  } catch (err: any) {
-    toast.error(err.message || "Failed to deactivate user");
-    dispatch(setError(err.message || "Failed to deactivate user"));
-  } finally {
-    dispatch(setLoading(false));
-  }
-   };
-
-
-
+  };
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -114,30 +123,30 @@ const handelInActive= async ()=>{
       sortable: true,
     },
     {
-      name: "Actions", 
+      name: "Active",
+      cell: (row: User) => <>{row.is_active ? "Y" : "N"}</>,
+      sortable: true,
+      center: true,
+    },
+    {
+      name: "Actions",
       cell: (row: User) =>
-        selected === "all" ? (
+        row.is_active ? (
           <>
             <button
-              onClick={() =>  confirmActivation()}
+              onClick={() => confirmDeactivation(row.id)}
               className="bg-red-500 text-white px-2 py-1 rounded"
             >
-              Active
+              In Active
             </button>
           </>
         ) : (
           <div className="flex space-x-2">
             <button
-              onClick={() => confirmActivation()}
+              onClick={() => confirmActivation(row.id)}
               className="bg-green-500 text-white px-2 py-1 rounded"
             >
-             Active
-            </button>
-            <button
-              onClick={() =>  confirmDeactivation()}
-              className="bg-red-500 text-white px-2 py-1 rounded"
-            >
-             In Active
+              Active
             </button>
           </div>
         ),
@@ -148,12 +157,11 @@ const handelInActive= async ()=>{
     <DataTable
       columns={columns}
       data={Array.isArray(users) ? users : []}
-      pagination
       highlightOnHover
       striped
       persistTableHead
     />
   );
 };
- 
+
 export default UserTable;

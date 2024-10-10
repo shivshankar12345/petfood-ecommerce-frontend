@@ -114,18 +114,24 @@ const handelInActive= async ()=>{
       sortable: true,
     },
     {
+      name: "Active",
+      cell: (row: User) => <>{row.is_active ? "Y" : "N"}</>,
+      sortable: true,
+      center: true,
+    },
+    {
       name: "Actions", 
       cell: (row: User) =>
-        selected === "all" ? (
+        ( row.is_active )  ? (  
           <>
             <button
               onClick={() =>  confirmActivation()}
               className="bg-red-500 text-white px-2 py-1 rounded"
             >
-              Active
+              In Active
             </button>
           </>
-        ) : (
+        ):( !row.is_active )? (
           <div className="flex space-x-2">
             <button
               onClick={() => confirmActivation()}
@@ -133,14 +139,13 @@ const handelInActive= async ()=>{
             >
              Active
             </button>
-            <button
-              onClick={() =>  confirmDeactivation()}
-              className="bg-red-500 text-white px-2 py-1 rounded"
-            >
-             In Active
-            </button>
           </div>
-        ),
+        ):(<><button
+          onClick={() => confirmActivation()}
+          className="bg-green-500 text-white px-2 py-1 rounded"
+        >
+         Active
+        </button></>),
       center: true,
     },
   ];
@@ -148,7 +153,6 @@ const handelInActive= async ()=>{
     <DataTable
       columns={columns}
       data={Array.isArray(users) ? users : []}
-      pagination
       highlightOnHover
       striped
       persistTableHead

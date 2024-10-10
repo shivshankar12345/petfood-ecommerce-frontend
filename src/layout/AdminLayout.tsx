@@ -1,18 +1,16 @@
 import React from 'react';
-import AdminSidebar from '../components/admin/AdminSidebar';
 import { Outlet } from 'react-router-dom';
+import AdminSidebar from '../components/admin/AdminSidebar'; // Adjust the import based on your folder structure
 
- 
 const AdminLayout: React.FC = () => {
   return (
-  
-    <div><AdminSidebar />
-       <div className="ml-64 p-4 "> {/* Add margin to the main content */}
-        <Outlet /> {/* This renders the matched child routes */}
+    <div className="flex flex-col lg:flex-row">
+      <AdminSidebar />
+      <div className="flex-1 p-4  bg-gray-100 min-h-screen transition-all duration-300">
+        <Outlet /> {/* This renders the matched child route component */}
       </div>
-</div>
-  
+    </div>
   );
 };
- 
+
 export default AdminLayout;

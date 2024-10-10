@@ -5,29 +5,32 @@ import AddProductModal from "./ProductModal";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading, setProducts, setError } from "../../Redux/Slice/Product.slice";
 import { RootState } from "../../Redux/store";
-import { Product } from "../../types/Product.types";
-import { PaginationControls } from "../../components/PaginationControls";
-import useDebounce from "../../hooks/useDebounce"; // Import your debounce hook
+import useDebounce from "../../hooks/useDebounce";
+import TableLayout from "../../layout/TableLayout";
+import { FaPlus } from "react-icons/fa"; // Importing icons
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ManageProductPage: React.FC = () => {
   const { makeAPICallWithOutData, makeAPICallWithData } = useApi();
   const dispatch = useDispatch();
-  const { products, loading, error } = useSelector((state: RootState) => state.products);
+  const { products, loading, error } = useSelector(
+    (state: RootState) => state.products
+  );
 
   const [showModal, setShowModal] = useState<boolean>(false);
   const [search, setSearch] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
 
-  // Use the debounced search term
-  const debouncedSearch = useDebounce(search, 1000); // 300 ms delay
+  const debouncedSearch = useDebounce(search, 3000);
 
   const fetchProducts = async () => {
     dispatch(setLoading(true));
     try {
       const { isError, response, error } = await makeAPICallWithOutData(
         "get",
-        `/products/getAllproducts?page=${currentPage}&limit=5&search=${(debouncedSearch)}`
+        `/products/getAllproducts?page=${currentPage}&limit=5&search=${debouncedSearch}`
       );
 
       if (isError) {
@@ -45,73 +48,109 @@ const ManageProductPage: React.FC = () => {
     }
   };
 
-  // Trigger fetchProducts only when currentPage or debouncedSearch changes
   useEffect(() => {
     fetchProducts();
-  }, [currentPage, debouncedSearch]); // Updated to include debounced search
+  }, [currentPage, debouncedSearch]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value); // Update search state
-    setCurrentPage(1); // Reset to first page on new search
+    setSearch(e.target.value);
+    setCurrentPage(1);
   };
 
-  const handleAddProduct = async (productData: Product) => {
+  const handleAddProduct = async (formData: FormData) => {
     try {
-      const formData = new FormData();
-      Object.keys(productData).forEach(key => {
-        const value = productData[key as keyof Product];
-        if (key === "imageUrl" && value instanceof File) {
-          formData.append(key, value);
-        } else if (typeof value === "string" || typeof value === "number") {
-          formData.append(key, String(value));
-        }
-      });
-
-      const { isError } = await makeAPICallWithData("post", "/products/createproducts", formData);
+      const { isError } = await makeAPICallWithData(
+        "post",
+        "/products/createproducts",
+        formData
+      );
 
       if (!isError) {
-        fetchProducts(); // Refresh the product list
+        toast.success("Product added successfully!");
+        fetchProducts();
         setShowModal(false);
       } else {
-        dispatch(setError("Failed to add product"));
+        toast.error("Failed to add product");
       }
     } catch (err) {
-      dispatch(setError("An unexpected error occurred while adding the product"));
+      toast.error("An unexpected error occurred while adding the product");
+    }
+  };
+
+  // const handleEditProduct = async (formData: FormData, id: string) => {
+  //   try {
+  //     const { isError } = await makeAPICallWithData(
+  //       "put",
+  //       `/products/updateproducts/id=${id}`,
+  //       formData
+  //     );
+
+  //     if (!isError) {
+  //       toast.success("Product updated successfully!");
+  //       fetchProducts();
+  //     } else {
+  //       toast.error("Failed to update product");
+  //     }
+  //   } catch (err) {
+  //     toast.error("An unexpected error occurred while updating the product");
+  //   }
+  // };
+
+  const handleDeleteProduct = async (id: string) => {
+    try {
+      const { isError } = await makeAPICallWithOutData(
+        "delete",
+        `/products/delete?id=${id}`
+      );
+
+      if (!isError) {
+        toast.success("Product deleted successfully!");
+        fetchProducts();
+      } else {
+        toast.error("Failed to delete product");
+      }
+    } catch (err) {
+      toast.error("An unexpected error occurred while deleting the product");
     }
   };
 
   return (
-    <div className="p-4">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-2xl font-bold">Manage Product</h2>
-        <button
-          onClick={() => setShowModal(true)}
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
-        >
-          ADD Product
-        </button>
-      </div>
-      <div className="mb-4">
-        <input
-          type="text"
-          placeholder="Search products..."
-          value={search}
-          onChange={handleSearch} // Call handleSearch on change
-          className="p-2 border border-gray-300 rounded w-full"
+    <TableLayout
+      title="Manage Product"
+      searchPlaceholder="Search products..."
+      searchValue={search}
+      onSearchChange={handleSearch}
+      currentPage={currentPage}
+      totalPages={totalPages}
+      onPageChange={(page: React.SetStateAction<number>) => setCurrentPage(page)}
+      error={error ?? undefined}
+    >
+      <button
+        onClick={() => setShowModal(true)}
+        className="flex items-center bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300 mb-4"
+      >
+        <FaPlus className="mr-2" />
+        Add Product
+      </button>
+
+      <div className="overflow-x-auto max-h-[400px]"> {/* Add max height to enable scrolling */}
+        <ProductTable
+          products={products}
+          loading={loading}
+          error={error}
+          // onEdit={handleEditProduct} // Pass the edit handler
+          onDelete={handleDeleteProduct} // Pass the delete handler
         />
       </div>
-      <ProductTable products={products} loading={loading} error={error} search={debouncedSearch} /> {/* Pass debouncedSearch */}
-      <PaginationControls
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={setCurrentPage}
-      />
+
       <AddProductModal
         isOpen={showModal}
         onClose={() => setShowModal(false)}
         onSubmit={handleAddProduct}
       />
-    </div>
+
+      <ToastContainer /> {/* Add the ToastContainer here */}
+    </TableLayout>
   );
 };
 

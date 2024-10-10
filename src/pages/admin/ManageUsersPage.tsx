@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../Redux/store"; 
+import { RootState } from "../../Redux/store";
 import UserTable from "../../components/Tables/UserTable";
 import useApi from "../../hooks/useApi";
-import { setUsers, setLoading, setError } from "../../Redux/Slice/user.slice"; 
+import { setUsers, setLoading, setError } from "../../Redux/Slice/user.slice";
 import {
   SearchBar,
   StatusDropdown,
@@ -27,7 +27,7 @@ const ManageUsersPage: React.FC = () => {
 
   const fetchUsers = async (
     status: string,
-    search: string ="",
+    search: string = "",
     limit = 10,
     page_num = 1
   ) => {
@@ -36,13 +36,13 @@ const ManageUsersPage: React.FC = () => {
     let endpoint = "";
 
     if (status === "all") {
-      endpoint = `/admin-panel/getAllUsers?status=${status}&search=${search}&limit=${limit}&page_num=${page_num}`;
+      endpoint = `/admin-panel/getAllUsers?search=${search}&limit=${limit}&page_num=${page_num}`;
     }
     if (status === "active") {
-      endpoint = `/admin-panel/getActiveUsers?status=${status}&search=${search}&limit=${limit}&page_num=${page_num}`;
+      endpoint = `/admin-panel/getActiveUsers?search=${search}&limit=${limit}&page_num=${page_num}`;
     }
     if (status === "inactive") {
-      endpoint = `/admin-panel/getInactiveUsers?status=${status}&search=${search}&limit=${limit}&page_num=${page_num}`;
+      endpoint = `/admin-panel/getInactiveUsers?search=${search}&limit=${limit}&page_num=${page_num}`;
     }
     const { isError, response, error } = await makeAPICallWithOutData(
       "get",
@@ -65,7 +65,7 @@ const ManageUsersPage: React.FC = () => {
     setCurrentPage(1);
     fetchUsers(selectedStatus, searchTerm, limit, 1);
   }, [selectedStatus, searchTerm]);
- 
+
   useEffect(() => {
     fetchUsers(selectedStatus, searchTerm, limit, currentPage);
   }, [currentPage]);

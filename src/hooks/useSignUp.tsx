@@ -10,6 +10,7 @@ import { baseURL } from "../env";
 import { IEmailInput, IOTPInput } from "../types/login.types";
 import useAPIs from "./useApi";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const useSignUp = () => {
   const { makeAPICallWithData } = useAPIs();
@@ -20,32 +21,23 @@ const useSignUp = () => {
 
   const onSubmitEmail = async (data: IEmailInput) => {
     setEmail(data.email);
-    setStep("otp");
- 
-
-    try {
-      const result = await makeAPICallWithData("post", "/users/sendOtp", {
-        email: data.email,
-      });
-      const { response = null, isError } = result;
-      if (isError || !response) {
-        return;
-      }
-      if (response.data.success) {
-        localStorage.setItem("email", data.email);
-        localStorage.setItem("otpId", response.data?.data.id);
-        console.log(`Sending OTP to ${data.email}`);
-   
-        setStep("otp");
-      }
-    } catch (error) {
-      window.alert("Something went wrong !!");
+    const result = await makeAPICallWithData("post", "/users/sendOtp", {
+      email: data.email,
+    });
+    const { response = null, isError } = result;
+    if (isError || !response) {
+      toast.error("Something went wrong !!");
+      return;
+    }
+    if (response.data.success) {
+      localStorage.setItem("email", data.email);
+      localStorage.setItem("otpId", response.data?.data.id);
+      toast("Otp sent successfully");
+      setStep("otp");
     }
   };
 
   const onSubmitOTP = async (data: IOTPInput) => {
-   
- 
     const resp = await axios.post(`${baseURL}/users/validateOtp`, {
       otp: data.otp,
       id: localStorage.getItem("otpId"),

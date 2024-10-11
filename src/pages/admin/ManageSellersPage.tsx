@@ -9,9 +9,7 @@ import {
   setLoading,
 } from "../../Redux/Slice/seller.slice";
 import TableLayout from "../../layout/TableLayout";
-import {
-  StatusDropdown,
-} from "../../components/admin/SearhBarDropdown";
+import { StatusDropdown } from "../../components/admin/SearhBarDropdown";
 import useDebounce from "../../hooks/useDebounce";
 
 const ManageSellerPage: React.FC = () => {
@@ -37,9 +35,10 @@ const ManageSellerPage: React.FC = () => {
     page_num = 1
   ) => {
     dispatch(setLoading(true));
-    let endpoint = status === "verified"
-      ? `/admin-panel/getVerifiedSeller?status=verified&search=${search}&limit=${limit}&page_num=${page_num}`
-      : `/admin-panel/getPendingSeller?search=${search}&limit=${limit}&page_num=${page_num}`;
+    let endpoint =
+      status === "verified"
+        ? `/admin-panel/getVerifiedSeller?status=verified&search=${search}&limit=${limit}&page_num=${page_num}`
+        : `/admin-panel/getPendingSeller?search=${search}&limit=${limit}&page_num=${page_num}`;
 
     const { isError, response, error } = await makeAPICallWithOutData(
       "get",
@@ -49,9 +48,10 @@ const ManageSellerPage: React.FC = () => {
     if (isError) {
       dispatch(setError(error.message || "Failed to fetch sellers"));
     } else {
-      const sellersData = status === "verified"
-        ? response?.data?.verified_sellers
-        : response?.data?.pending_sellers;
+      const sellersData =
+        status === "verified"
+          ? response?.data?.verified_sellers
+          : response?.data?.pending_sellers;
 
       dispatch(setSellers(sellersData || []));
       setTotalPages(response?.data?.total_pages || 1);
@@ -74,10 +74,10 @@ const ManageSellerPage: React.FC = () => {
       title="Manage Sellers"
       searchPlaceholder="Search seller..."
       searchValue={debouncedSearch}
-      onSearchChange={(e) => setSearchTerm(e.target.value)}
+      onSearchChange={e => setSearchTerm(e.target.value)}
       currentPage={currentPage}
       totalPages={totalPages}
-      onPageChange={(page) => setCurrentPage(page)}
+      onPageChange={page => setCurrentPage(page)}
       error={error || undefined}
     >
       <div className="flex flex-col md:flex-row justify-between items-center mb-4 space-y-4 md:space-y-0">
@@ -91,10 +91,11 @@ const ManageSellerPage: React.FC = () => {
         seller={sellers}
         loading={loading}
         error={error}
-        onSellerChange={() => fetchSellers(selectedStatus, debouncedSearch, limit, currentPage)}
+        onSellerChange={() =>
+          fetchSellers(selectedStatus, debouncedSearch, limit, currentPage)
+        }
         selected={selectedStatus}
       />
-
     </TableLayout>
   );
 };

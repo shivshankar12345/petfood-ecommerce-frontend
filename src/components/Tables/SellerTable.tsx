@@ -3,7 +3,7 @@ import { Seller, SellerTableProps } from "../../types/seller.types";
 import useApi from "../../hooks/useApi";
 import { useDispatch } from "react-redux";
 import { setError, setLoading } from "../../Redux/Slice/seller.slice";
-import { toast } from "react-toastify"; 
+import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 
 const SellerTable: React.FC<SellerTableProps> = ({
@@ -13,22 +13,22 @@ const SellerTable: React.FC<SellerTableProps> = ({
   onSellerChange,
   selected,
 }) => {
-  const { makeAPICallWithData } = useApi(); 
+  const { makeAPICallWithData } = useApi();
   const dispatch = useDispatch();
 
   // Function to confirm approval via SweetAlert2
   const confirmApproval = (id: string) => {
     Swal.fire({
-      title: 'Are you sure?',
+      title: "Are you sure?",
       text: "You want to approve this seller!",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, approve it!',
-    }).then((result) => {
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, approve it!",
+    }).then(result => {
       if (result.isConfirmed) {
-        handleApprove(id); 
+        handleApprove(id);
       }
     });
   };
@@ -36,16 +36,16 @@ const SellerTable: React.FC<SellerTableProps> = ({
   // Function to confirm rejection via SweetAlert2
   const confirmRejection = (id: string) => {
     Swal.fire({
-      title: 'Are you sure?',
+      title: "Are you sure?",
       text: "You want to reject this seller!",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, reject it!',
-    }).then((result) => {
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, reject it!",
+    }).then(result => {
       if (result.isConfirmed) {
-        handleReject(id); 
+        handleReject(id);
       }
     });
   };
@@ -124,13 +124,20 @@ const SellerTable: React.FC<SellerTableProps> = ({
     },
     {
       name: "Gender",
-      selector: (row: Seller) => row.gender,
+      cell: (row: Seller) =>
+        row.gender == "m" ? (
+          <>Male</>
+        ) : row.gender == "f" ? (
+          <>Female</>
+        ) : (
+          <>Other</>
+        ),
       sortable: true,
       center: true,
     },
     {
       name: "Active",
-      cell: (row: Seller) => <>{row.is_active ? "Y" : "N"}</>,
+      cell: (row: Seller) => <>{row.is_active ? "Yes" : "No"}</>,
       sortable: true,
       center: true,
     },
@@ -147,7 +154,7 @@ const SellerTable: React.FC<SellerTableProps> = ({
       center: true,
     },
     {
-      name: "Actions", 
+      name: "Actions",
       cell: (row: Seller) =>
         selected === "verified" ? (
           <>
@@ -190,4 +197,3 @@ const SellerTable: React.FC<SellerTableProps> = ({
 };
 
 export default SellerTable;
-

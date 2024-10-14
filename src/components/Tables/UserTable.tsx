@@ -10,10 +10,9 @@ const UserTable: React.FC<UserTableProps> = ({
   users,
   loading,
   error,
-  selected,
   onUserChange,
 }) => {
-  const { makeAPICallWithOutData, makeAPICallWithData } = useApi();
+  const {  makeAPICallWithData } = useApi();
   const dispatch = useDispatch();
 
   const confirmActivation = (id: string) => {

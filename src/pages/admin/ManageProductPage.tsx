@@ -3,11 +3,14 @@ import ProductTable from "../../components/Tables/ProductTable";
 import useApi from "../../hooks/useApi";
 import AddProductModal from "./ProductModal";
 import { useDispatch, useSelector } from "react-redux";
-import { setLoading, setProducts, setError } from "../../Redux/Slice/Product.slice";
+import {
+  setLoading,
+  setProducts,
+  setError,
+} from "../../Redux/Slice/Product.slice";
 import { RootState } from "../../Redux/store";
 import useDebounce from "../../hooks/useDebounce";
 import TableLayout from "../../layout/TableLayout";
-import { FaPlus } from "react-icons/fa"; // Importing icons
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -122,34 +125,36 @@ const ManageProductPage: React.FC = () => {
       onSearchChange={handleSearch}
       currentPage={currentPage}
       totalPages={totalPages}
-      onPageChange={(page: React.SetStateAction<number>) => setCurrentPage(page)}
+      onPageChange={(page: React.SetStateAction<number>) =>
+        setCurrentPage(page)
+      }
       error={error ?? undefined}
     >
-      <button
-        onClick={() => setShowModal(true)}
-        className="flex items-center bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300 mb-4"
-      >
-        <FaPlus className="mr-2" />
-        Add Product
-      </button>
+      <div className="w-full h-full border border-gray-300 overflow-auto p-4">
+        {/* Add Product Button */}
+        <button
+          onClick={() => setShowModal(true)}
+          className=" p-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 transition duration-200"
+        >
+          Add Product
+        </button>
 
-      <div className="overflow-x-auto max-h-[400px]"> {/* Add max height to enable scrolling */}
+        {/* Add Product Modal */}
+
+        {/* Product Table */}
         <ProductTable
           products={products}
           loading={loading}
           error={error}
-          // onEdit={handleEditProduct} // Pass the edit handler
-          onDelete={handleDeleteProduct} // Pass the delete handler
+          onDelete={handleDeleteProduct}
         />
       </div>
-
       <AddProductModal
         isOpen={showModal}
         onClose={() => setShowModal(false)}
         onSubmit={handleAddProduct}
       />
-
-      <ToastContainer /> {/* Add the ToastContainer here */}
+      <ToastContainer />
     </TableLayout>
   );
 };

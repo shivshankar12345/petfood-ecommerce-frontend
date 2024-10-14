@@ -21,20 +21,24 @@ const AdminSidebar: React.FC = () => {
   };
 
   return (
-    <div className={`fixed top-0 left-0 h-full w-64 bg-gray-800 text-white z-50 transition-transform transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 lg:static`}>
+    <div
+      className={`fixed top-0 left-0 h-[120%] w-64 bg-gray-800 text-white z-50 transition-transform transform ${
+        isOpen ? 'translate-x-0' : '-translate-x-full'
+      } lg:translate-x-0 lg:static`}
+    >
       {/* Toggle Button for Mobile */}
       <button className="p-2 text-white lg:hidden" onClick={toggleSidebar}>
         {isOpen ? <FaTimes /> : <FaBars />}
       </button>
 
-      <div className="flex flex-col h-full">
+      <div className="flex flex-col h-full overflow-hidden"> {/* Disable scrolling */}
         {/* Logo Section */}
         <div className="flex items-center justify-center h-16 bg-gray-900">
           <h1 className="text-2xl font-bold">Admin Panel</h1>
         </div>
 
         {/* Navigation Links */}
-        <div className="flex-1 overflow-y-auto p-4">
+        <div className="flex-1 overflow-y-hidden p-4"> {/* Remove vertical scrollbar */}
           <ul className="space-y-4">
             <li>
               <NavLink

@@ -8,8 +8,6 @@ import {
   StatusDropdown,
 } from "../../components/admin/SearhBarDropdown";
 import TableLayout from "../../layout/TableLayout";
-import EditUserModal from "./UserModal";
-import { User } from "../../types/user.types";
 
 const ManageUsersPage: React.FC = () => {
   const { makeAPICallWithOutData } = useApi();
@@ -26,9 +24,6 @@ const ManageUsersPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [selectedStatus, setSelectedStatus] = useState<string>("all"); // Default to 'all'
 
-  // Modal state
-  // const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
-  // const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   const fetchUsers = async (
     status: string,
@@ -75,16 +70,6 @@ const ManageUsersPage: React.FC = () => {
     fetchUsers(selectedStatus, searchTerm, limit, currentPage);
   }, [currentPage]);
 
-  // const handleEditUser = (user: User) => {
-  //   setSelectedUser(user); // Set the selected user
-  //   setIsEditModalOpen(true); // Open the modal
-  // };
-
-  // const handleSaveUser = (updatedUser: User) => {
-  //   // Update the user in the state
-  //   setIsEditModalOpen(false); // Close the modal after saving
-  //   fetchUsers(selectedStatus, searchTerm, limit, currentPage); // Refresh the user list
-  // };
 
   return (
     <>
@@ -113,12 +98,6 @@ const ManageUsersPage: React.FC = () => {
         //onEditUser={handleEditUser} // Pass the edit handler
       />
     </TableLayout>
-    {/* <EditUserModal
-    user={selectedUser}
-    isOpen={isEditModalOpen}
-    onClose={() => setIsEditModalOpen(false)}
-    onSave={handleSaveUser}
-  /> */}
   </>
   );
 };

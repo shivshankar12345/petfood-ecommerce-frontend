@@ -1,6 +1,7 @@
 import React from "react";
 import { User } from "../../types/user.types";
 import { useForm } from "react-hook-form";
+import useApi from "../../hooks/useApi";
 
 interface EditUserModalProps {
   user: User;
@@ -10,26 +11,39 @@ interface EditUserModalProps {
 
 const EditUserModal: React.FC<EditUserModalProps> = ({ user, onClose, onSave }) => {
   const { register, handleSubmit, reset } = useForm<User>();
+  const {makeAPICallWithData}=useApi();
 
   // Populate form with the user data when the modal opens
   React.useEffect(() => {
     reset(user);
   }, [user, reset]);
 
-  const onSubmit = async (data: User) => {
-    // Make API call to update user
-    // After successful update, call onSave to refresh the user list
-    await fetch("/admin-panel/modifyUser", {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    //   body: JSON.stringify({ id: user.id, ...data }), // Send updated user data
-    });
-    
-    onSave();
-    onClose();
+const onSubmit = async (data: User) => {
+    try {
+      // Make API call to update user
+      const response=await makeAPICallWithData("patch","/users/update",{
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        gender: data.gender,
+      });
+
+      if (!response.isError) {
+        throw new Error("Failed to update user");
+      }
+
+      const result = await response.response?.data;
+      console.log("User updated successfully", result);
+
+      // Call onSave to refresh the user list after saving
+      onSave();
+      onClose();
+    } catch (error) {
+      console.error("Error updating user:", error);
+    }
   };
+
+
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm z-50"> {/* Overlay */}
@@ -53,6 +67,26 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ user, onClose, onSave }) 
             <input
               type="email"
               {...register("email", { required: true })} // Register input with validation
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">
+              Phone:
+            </label>
+            <input
+              type="phone"
+              {...register("phone", { required: true })} // Register input with validation
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">
+              Gender:
+            </label>
+            <input
+              type="gender"
+              {...register("gender", { required: true })} // Register input with validation
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
             />
           </div>

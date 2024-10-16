@@ -119,7 +119,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
 
           <ProductInputField
             label="Brand ID"
-            type="number"
+            type="text"
             placeholder="Enter brand ID"
             {...register("brandId", {
               required: "Brand ID is required",
@@ -132,7 +132,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
 
           <ProductInputField
             label="Seller ID"
-            type="number"
+            type="text"
             placeholder="Enter seller ID"
             {...register("sellerId", {
               required: "Seller ID is required",

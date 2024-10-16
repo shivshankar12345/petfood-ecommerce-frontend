@@ -119,12 +119,19 @@ const UserTable: React.FC<UserTableProps> = ({
     },
     {
       name: "Gender",
-      selector: (row: User) => row.gender,
+      cell: (row: User) =>
+        row.gender == "m" ? (
+          <>Male</>
+        ) : row.gender == "f" ? (
+          <>Female</>
+        ) : (
+          <>Other</>
+        ),
       sortable: true,
     },
     {
       name: "Active",
-      cell: (row: User) => <>{row.is_active ? "Y" : "N"}</>,
+      cell: (row: User) => <>{row.is_active ? "Yes" : "No"}</>,
       sortable: true,
       center: true,
     },

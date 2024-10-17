@@ -13,7 +13,7 @@ export interface User {
   is_active: boolean;
   created_at: string;
   updated_at: string;
-  deleted_at?: string | null;  // Making deleted_at optional
+  deleted_at?: string | null; // Making deleted_at optional
 }
 
 export interface UserTableProps {
@@ -21,6 +21,7 @@ export interface UserTableProps {
   loading: boolean;
   error: string | null;
   onUserChange: () => void;
+  selectedStatus:string;
 }
 
 export interface ActionButtonsProps {

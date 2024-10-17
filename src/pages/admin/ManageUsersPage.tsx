@@ -44,6 +44,9 @@ const ManageUsersPage: React.FC = () => {
     if (status === "inactive") {
       endpoint = `/admin-panel/getInactiveUsers?search=${search}&limit=${limit}&page_num=${page_num}`;
     }
+    if(status === "delete"){
+      endpoint=`/admin-panel/getDeletedUser?status=${status}&search=${search}&limit=${limit}&page_num=${page_num}`;
+    }
 
     const { isError, response, error } = await makeAPICallWithOutData(
       "get",
@@ -95,6 +98,7 @@ const ManageUsersPage: React.FC = () => {
         loading={loading}
         error={error}
         onUserChange={() => fetchUsers(selectedStatus, searchTerm, limit, currentPage)}
+        selectedStatus={selectedStatus}
         //onEditUser={handleEditUser} // Pass the edit handler
       />
     </TableLayout>

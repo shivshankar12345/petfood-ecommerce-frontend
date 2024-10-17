@@ -14,8 +14,9 @@ const UserTable: React.FC<UserTableProps> = ({
   loading,
   error,
   onUserChange,
+  selectedStatus,
 }) => {
-  const { makeAPICallWithData } = useApi();
+  const { makeAPICallWithOutData,makeAPICallWithData } = useApi();
   const dispatch = useDispatch();
  
   const [isModalOpen, setModalOpen] = useState(false);
@@ -105,10 +106,27 @@ const UserTable: React.FC<UserTableProps> = ({
     setModalOpen(true); // Open the modal
   };
 
-  const handleDelete = (id: string) => {
-    // Implement delete functionality
-    console.log(`Delete user with id: ${id}`);
+  const handleDelete = async (id: string) => {
+    dispatch(setLoading(true));
+    try {
+      const result = await makeAPICallWithOutData(
+        "delete",  // Change the method to 'delete'
+        `/admin-panel/deleteUser/${id}` // Use the appropriate endpoint
+      );
+      if (!result.isError) {
+        toast.success(`User Deleted Successfully`);
+        onUserChange(); // Refresh the user list
+      } else {
+        throw new Error(result.error?.message || "Failed to delete user");
+      }
+    } catch (err: any) {
+      toast.error(err.message || "Failed to delete user");
+      dispatch(setError(err.message || "Failed to delete user"));
+    } finally {
+      dispatch(setLoading(false));
+    }
   };
+
 
   
 
@@ -154,20 +172,24 @@ const UserTable: React.FC<UserTableProps> = ({
       sortable: true,
       center: true,
     },
+    selectedStatus !== 'delete' &&(
     {
       name: "Actions",
       cell: (row: User) => (
-        <ActionButtons
-          id={row.id}
-          isActive={row.is_active}
-          onActivate={confirmActivation}
-          onDeactivate={confirmDeactivation}
-          onEdit={handleEdit} 
-          onDelete={handleDelete} 
-        />
-      ),
+       
+          <ActionButtons
+            id={row.id}
+            isActive={row.is_active}
+            onActivate={confirmActivation}
+            onDeactivate={confirmDeactivation}
+            onEdit={handleEdit} 
+            onDelete={handleDelete} 
+          />
+        )
+      ,
       center: true,
-    },
+    }
+  ),
   ];
 
   return (

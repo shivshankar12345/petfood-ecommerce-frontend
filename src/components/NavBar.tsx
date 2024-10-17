@@ -41,7 +41,7 @@ const Navbar: React.FC = () => {
       {/* Navbar */}
       <nav className="bg-indigo-600 p-4 shadow-md ">
         <div className="container mx-auto flex justify-between items-center">
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-4 cursor-pointer">
             <img
               src="https://supertails.com/cdn/shop/files/supertails-logo-for-dark-theme_200x_2x_200x_2x_909b1df1-0f68-4734-9eeb-1d0e0a39c91f.webp?v=1705757214&width=200" // Replace with your logo path
               alt="Logo"
@@ -117,7 +117,7 @@ const Navbar: React.FC = () => {
               </NavLink>
             ) : (
               <NavLink
-                to="#"
+                to="/signout"
                 className={({ isActive }) =>
                   `text-white hover:text-gray-200 transition duration-300 ${
                     isActive ? "font-bold" : ""

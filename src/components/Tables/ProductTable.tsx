@@ -7,7 +7,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
   products,
   loading,
   error,
-  // onEdit,
+  onEdit,
   onDelete,
 }) => {
   const columns: TableColumn<Product>[] = [
@@ -30,6 +30,11 @@ const ProductTable: React.FC<ProductTableProps> = ({
       name: "Category",
       selector: (row: Product) => row.categoryId || "",
       sortable: true,
+    },
+    {
+      name:"Pet",
+      selector:(row:Product) => row.petType || "",
+      sortable:true
     },
     {
       name: "Stock",
@@ -60,20 +65,20 @@ const ProductTable: React.FC<ProductTableProps> = ({
       },
       sortable: false,
     },
-    {
-      name: "Created At",
-      selector: (row: Product) => {
-        return row.createdAt ? new Date(row.createdAt).toLocaleString() : "N/A";
-      },
-      sortable: true,
-    },
-    {
-      name: "Updated At",
-      selector: (row: Product) => {
-        return row.updatedAt ? new Date(row.updatedAt).toLocaleString() : "N/A";
-      },
-      sortable: true,
-    },
+    // {
+    //   name: "Created At",
+    //   selector: (row: Product) => {
+    //     return row.createdAt ? new Date(row.createdAt).toLocaleString() : "N/A";
+    //   },
+    //   sortable: true,
+    // },
+    // {
+    //   name: "Updated At",
+    //   selector: (row: Product) => {
+    //     return row.updatedAt ? new Date(row.updatedAt).toLocaleString() : "N/A";
+    //   },
+    //   sortable: true,
+    // },
   
     {
       name: "Actions",
@@ -81,7 +86,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
         <div className="flex space-x-2">
           {/* Uncomment to enable edit functionality */}
           <button
-            onClick={() => onEdit(row.id)}
+            onClick={() => onEdit(row)}
             className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 transition duration-200"
           >
             <FaEdit></FaEdit>
@@ -115,3 +120,5 @@ const ProductTable: React.FC<ProductTableProps> = ({
 };
 
 export default ProductTable;
+
+

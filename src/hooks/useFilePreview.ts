@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const useFilePreview = (file: File | null): [string | null] => {
+const useFilePreview = (file: File | null): [string | null, (url: string | null) => void] => {
   const [preview, setPreview] = useState<string | null>(null);
 
   useEffect(() => {
@@ -12,11 +12,11 @@ const useFilePreview = (file: File | null): [string | null] => {
     const objectUrl = URL.createObjectURL(file);
     setPreview(objectUrl);
 
-    // Clean up the object URL when the component unmounts or file changes
+    // Cleanup to revoke object URL after component unmounts or file change
     return () => URL.revokeObjectURL(objectUrl);
   }, [file]);
 
-  return [preview];
+  return [preview, setPreview];
 };
 
 export default useFilePreview;

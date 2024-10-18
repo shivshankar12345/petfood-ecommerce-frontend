@@ -3,13 +3,17 @@ import ProductTable from "../../components/Tables/ProductTable";
 import useApi from "../../hooks/useApi";
 import AddProductModal from "./ProductModal";
 import { useDispatch, useSelector } from "react-redux";
-import { setLoading, setProducts, setError } from "../../Redux/Slice/Product.slice";
+import {
+  setLoading,
+  setProducts,
+  setError,
+} from "../../Redux/Slice/Product.slice";
 import { RootState } from "../../Redux/store";
 import useDebounce from "../../hooks/useDebounce";
 import TableLayout from "../../layout/TableLayout";
-import { FaPlus } from "react-icons/fa"; // Importing icons
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ConfirmationModal from "../../components/ConfirmationModal";
 
 const ManageProductPage: React.FC = () => {
   const { makeAPICallWithOutData, makeAPICallWithData } = useApi();
@@ -17,12 +21,13 @@ const ManageProductPage: React.FC = () => {
   const { products, loading, error } = useSelector(
     (state: RootState) => state.products
   );
-
+  const [showConfirmModal,setShowConfirmModal] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [search, setSearch] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedProducts, setSelectedProducts] = useState<any>(null);
   const debouncedSearch = useDebounce(search, 3000);
 
   const fetchProducts = async () => {
@@ -58,6 +63,8 @@ const ManageProductPage: React.FC = () => {
   };
 
   const handleAddProduct = async (formData: FormData) => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     try {
       const { isError } = await makeAPICallWithData(
         "post",
@@ -74,27 +81,35 @@ const ManageProductPage: React.FC = () => {
       }
     } catch (err) {
       toast.error("An unexpected error occurred while adding the product");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  // const handleEditProduct = async (formData: FormData, id: string) => {
-  //   try {
-  //     const { isError } = await makeAPICallWithData(
-  //       "put",
-  //       `/products/updateproducts/id=${id}`,
-  //       formData
-  //     );
+  const handleEditProduct = async (formData: FormData, id: string) => {
+    if(!id){
+      console.error("id is required to update the product");
+    }
 
-  //     if (!isError) {
-  //       toast.success("Product updated successfully!");
-  //       fetchProducts();
-  //     } else {
-  //       toast.error("Failed to update product");
-  //     }
-  //   } catch (err) {
-  //     toast.error("An unexpected error occurred while updating the product");
-  //   }
-  // };
+
+    try {
+      const { isError } = await makeAPICallWithData(
+        "put",
+        `/products/update?id=${id}`,
+        formData
+      );
+
+      if (!isError) {
+        toast.success("Product updated successfully!");
+        fetchProducts();
+      } else {
+        toast.error("Failed to update product");
+      }
+    } catch (err) {
+      toast.error("An unexpected error occurred while updating the product");
+    } 
+
+  };
 
   const handleDeleteProduct = async (id: string) => {
     try {
@@ -105,6 +120,7 @@ const ManageProductPage: React.FC = () => {
 
       if (!isError) {
         toast.success("Product deleted successfully!");
+  
         fetchProducts();
       } else {
         toast.error("Failed to delete product");
@@ -114,6 +130,14 @@ const ManageProductPage: React.FC = () => {
     }
   };
 
+  const openEditModal = (product: any) => {
+    setSelectedProducts(product);
+    setShowModal(true);
+  };
+  const openDeleteModel = (id:string) =>{
+    setSelectedProducts(id);
+    setShowConfirmModal(true);
+  }
   return (
     <TableLayout
       title="Manage Product"
@@ -122,34 +146,48 @@ const ManageProductPage: React.FC = () => {
       onSearchChange={handleSearch}
       currentPage={currentPage}
       totalPages={totalPages}
-      onPageChange={(page: React.SetStateAction<number>) => setCurrentPage(page)}
+      onPageChange={(page: React.SetStateAction<number>) =>
+        setCurrentPage(page)
+      }
       error={error ?? undefined}
     >
-      <button
-        onClick={() => setShowModal(true)}
-        className="flex items-center bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300 mb-4"
-      >
-        <FaPlus className="mr-2" />
-        Add Product
-      </button>
+      <div className="w-full h-full border border-gray-300 overflow-auto p-4">
+        {/* Add Product Button */}
+        <button
+          onClick={() => {
+            setSelectedProducts(null);
+            setShowModal(true);
+          }}
+          className=" p-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 transition duration-200"
+        >
+          Add Product
+        </button>
 
-      <div className="overflow-x-auto max-h-[400px]"> {/* Add max height to enable scrolling */}
+        {/* Add Product Modal */}
+
+        {/* Product Table */}
         <ProductTable
           products={products}
           loading={loading}
           error={error}
-          // onEdit={handleEditProduct} // Pass the edit handler
-          onDelete={handleDeleteProduct} // Pass the delete handler
+          onDelete={openDeleteModel}
+          onEdit={openEditModal}
         />
       </div>
-
       <AddProductModal
         isOpen={showModal}
         onClose={() => setShowModal(false)}
-        onSubmit={handleAddProduct}
+        onSubmit={(formData) => selectedProducts ? handleEditProduct(formData, selectedProducts.id) : handleAddProduct(formData)} // Pass id when editing
+        product={selectedProducts}
+        productId={selectedProducts?.id} // Pass the product ID here
       />
-
-      <ToastContainer /> {/* Add the ToastContainer here */}
+      <ToastContainer />
+      <ConfirmationModal
+        isOpen = {showConfirmModal}
+        onClose={()=> setShowConfirmModal(false)} 
+        onConfirm={() => handleDeleteProduct(selectedProducts!)} 
+        message = "Do you want to delete this product?"     />
+      
     </TableLayout>
   );
 };

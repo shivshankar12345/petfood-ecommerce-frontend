@@ -18,7 +18,7 @@ export interface ProductTableProps {
   loading: boolean;
   error: string | null;
   search?: string
-  // onEdit: (id: string) => void;  // Function to handle edit action, takes the product ID
+  onEdit: (product:any) => void;  // Function to handle edit action, takes the product ID
   onDelete: (id: string) => void; 
 }
 export interface ProductInputFieldProps {
@@ -38,5 +38,19 @@ export interface ProductInputFieldProps {
 export interface AddProductModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (formData: FormData) => Promise<void>;
+  onSubmit: (formData: FormData, id?: string) => Promise<void>; // Include an optional ID parameter
+  product?: FormValues; // Accept the product data for editing
+  productId?: string;
 }
+
+export type FormValues = {
+  name: string;
+  categoryId: string;
+  price: number;
+  description: string;
+  stock: number;
+  imageUrl: FileList | string |null;
+  brandId: number;
+  sellerId: number;
+  petType: string;
+};

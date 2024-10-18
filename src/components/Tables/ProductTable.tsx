@@ -1,12 +1,13 @@
 import React from "react";
 import DataTable, { TableColumn } from "react-data-table-component";
 import { Product, ProductTableProps } from "../../types/Product.types";
+import { FaTrash,FaEdit } from "react-icons/fa";
 
 const ProductTable: React.FC<ProductTableProps> = ({
   products,
   loading,
   error,
-  // onEdit,
+  onEdit,
   onDelete,
 }) => {
   const columns: TableColumn<Product>[] = [
@@ -29,6 +30,11 @@ const ProductTable: React.FC<ProductTableProps> = ({
       name: "Category",
       selector: (row: Product) => row.categoryId || "",
       sortable: true,
+    },
+    {
+      name:"Pet",
+      selector:(row:Product) => row.petType || "",
+      sortable:true
     },
     {
       name: "Stock",
@@ -59,40 +65,37 @@ const ProductTable: React.FC<ProductTableProps> = ({
       },
       sortable: false,
     },
-    {
-      name: "Created At",
-      selector: (row: Product) => {
-        return row.createdAt
-          ? new Date(row.createdAt).toLocaleString()
-          : "N/A";
-      },
-      sortable: true,
-    },
-    {
-      name: "Updated At",
-      selector: (row: Product) => {
-        return row.updatedAt
-          ? new Date(row.updatedAt).toLocaleString()
-          : "N/A";
-      },
-      sortable: true,
-    },
+    // {
+    //   name: "Created At",
+    //   selector: (row: Product) => {
+    //     return row.createdAt ? new Date(row.createdAt).toLocaleString() : "N/A";
+    //   },
+    //   sortable: true,
+    // },
+    // {
+    //   name: "Updated At",
+    //   selector: (row: Product) => {
+    //     return row.updatedAt ? new Date(row.updatedAt).toLocaleString() : "N/A";
+    //   },
+    //   sortable: true,
+    // },
+  
     {
       name: "Actions",
       cell: (row: Product) => (
         <div className="flex space-x-2">
           {/* Uncomment to enable edit functionality */}
-          {/* <button
-            onClick={() => onEdit(row.id)}
+          <button
+            onClick={() => onEdit(row)}
             className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 transition duration-200"
           >
-            Edit
-          </button> */}
+            <FaEdit></FaEdit>
+          </button>
           <button
             onClick={() => onDelete(row.id as string)}
             className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 transition duration-200"
           >
-            Delete
+          <FaTrash></FaTrash>
           </button>
         </div>
       ),
@@ -106,17 +109,16 @@ const ProductTable: React.FC<ProductTableProps> = ({
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div style={{ maxHeight: "400px", overflowY: "auto" }}> {/* Fixed height for scrolling */}
-      <DataTable
-        columns={columns}
-        data={Array.isArray(products) ? products : []}
-        highlightOnHover
-        pointerOnHover
-        persistTableHead
-        className="w-full"
-      />
-    </div>
+    <DataTable
+      columns={columns}
+      data={Array.isArray(products) ? products : []}
+      highlightOnHover
+      pointerOnHover
+      persistTableHead
+    />
   );
 };
 
 export default ProductTable;
+
+

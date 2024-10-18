@@ -1,20 +1,9 @@
 import React, { useEffect, useState } from "react";
 import ProductInputField from "../../components/admin/ProductInputField";
-import { AddProductModalProps } from "../../types/Product.types";
+import { AddProductModalProps,FormValues } from "../../types/Product.types";
 import { useForm, SubmitHandler } from "react-hook-form";
 import useFilePreview from "../../hooks/useFilePreview";
 
-type FormValues = {
-  name: string;
-  categoryId: string;
-  price: number;
-  description: string;
-  stock: number;
-  imageUrl: FileList;
-  brandId: number;
-  sellerId: number;
-  petType: string;
-};
 
 const AddProductModal: React.FC<AddProductModalProps> = ({
   isOpen,
@@ -41,7 +30,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
       Object.entries(product).forEach(([key, value]) => {
         setValue(key as keyof FormValues, value as string|number|FileList);
       });
-      if (product.imageUrl) {
+      if (product.imageUrl === "string") {
         setPreview(product.imageUrl);
         setSelectedFile(null);
         setImageName(product.imageUrl.split("/").pop() || null); 
@@ -68,7 +57,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
       if (typedKey === "imageUrl") {
         if (selectedFile) {
           formData.append(key, selectedFile);
-        } else if (product?.imageUrl) {
+        } else if (typeof product?.imageUrl === "string")  {
           formData.append(key, product.imageUrl);
         }
       } else {

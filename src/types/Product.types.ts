@@ -42,3 +42,15 @@ export interface AddProductModalProps {
   product?: FormValues; // Accept the product data for editing
   productId?: string;
 }
+
+export type FormValues = {
+  name: string;
+  categoryId: string;
+  price: number;
+  description: string;
+  stock: number;
+  imageUrl: FileList | string |null;
+  brandId: number;
+  sellerId: number;
+  petType: string;
+};

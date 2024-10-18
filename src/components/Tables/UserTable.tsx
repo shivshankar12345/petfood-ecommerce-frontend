@@ -16,13 +16,11 @@ const UserTable: React.FC<UserTableProps> = ({
   onUserChange,
   selectedStatus,
 }) => {
-  const { makeAPICallWithOutData,makeAPICallWithData } = useApi();
+  const { makeAPICallWithOutData, makeAPICallWithData } = useApi();
   const dispatch = useDispatch();
- 
+
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null); // State to hold the selected user
- 
-
 
   const confirmActivation = (id: string) => {
     Swal.fire({
@@ -127,9 +125,6 @@ const UserTable: React.FC<UserTableProps> = ({
     }
   };
 
-
-  
-
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
@@ -156,14 +151,11 @@ const UserTable: React.FC<UserTableProps> = ({
     },
     {
       name: "Gender",
-      cell: (row: User) =>
-        row.gender == "m" ? (
-          <>Male</>
-        ) : row.gender == "f" ? (
-          <>Female</>
-        ) : (
-          <>Other</>
-        ),
+      cell: (row: User) => (
+        <>
+          {row.gender === "m" ? "Male" : row.gender === "f" ? "Female" : "Other"}
+        </>
+      ),
       sortable: true,
     },
     {
@@ -172,44 +164,43 @@ const UserTable: React.FC<UserTableProps> = ({
       sortable: true,
       center: true,
     },
-    selectedStatus !== 'delete' &&(
-    {
-      name: "Actions",
-      cell: (row: User) => (
-       
-          <ActionButtons
-            id={row.id}
-            isActive={row.is_active}
-            onActivate={confirmActivation}
-            onDeactivate={confirmDeactivation}
-            onEdit={handleEdit} 
-            onDelete={handleDelete} 
-          />
-        )
-      ,
-      center: true,
-    }
-  ),
+    ...(selectedStatus !== 'delete'
+      ? [{
+          name: "Actions",
+          cell: (row: User) => (
+            <ActionButtons
+              id={row.id}
+              isActive={row.is_active}
+              onActivate={confirmActivation}
+              onDeactivate={confirmDeactivation}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
+          ),
+          center: true,
+        }]
+      : []),
   ];
 
   return (
-    <>   <DataTable
-    columns={columns}
-    data={Array.isArray(users) ? users : []}
-    highlightOnHover
-    striped
-    persistTableHead
-  />
-   {isModalOpen && selectedUser && (
+    <>
+      <DataTable
+        columns={columns}
+        data={Array.isArray(users) ? users : []}
+        highlightOnHover
+        striped
+        persistTableHead
+      />
+      {isModalOpen && selectedUser && (
         <EditUserModal 
           user={selectedUser} 
           onClose={() => setModalOpen(false)} 
           onSave={onUserChange} // Call onUserChange to refresh the user list
         />
       )}
-</>
-  
+    </>
   );
 };
 
 export default UserTable;
+

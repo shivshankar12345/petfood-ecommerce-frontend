@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { setError, setLoading } from "../../Redux/Slice/user.slice";
 import ActionButtons from "../admin/ActionButtons";
 import EditUserModal from "../../pages/admin/UserModal";
+import { userConfirm } from "../../utils/Confirmation";
 
 const UserTable: React.FC<UserTableProps> = ({
   users,
@@ -105,10 +106,23 @@ const UserTable: React.FC<UserTableProps> = ({
   };
 
   const handleDelete = async (id: string) => {
+    const confirm = await userConfirm(
+      "Are you sure.?",
+      "You want to Delete this User",
+      "Yes, Delete it",
+      "warning",
+      true,
+      "#3085d6",
+      "#d33"
+    );
+    if (!confirm) {
+      return;
+    }
+
     dispatch(setLoading(true));
     try {
       const result = await makeAPICallWithOutData(
-        "delete",  // Change the method to 'delete'
+        "delete", // Change the method to 'delete'
         `/admin-panel/deleteUser/${id}` // Use the appropriate endpoint
       );
       if (!result.isError) {
@@ -153,7 +167,11 @@ const UserTable: React.FC<UserTableProps> = ({
       name: "Gender",
       cell: (row: User) => (
         <>
-          {row.gender === "m" ? "Male" : row.gender === "f" ? "Female" : "Other"}
+          {row.gender === "m"
+            ? "Male"
+            : row.gender === "f"
+            ? "Female"
+            : "Other"}
         </>
       ),
       sortable: true,
@@ -164,8 +182,8 @@ const UserTable: React.FC<UserTableProps> = ({
       sortable: true,
       center: true,
     },
-    ...(selectedStatus !== 'delete'
-      ? [{
+    selectedStatus !== "delete"
+      ? {
           name: "Actions",
           cell: (row: User) => (
             <ActionButtons
@@ -178,9 +196,13 @@ const UserTable: React.FC<UserTableProps> = ({
             />
           ),
           center: true,
-        }]
-      : []),
+        }
+      : {},
   ];
+
+  if (selectedStatus == "delete") {
+    columns.pop();
+  }
 
   return (
     <>
@@ -192,9 +214,9 @@ const UserTable: React.FC<UserTableProps> = ({
         persistTableHead
       />
       {isModalOpen && selectedUser && (
-        <EditUserModal 
-          user={selectedUser} 
-          onClose={() => setModalOpen(false)} 
+        <EditUserModal
+          user={selectedUser}
+          onClose={() => setModalOpen(false)}
           onSave={onUserChange} // Call onUserChange to refresh the user list
         />
       )}
@@ -203,4 +225,3 @@ const UserTable: React.FC<UserTableProps> = ({
 };
 
 export default UserTable;
-

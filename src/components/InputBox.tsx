@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { InputProps } from "../types/common.types";
+import useApi from "../hooks/useApi";
+import { toast } from "react-toastify";
 
 const InputBox: React.FC<InputProps> = ({
   id,
@@ -13,7 +15,8 @@ const InputBox: React.FC<InputProps> = ({
   handleSubmit,
   onSubmit,
 }) => {
-  const [expireTime, setExpireTime] = useState<number>(120);
+  const [expireTime, setExpireTime] = useState<number>(119);
+  const { makeAPICallWithData } = useApi();
   useEffect(() => {
     if (expireTime != 0) {
       window.setTimeout(() => {
@@ -21,6 +24,20 @@ const InputBox: React.FC<InputProps> = ({
       }, 1000);
     }
   }, [expireTime]);
+
+  async function reSendOtp(email: string) {
+    const { isError, response } = await makeAPICallWithData(
+      "post",
+      "/users/sendOtp",
+      { email }
+    );
+    if (isError || !response) {
+      toast.error("Something went wrong !!");
+    } else {
+      toast("Otp sent successfully !!");
+      localStorage.setItem("otpId", response.data?.data.id);
+    }
+  }
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       {/* Conditional rendering for select options or input fields */}
@@ -65,13 +82,17 @@ const InputBox: React.FC<InputProps> = ({
 
       {/* Conditional rendering for the submit button */}
       {buttonText == "Verify OTP" && expireTime != 0 ? (
-        <div className="text-end">Expired in : {expireTime}</div>
+        <div className="text-end">
+          Expired in : 0{Math.trunc(expireTime / 60)}:
+          {Math.trunc((expireTime % 60) / 10) == 0 ? "0" : ""}
+          {expireTime % 60}
+        </div>
       ) : buttonText == "Verify OTP" ? (
         <div
           className="text-end text-red-500 cursor-pointer"
-          onClick={e => {
-            handleSubmit(onSubmit)(e);
+          onClick={() => {
             setExpireTime(120);
+            reSendOtp(localStorage.getItem("email") as string);
           }}
         >
           Resend Otp

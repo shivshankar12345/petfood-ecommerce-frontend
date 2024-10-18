@@ -2,12 +2,11 @@ import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import InputBox from "../../components/InputBox";
 import { IFormInput, LogInProps } from "../../types/details.types";
-import axios from "axios";
-import { baseURL } from "../../env";
 import { useSelector } from "react-redux";
 import { RootState } from "../../Redux/store";
 import { useNavigate } from "react-router-dom";
 import useApi from "../../hooks/useApi";
+import { toast } from "react-toastify";
 
 const LogInPage: React.FC<LogInProps> = ({ email }) => {
   const {
@@ -20,25 +19,23 @@ const LogInPage: React.FC<LogInProps> = ({ email }) => {
   const { accessToken } = useSelector((state: RootState) => state.auth);
 
   const onSubmitDetails: SubmitHandler<IFormInput> = async data => {
-    console.log(data);
-    // Perform your form submission logic here (API call, etc.)
-    try {
-      await makeAPICallWithData(
-        "patch",
-        "/users/update",
-        {
-          name: data.name,
-          phone: data.phone,
-          gender: data.gender,
-        },
-        { headers: { Authorization: `Bearer ${accessToken}` } }
-      );
-      localStorage.removeItem("otpId");
-      localStorage.removeItem("email");
-      navigate("/");
-    } catch (error) {
-      alert("Enter All Details");
+    const { isError, error } = await makeAPICallWithData(
+      "patch",
+      "/users/update",
+      {
+        name: data.name,
+        phone: data.phone,
+        gender: data.gender,
+      },
+      { headers: { Authorization: `Bearer ${accessToken}` } }
+    );
+    if (isError) {
+      toast.error(error?.response?.data?.message || "Something went wrong !!");
+      return;
     }
+    localStorage.removeItem("otpId");
+    localStorage.removeItem("email");
+    navigate("/");
   };
 
   return (

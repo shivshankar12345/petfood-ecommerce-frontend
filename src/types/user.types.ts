@@ -13,13 +13,22 @@ export interface User {
   is_active: boolean;
   created_at: string;
   updated_at: string;
-  deleted_at?: string | null;  // Making deleted_at optional
+  deleted_at?: string | null; // Making deleted_at optional
 }
 
 export interface UserTableProps {
   users: User[];
   loading: boolean;
   error: string | null;
-  selected:string
   onUserChange: () => void;
+  selectedStatus:string;
+}
+
+export interface ActionButtonsProps {
+  id: string;
+  isActive: boolean;
+  onActivate: (id: string) => void;
+  onDeactivate: (id: string) => void;
+  onEdit: (id: string) => void; // Added Edit functionality
+  onDelete: (id: string) => void; // Added Delete functionality
 }

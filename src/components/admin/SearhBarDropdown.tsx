@@ -38,6 +38,7 @@ export const StatusDropdown: React.FC<{ selectedStatus: string; onStatusChange: 
         <option value="all">All</option>
         <option value="active">Active</option>
         <option value="inactive">Inactive</option>
+        <option value="delete">Delete User</option>
       </select>
     )}</>
   )

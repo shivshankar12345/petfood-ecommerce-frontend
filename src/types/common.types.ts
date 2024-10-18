@@ -20,6 +20,6 @@ export interface SidebarProps {
 }
 
 export interface PincodeModalProps {
-  isOpen: boolean;
-  onClose: () => void;
+  isOpen?: boolean;
+  onClose?: () => void;
 }

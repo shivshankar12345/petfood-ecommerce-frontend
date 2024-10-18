@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import DataTable from "react-data-table-component";
 import { User, UserTableProps } from "../../types/user.types";
 import useApi from "../../hooks/useApi";
@@ -5,15 +6,23 @@ import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import { setError, setLoading } from "../../Redux/Slice/user.slice";
+import ActionButtons from "../admin/ActionButtons";
+import EditUserModal from "../../pages/admin/UserModal";
 
 const UserTable: React.FC<UserTableProps> = ({
   users,
   loading,
   error,
   onUserChange,
+  selectedStatus,
 }) => {
-  const {  makeAPICallWithData } = useApi();
+  const { makeAPICallWithOutData,makeAPICallWithData } = useApi();
   const dispatch = useDispatch();
+ 
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null); // State to hold the selected user
+ 
+
 
   const confirmActivation = (id: string) => {
     Swal.fire({
@@ -26,7 +35,7 @@ const UserTable: React.FC<UserTableProps> = ({
       confirmButtonText: "Yes, activate it!",
     }).then(result => {
       if (result.isConfirmed) {
-        handelActive(id);
+        handleActivate(id);
       }
     });
   };
@@ -42,12 +51,12 @@ const UserTable: React.FC<UserTableProps> = ({
       confirmButtonText: "Yes, deactivate it!",
     }).then(result => {
       if (result.isConfirmed) {
-        handelInActive(id);
+        handleDeactivate(id);
       }
     });
   };
 
-  const handelActive = async (id: string) => {
+  const handleActivate = async (id: string) => {
     dispatch(setLoading(true));
     try {
       const result = await makeAPICallWithData(
@@ -69,7 +78,7 @@ const UserTable: React.FC<UserTableProps> = ({
     }
   };
 
-  const handelInActive = async (id: string) => {
+  const handleDeactivate = async (id: string) => {
     dispatch(setLoading(true));
     try {
       const result = await makeAPICallWithData(
@@ -77,9 +86,7 @@ const UserTable: React.FC<UserTableProps> = ({
         "/admin-panel/modifyUser",
         { id, is_active: false }
       );
-
       if (!result.isError) {
-        console.log(`Seller with ID approved`, result.response?.data);
         toast.success(`User Deactivated`);
         onUserChange();
       } else {
@@ -93,8 +100,39 @@ const UserTable: React.FC<UserTableProps> = ({
     }
   };
 
+  const handleEdit = (id: string) => {
+    const userToEdit = users.find(user => user.id === id); // Find the user to edit
+    setSelectedUser(userToEdit || null); // Set the selected user
+    setModalOpen(true); // Open the modal
+  };
+
+  const handleDelete = async (id: string) => {
+    dispatch(setLoading(true));
+    try {
+      const result = await makeAPICallWithOutData(
+        "delete",  // Change the method to 'delete'
+        `/admin-panel/deleteUser/${id}` // Use the appropriate endpoint
+      );
+      if (!result.isError) {
+        toast.success(`User Deleted Successfully`);
+        onUserChange(); // Refresh the user list
+      } else {
+        throw new Error(result.error?.message || "Failed to delete user");
+      }
+    } catch (err: any) {
+      toast.error(err.message || "Failed to delete user");
+      dispatch(setError(err.message || "Failed to delete user"));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+
+  
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
+
   const columns = [
     {
       name: "ID",
@@ -118,48 +156,59 @@ const UserTable: React.FC<UserTableProps> = ({
     },
     {
       name: "Gender",
-      selector: (row: User) => row.gender,
+      cell: (row: User) =>
+        row.gender == "m" ? (
+          <>Male</>
+        ) : row.gender == "f" ? (
+          <>Female</>
+        ) : (
+          <>Other</>
+        ),
       sortable: true,
     },
     {
       name: "Active",
-      cell: (row: User) => <>{row.is_active ? "Y" : "N"}</>,
+      cell: (row: User) => <>{row.is_active ? "Yes" : "No"}</>,
       sortable: true,
       center: true,
     },
+    selectedStatus !== 'delete' &&(
     {
       name: "Actions",
-      cell: (row: User) =>
-        row.is_active ? (
-          <>
-            <button
-              onClick={() => confirmDeactivation(row.id)}
-              className="bg-red-500 text-white px-2 py-1 rounded"
-            >
-              In Active
-            </button>
-          </>
-        ) : (
-          <div className="flex space-x-2">
-            <button
-              onClick={() => confirmActivation(row.id)}
-              className="bg-green-500 text-white px-2 py-1 rounded"
-            >
-              Active
-            </button>
-          </div>
-        ),
+      cell: (row: User) => (
+       
+          <ActionButtons
+            id={row.id}
+            isActive={row.is_active}
+            onActivate={confirmActivation}
+            onDeactivate={confirmDeactivation}
+            onEdit={handleEdit} 
+            onDelete={handleDelete} 
+          />
+        )
+      ,
       center: true,
-    },
+    }
+  ),
   ];
+
   return (
-    <DataTable
-      columns={columns}
-      data={Array.isArray(users) ? users : []}
-      highlightOnHover
-      striped
-      persistTableHead
-    />
+    <>   <DataTable
+    columns={columns}
+    data={Array.isArray(users) ? users : []}
+    highlightOnHover
+    striped
+    persistTableHead
+  />
+   {isModalOpen && selectedUser && (
+        <EditUserModal 
+          user={selectedUser} 
+          onClose={() => setModalOpen(false)} 
+          onSave={onUserChange} // Call onUserChange to refresh the user list
+        />
+      )}
+</>
+  
   );
 };
 

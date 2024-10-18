@@ -1,16 +1,46 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
+import { Navigation, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import useApi from "../hooks/useApi";
+import { toast } from "react-toastify";
 
+type SwiperSlide = {
+  id: string;
+  imageUrl: string;
+};
 const HomePage: React.FC = () => {
+  const { makeAPICallWithOutData } = useApi();
+  const [sliderImages, setSlideImages] = useState<SwiperSlide[]>([]);
+
+  async function fetchSliderImages() {
+    const { response, isError } = await makeAPICallWithOutData(
+      "get",
+      "/admin-panel/landingpage/crousel/getImages"
+    );
+    if (isError || !response) {
+      toast.error("Network Error");
+      return;
+    }
+    setSlideImages(response?.data?.crouselData);
+  }
+  useEffect(() => {
+    fetchSliderImages();
+  }, []);
+
   return (
     <div>
       {/* Welcome Section */}
-      <div className="text-center p-8 rounded" style={{ background: 'linear-gradient(45deg, #FF9A8B, #FF6A88, #FF99AC)', backgroundSize: 'cover',
-    backgroundPosition: 'center', }}>
+      <div
+        className="text-center p-8 rounded"
+        style={{
+          background: "linear-gradient(45deg, #FF9A8B, #FF6A88, #FF99AC)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
         <h1 className="text-5xl font-bold mb-4 text-white">
           Welcome to PetFood Haven
         </h1>
@@ -18,7 +48,7 @@ const HomePage: React.FC = () => {
           Everything your pet needs, delivered to your door!
         </p>
         <button className="bg-orange-500 text-white px-6 py-3 rounded-lg hover:bg-orange-600 transition duration-300">
-          Shop Now 
+          Shop Now
         </button>
       </div>
 
@@ -34,8 +64,22 @@ const HomePage: React.FC = () => {
             navigation={true}
             className="w-full"
           >
+            {sliderImages.map((value: SwiperSlide) => (
+              <SwiperSlide>
+                <div
+                  className="relative bg-cover bg-center h-[70vh] flex items-center justify-center"
+                  style={{
+                    backgroundImage:
+                      // 'url("https://supertails.com/cdn/shop/files/12th_oct_web_2-min_1600x.png?v=1728541127")',
+                      `url(${value.imageUrl})`,
+                    width: "100%",
+                    // backgroundSize: "contain",
+                  }}
+                ></div>
+              </SwiperSlide>
+            ))}
             {/* Carousel Slide 1 */}
-            <SwiperSlide>
+            {/* <SwiperSlide>
               <div
                 className="relative bg-cover bg-center h-[70vh] flex items-center justify-center"
                 style={{
@@ -45,10 +89,10 @@ const HomePage: React.FC = () => {
                   //backgroundSize: "contain",
                 }}
               ></div>
-            </SwiperSlide>
+            </SwiperSlide> */}
 
             {/* Carousel Slide 2 */}
-            <SwiperSlide>
+            {/* <SwiperSlide>
               <div
                 className="relative bg-cover bg-center h-[70vh] flex items-center justify-center"
                 style={{
@@ -58,10 +102,10 @@ const HomePage: React.FC = () => {
                   //backgroundSize: "contain",
                 }}
               ></div>
-            </SwiperSlide>
+            </SwiperSlide> */}
 
             {/* Carousel Slide 3 */}
-            <SwiperSlide>
+            {/* <SwiperSlide>
               <div
                 className="relative bg-cover bg-center h-[70vh] flex items-center justify-center"
                 style={{
@@ -71,7 +115,7 @@ const HomePage: React.FC = () => {
                   //backgroundSize: "contain",
                 }}
               ></div>
-            </SwiperSlide>
+            </SwiperSlide> */}
           </Swiper>
         </section>
 
@@ -147,7 +191,7 @@ const HomePage: React.FC = () => {
               </button>
             </div>
             <div className="border rounded-lg p-4 bg-white shadow-md">
-               <img
+              <img
                 src="https://cdn.shopify.com/s/files/1/0565/8021/0861/files/Combo_21.png?v=1696417035"
                 alt="Product 3"
                 className="h-40 w-full object-cover rounded-md"
@@ -179,4 +223,3 @@ const HomePage: React.FC = () => {
 };
 
 export default HomePage;
-

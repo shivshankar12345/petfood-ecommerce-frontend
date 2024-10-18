@@ -34,7 +34,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [preview, setPreview] = useFilePreview(selectedFile);
   const [imageName, setImageName] = useState<string | null>(null);
-  const [editMode, setEditMode] = useState<boolean>(true);
+ 
 
   useEffect(() => {
     if (product) {
@@ -76,6 +76,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
       }
     });
     onSubmit(formData, productId);
+    handleClose();
   };
 
   const handleClose = () => {

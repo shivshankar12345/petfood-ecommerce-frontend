@@ -13,6 +13,7 @@ import useDebounce from "../../hooks/useDebounce";
 import TableLayout from "../../layout/TableLayout";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ConfirmationModal from "../../components/ConfirmationModal";
 
 const ManageProductPage: React.FC = () => {
   const { makeAPICallWithOutData, makeAPICallWithData } = useApi();
@@ -20,7 +21,7 @@ const ManageProductPage: React.FC = () => {
   const { products, loading, error } = useSelector(
     (state: RootState) => state.products
   );
-
+  const [showConfirmModal,setShowConfirmModal] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [search, setSearch] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -119,6 +120,7 @@ const ManageProductPage: React.FC = () => {
 
       if (!isError) {
         toast.success("Product deleted successfully!");
+  
         fetchProducts();
       } else {
         toast.error("Failed to delete product");
@@ -132,7 +134,10 @@ const ManageProductPage: React.FC = () => {
     setSelectedProducts(product);
     setShowModal(true);
   };
-
+  const openDeleteModel = (id:string) =>{
+    setSelectedProducts(id);
+    setShowConfirmModal(true);
+  }
   return (
     <TableLayout
       title="Manage Product"
@@ -165,7 +170,7 @@ const ManageProductPage: React.FC = () => {
           products={products}
           loading={loading}
           error={error}
-          onDelete={handleDeleteProduct}
+          onDelete={openDeleteModel}
           onEdit={openEditModal}
         />
       </div>
@@ -177,6 +182,12 @@ const ManageProductPage: React.FC = () => {
         productId={selectedProducts?.id} // Pass the product ID here
       />
       <ToastContainer />
+      <ConfirmationModal
+        isOpen = {showConfirmModal}
+        onClose={()=> setShowConfirmModal(false)} 
+        onConfirm={() => handleDeleteProduct(selectedProducts!)} 
+        message = "Do you want to delete this product?"     />
+      
     </TableLayout>
   );
 };

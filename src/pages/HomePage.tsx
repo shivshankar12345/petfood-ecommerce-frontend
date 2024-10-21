@@ -42,7 +42,7 @@ const HomePage: React.FC = () => {
         }}
       >
         <h1 className="text-5xl font-bold mb-4 text-white">
-          Welcome to PetFood Haven
+          Welcome to PetFood Heaven
         </h1>
         <p className="text-lg mb-6 text-white">
           Everything your pet needs, delivered to your door!

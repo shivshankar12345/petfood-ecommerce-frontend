@@ -1,16 +1,23 @@
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
+import { Navigation, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import Footer from "../components/Footer";
 
 const HomePage: React.FC = () => {
   return (
     <div>
       {/* Welcome Section */}
-      <div className="text-center p-8 rounded" style={{ background: 'linear-gradient(45deg, #FF9A8B, #FF6A88, #FF99AC)', backgroundSize: 'cover',
-    backgroundPosition: 'center', }}>
+      <div
+        className="text-center p-8 rounded"
+        style={{
+          background: "linear-gradient(45deg, #FF9A8B, #FF6A88, #FF99AC)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
         <h1 className="text-5xl font-bold mb-4 text-white">
           Welcome to PetFood Haven
         </h1>
@@ -18,7 +25,7 @@ const HomePage: React.FC = () => {
           Everything your pet needs, delivered to your door!
         </p>
         <button className="bg-orange-500 text-white px-6 py-3 rounded-lg hover:bg-orange-600 transition duration-300">
-          Shop Now 
+          Shop Now
         </button>
       </div>
 
@@ -147,7 +154,7 @@ const HomePage: React.FC = () => {
               </button>
             </div>
             <div className="border rounded-lg p-4 bg-white shadow-md">
-               <img
+              <img
                 src="https://cdn.shopify.com/s/files/1/0565/8021/0861/files/Combo_21.png?v=1696417035"
                 alt="Product 3"
                 className="h-40 w-full object-cover rounded-md"
@@ -173,10 +180,14 @@ const HomePage: React.FC = () => {
             </div>
           </div>
         </section>
+
+        {/*Footer section  */}
+        <section>
+          <Footer />
+        </section>
       </main>
     </div>
   );
 };
 
 export default HomePage;
-

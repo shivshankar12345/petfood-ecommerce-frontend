@@ -5,14 +5,16 @@ import TableLayout from "../../layout/TableLayout";
 import useDebounce from "../../hooks/useDebounce";
 import ContactTable from "../../components/Tables/ContactTable";
 import { userConfirm } from "../../utils/Confirmation";
+import AddContactModal from "./ContactModal";
+import {
+  Contact,
+  ContactOptional,
+  FormValues,
+  OptionalId,
+} from "../../types/contact.types";
 
-type Contact = {
-  id: string;
-  contact_type: "Email" | "Phone";
-  contact: string;
-};
 const ManageContactPage = () => {
-  const { makeAPICallWithOutData } = useApi();
+  const { makeAPICallWithOutData, makeAPICallWithData } = useApi();
   const [showModal, setShowModal] = useState<boolean>(false);
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -48,20 +50,63 @@ const ManageContactPage = () => {
       "blue"
     );
     if (confirmByUser) {
-      console.log("Confirmed");
+      const { isError, error } = await makeAPICallWithOutData(
+        "delete",
+        `/admin-panel/contact/deleteContact?id=${id}`
+      );
+      if (isError) {
+        toast.error(
+          error?.response?.data?.message || "Something went wrong !!"
+        );
+        return;
+      }
+
+      toast.success("Contact Deleted Successfully !!");
+      fetchContact();
     }
   }
 
-  async function updateContact(data: {
-    id: string;
-    contact_type?: string;
-    contact?: string;
-  }) {}
-
-  const openEditModal = (contact: Contact | null = null) => {
+  const handleShow = (contact: Contact | null = null) => {
     setSelectedContact(contact);
     setShowModal(true);
   };
+
+  function onSubmit(data: FormValues & OptionalId) {
+    if (data.id) {
+      updateContact(data as Contact);
+    } else {
+      addContact(data);
+    }
+  }
+
+  async function addContact(data: FormValues): Promise<void> {
+    const { contact, contact_type } = data;
+    const { isError, error } = await makeAPICallWithData(
+      "post",
+      "/admin-panel/contact/addContact",
+      { contact, contact_type }
+    );
+    if (isError) {
+      toast.error(error?.response?.data?.message || "Something went wrong !!");
+      return;
+    }
+    toast.success("Added Successfully !!");
+    fetchContact();
+  }
+  async function updateContact(data: Contact) {
+    const { isError, error } = await makeAPICallWithData(
+      "patch",
+      "/admin-panel/contact/updateContact",
+      data
+    );
+    if (isError) {
+      toast.error(error?.response?.data?.message);
+      return;
+    }
+
+    toast.success("Contact updated !!");
+    fetchContact();
+  }
   return (
     <TableLayout
       title="Manage Contacts"
@@ -82,14 +127,24 @@ const ManageContactPage = () => {
           }}
           className=" p-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 transition duration-200"
         >
-          Add Product
+          Add Contact
         </button>
         <ContactTable
           contacts={contacts}
-          updateContact={updateContact}
           deleteContact={deleteContact}
+          handleShow={handleShow}
         />
       </div>
+      <AddContactModal
+        isOpen={showModal}
+        contact={selectedContact}
+        id={selectedContact?.id || null}
+        handleClose={() => {
+          setSelectedContact(null);
+          setShowModal(false);
+        }}
+        onSubmit={onSubmit}
+      />
     </TableLayout>
   );
 };

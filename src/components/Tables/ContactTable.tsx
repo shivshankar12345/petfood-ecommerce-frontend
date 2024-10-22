@@ -1,25 +1,16 @@
 import DataTable, { TableColumn } from "react-data-table-component";
 import { FaPencilAlt, FaTrash } from "react-icons/fa";
-type Contact = {
-  id: string;
-  contact_type: "Phone" | "Email";
-  contact: string;
-};
+import { Contact } from "../../types/contact.types";
 
-type ContactOptional = {
-  id: string;
-  contact_type?: "Phone" | "Email";
-  contact?: string;
-};
 type ContactProps = {
   contacts: Contact[];
   deleteContact: (id: string) => Promise<void>;
-  updateContact: (data: ContactOptional) => Promise<void>;
+  handleShow: (contact: Contact | null) => void;
 };
 const ContactTable: React.FC<ContactProps> = ({
   contacts,
-  updateContact,
   deleteContact,
+  handleShow,
 }) => {
   const columns: TableColumn<Contact>[] = [
     {
@@ -47,7 +38,7 @@ const ContactTable: React.FC<ContactProps> = ({
           <FaPencilAlt
             className="text-blue-500 cursor-pointer"
             title="Edit"
-            onClick={() => updateContact({ id: row.id })}
+            onClick={() => handleShow(row)}
           />
           <FaTrash
             className="text-red-500 cursor-pointer"

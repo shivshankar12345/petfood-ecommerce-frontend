@@ -19,9 +19,7 @@ const ManageContactPage = () => {
   const debouncedSearch = useDebounce(searchTerm, 1000);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
-  const [selectedContact, setSelectedContact] = useState<Contact | null>(
-    undefined
-  );
+  const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
   useEffect(() => {
     fetchContact();
   }, []);
@@ -92,17 +90,6 @@ const ManageContactPage = () => {
           deleteContact={deleteContact}
         />
       </div>
-      {/* <AddProductModal
-        isOpen={showModal}
-        onClose={() => setShowModal(false)}
-        onSubmit={formData =>
-          selectedProducts
-            ? handleEditProduct(formData, selectedProducts.id)
-            : handleAddProduct(formData)
-        } // Pass id when editing
-        product={selectedProducts}
-        productId={selectedProducts?.id} // Pass the product ID here
-      /> */}
     </TableLayout>
   );
 };

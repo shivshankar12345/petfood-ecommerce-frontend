@@ -1,12 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import Footer from "../components/Footer";
+import useApi from "../hooks/useApi";
+import { toast } from "react-toastify";
 
+type SwiperSlide = {
+  id: string;
+  imageUrl: string;
+};
 const HomePage: React.FC = () => {
+  const { makeAPICallWithOutData } = useApi();
+  const [sliderImages, setSlideImages] = useState<SwiperSlide[]>([]);
+
+  async function fetchSliderImages() {
+    const { response, isError } = await makeAPICallWithOutData(
+      "get",
+      "/admin-panel/landingpage/crousel/getImages"
+    );
+    if (isError || !response) {
+      toast.error("Network Error");
+      return;
+    }
+    setSlideImages(response?.data?.crouselData);
+  }
+  useEffect(() => {
+    fetchSliderImages();
+  }, []);
+
   return (
     <div>
       {/* Welcome Section */}
@@ -19,7 +43,7 @@ const HomePage: React.FC = () => {
         }}
       >
         <h1 className="text-5xl font-bold mb-4 text-white">
-          Welcome to PetFood Haven
+          Welcome to PetFood Heaven
         </h1>
         <p className="text-lg mb-6 text-white">
           Everything your pet needs, delivered to your door!
@@ -41,8 +65,22 @@ const HomePage: React.FC = () => {
             navigation={true}
             className="w-full"
           >
+            {sliderImages.map((value: SwiperSlide) => (
+              <SwiperSlide>
+                <div
+                  className="relative bg-cover bg-center h-[70vh] flex items-center justify-center"
+                  style={{
+                    backgroundImage:
+                      // 'url("https://supertails.com/cdn/shop/files/12th_oct_web_2-min_1600x.png?v=1728541127")',
+                      `url(${value.imageUrl})`,
+                    width: "100%",
+                    // backgroundSize: "contain",
+                  }}
+                ></div>
+              </SwiperSlide>
+            ))}
             {/* Carousel Slide 1 */}
-            <SwiperSlide>
+            {/* <SwiperSlide>
               <div
                 className="relative bg-cover bg-center h-[70vh] flex items-center justify-center"
                 style={{
@@ -52,10 +90,10 @@ const HomePage: React.FC = () => {
                   //backgroundSize: "contain",
                 }}
               ></div>
-            </SwiperSlide>
+            </SwiperSlide> */}
 
             {/* Carousel Slide 2 */}
-            <SwiperSlide>
+            {/* <SwiperSlide>
               <div
                 className="relative bg-cover bg-center h-[70vh] flex items-center justify-center"
                 style={{
@@ -65,10 +103,10 @@ const HomePage: React.FC = () => {
                   //backgroundSize: "contain",
                 }}
               ></div>
-            </SwiperSlide>
+            </SwiperSlide> */}
 
             {/* Carousel Slide 3 */}
-            <SwiperSlide>
+            {/* <SwiperSlide>
               <div
                 className="relative bg-cover bg-center h-[70vh] flex items-center justify-center"
                 style={{
@@ -78,7 +116,7 @@ const HomePage: React.FC = () => {
                   //backgroundSize: "contain",
                 }}
               ></div>
-            </SwiperSlide>
+            </SwiperSlide> */}
           </Swiper>
         </section>
 

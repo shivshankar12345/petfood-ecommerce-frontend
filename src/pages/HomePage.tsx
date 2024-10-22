@@ -7,6 +7,8 @@ import "swiper/css/pagination";
 import Footer from "../components/Footer";
 import useApi from "../hooks/useApi";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import { RootState } from "../Redux/store";
 
 type SwiperSlide = {
   id: string;
@@ -32,10 +34,10 @@ const HomePage: React.FC = () => {
   }, []);
 
   return (
-    <div>
+    <div >
       {/* Welcome Section */}
       <div
-        className="text-center p-8 rounded"
+        className="text-center p-8 rounded "
         style={{
           background: "linear-gradient(45deg, #FF9A8B, #FF6A88, #FF99AC)",
           backgroundSize: "cover",
@@ -229,3 +231,4 @@ const HomePage: React.FC = () => {
 };
 
 export default HomePage;
+

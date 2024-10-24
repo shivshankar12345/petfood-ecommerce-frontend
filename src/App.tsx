@@ -20,7 +20,7 @@ function App() {
         closeOnClick
       />
       {/* <Loader /> */}
-      {/* <Spinner></Spinner> */}
+      <Spinner />
       <Router>
         <NavBar />
         {/* Define your routes here */}

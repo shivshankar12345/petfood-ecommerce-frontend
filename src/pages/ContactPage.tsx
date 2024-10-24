@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import Footer from "../components/Footer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -15,6 +16,7 @@ import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import { RootState } from "../Redux/store";
 import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
+import useApi from "../hooks/useApi";
 
 interface formInput {
   name: string;
@@ -24,6 +26,34 @@ interface formInput {
 
 const Contact = () => {
   const { role, isAuth } = useSelector((state: RootState) => state.auth);
+  const { makeAPICallWithOutData } = useApi();
+
+  // State for storing the contact info
+  const [contactInfo, setContactInfo] = useState({
+    phone: "",
+    email: "",
+  });
+
+
+  // Fetch contact information from the API
+  async function fetchContact() {
+    const { isError, response } = await makeAPICallWithOutData(
+      "get",
+      `/admin-panel/contact/getAllContact`
+    );
+    if (!isError && response?.data) {
+      setContactInfo({
+        phone: response?.data.contacts?.[0].contact || "Not available",
+        email: response.data.contacts?.[2].contact || "Not available",
+       
+      });
+    }
+  }
+
+  // Use useEffect to call fetchContact when the component mounts
+  useEffect(() => {
+    fetchContact();
+  }, []);
 
   // Initializing react-hook-form
   const {
@@ -51,9 +81,7 @@ const Contact = () => {
             <h3 className="text-2xl font-semibold text-gray-700 mb-4">
               Getting help is easy
             </h3>
-            <p className="text-gray-600 mb-6">
-              Sign in to get help with recent orders
-            </p>
+            <p className="text-gray-600 mb-6">Sign in to get help with recent orders</p>
             <button className="bg-teal-500 text-white py-2 px-4 rounded-md hover:bg-teal-600 transition-colors">
               <FontAwesomeIcon icon={faSignInAlt} className="mr-2" />
               SIGN IN
@@ -63,9 +91,7 @@ const Contact = () => {
 
         {/* Quick Links Section */}
         <div className="bg-white p-8 rounded-lg shadow-lg mb-8">
-          <h3 className="text-2xl font-semibold text-gray-700 mb-4">
-            Quick links
-          </h3>
+          <h3 className="text-2xl font-semibold text-gray-700 mb-4">Quick links</h3>
           <ul className="space-y-4 text-gray-600">
             <li>
               <a href="/track-order" className="hover:underline text-teal-500">
@@ -90,11 +116,10 @@ const Contact = () => {
             </li>
           </ul>
         </div>
+
         {/* Browse Topics Section */}
         <div className="bg-white p-8 rounded-lg shadow-lg mb-8">
-          <h3 className="text-2xl font-semibold text-gray-700 mb-4">
-            Browse Topics
-          </h3>
+          <h3 className="text-2xl font-semibold text-gray-700 mb-4">Browse Topics</h3>
           <ul className="space-y-4 text-gray-600">
             <li>
               <a href="/orders" className="hover:underline text-teal-500">
@@ -103,37 +128,25 @@ const Contact = () => {
               </a>
             </li>
             <li>
-              <a
-                href="/returns-cancellations"
-                className="hover:underline text-teal-500"
-              >
+              <a href="/returns-cancellations" className="hover:underline text-teal-500">
                 <FontAwesomeIcon icon={faUndoAlt} className="mr-2" />
                 Returns & cancellations related
               </a>
             </li>
             <li>
-              <a
-                href="/payments-refunds"
-                className="hover:underline text-teal-500"
-              >
+              <a href="/payments-refunds" className="hover:underline text-teal-500">
                 <FontAwesomeIcon icon={faMoneyBillWave} className="mr-2" />
                 Payments & refunds related
               </a>
             </li>
             <li>
-              <a
-                href="/coupons-discounts"
-                className="hover:underline text-teal-500"
-              >
+              <a href="/coupons-discounts" className="hover:underline text-teal-500">
                 <FontAwesomeIcon icon={faTags} className="mr-2" />
                 Coupons & discounts related
               </a>
             </li>
             <li>
-              <a
-                href="/general-enquiry"
-                className="hover:underline text-teal-500"
-              >
+              <a href="/general-enquiry" className="hover:underline text-teal-500">
                 <FontAwesomeIcon icon={faQuestionCircle} className="mr-2" />
                 General enquiry
               </a>
@@ -143,134 +156,89 @@ const Contact = () => {
 
         {/* Get in Touch Section */}
         <div className="bg-white p-8 rounded-lg shadow-lg">
-          <h3 className="text-2xl font-semibold text-gray-700 mb-4">
-            Get in touch
-          </h3>
-          <p className="text-gray-600 mb-2">
-            If you have any inquiries, feel free to
-          </p>
+          <h3 className="text-2xl font-semibold text-gray-700 mb-4">Get in touch</h3>
+          <p className="text-gray-600 mb-2">If you have any inquiries, feel free to</p>
           <p className="text-gray-600">
-            <FontAwesomeIcon
-              icon={faWhatsapp}
-              className="text-green-500 mr-2"
-            />
+            <FontAwesomeIcon icon={faWhatsapp} className="text-green-500 mr-2" />
             WhatsApp us at{" "}
-            <a
-              href="tel:+18005723575"
-              className="text-teal-500 hover:underline"
-            >
-              +1800-5723-575
+            <a href={`tel:${contactInfo.phone}`} className="text-teal-500 hover:underline">
+              {contactInfo.phone}
             </a>
           </p>
           <p className="text-gray-600">
             <FontAwesomeIcon icon={faPhoneAlt} className="mr-2" />
             Call us at{" "}
-            <a href="tel:18005723575" className="text-teal-500 hover:underline">
-              1800-5723-575
+            <a href={`tel:${contactInfo.phone}`} className="text-teal-500 hover:underline">
+              {contactInfo.phone}
             </a>
           </p>
           <p className="text-gray-600">
             <FontAwesomeIcon icon={faEnvelope} className="text-teal-500 mr-2" />
             Email us at{" "}
-            <a
-              href="mailto:support@supertails.com"
-              className="text-teal-500 hover:underline"
-            >
-              support@supertails.com
+            <a href={`mailto:${contactInfo.email}`} className="text-teal-500 hover:underline">
+              {contactInfo.email}
             </a>
           </p>
         </div>
 
         {/* Become a Seller Section */}
         {role === "customer" ? (
-          <>
-            {" "}
-            <div className="bg-white p-8 rounded-lg shadow-lg mt-8">
-              <h3 className="text-2xl font-semibold text-gray-700 mb-4">
-                Become a seller
-              </h3>
-              <p className="text-gray-600">
-                List all your products on Supertails.
-              </p>
-
-              <button className="mt-4 bg-teal-500 text-white py-2 px-4 rounded-md hover:bg-teal-600 transition-colors">
-                Become a Seller
-              </button>
-            </div>
-          </>
-        ) : (
-          <></>
-        )}
+          <div className="bg-white p-8 rounded-lg shadow-lg mt-8">
+            <h3 className="text-2xl font-semibold text-gray-700 mb-4">Become a seller</h3>
+            <p className="text-gray-600">List all your products on Supertails.</p>
+            <button className="mt-4 bg-teal-500 text-white py-2 px-4 rounded-md hover:bg-teal-600 transition-colors">
+              Become a Seller
+            </button>
+          </div>
+        ) : null}
 
         {/* Contact Form Section */}
         <div className="bg-white p-8 rounded-lg shadow-lg mt-8">
-          <h3 className="text-2xl font-semibold text-gray-700 mb-4">
-            Send us a message
-          </h3>
+          <h3 className="text-2xl font-semibold text-gray-700 mb-4">Send us a message</h3>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
-              <label htmlFor="name" className="block text-gray-600">
-                Name
-              </label>
+              <label htmlFor="name" className="block text-gray-600">Name</label>
               <input
                 type="text"
                 id="name"
                 {...register("name", { required: "Name is required" })}
                 className="w-full border border-gray-300 rounded-md p-2 mt-1"
               />
-              {errors.name && (
-                <p className="text-red-500">{errors.name.message}</p>
-              )}
+              {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
             </div>
+
             <div>
-              <label htmlFor="email" className="block text-gray-600">
-                Email
-              </label>
+              <label htmlFor="email" className="block text-gray-600">Email</label>
               <input
                 type="email"
                 id="email"
-                {...register("email", {
-                  required: "Email is required",
-                  pattern: {
-                    value: /^\S+@\S+$/i,
-                    message: "Enter a valid email",
-                  },
-                })}
+                {...register("email", { required: "Email is required" })}
                 className="w-full border border-gray-300 rounded-md p-2 mt-1"
               />
-              {errors.email && (
-                <p className="text-red-500">{errors.email.message}</p>
-              )}
+              {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
             </div>
+
             <div>
-              <label htmlFor="message" className="block text-gray-600">
-                Message
-              </label>
+              <label htmlFor="message" className="block text-gray-600">Message</label>
               <textarea
                 id="message"
                 {...register("message", { required: "Message is required" })}
                 className="w-full border border-gray-300 rounded-md p-2 mt-1"
-                rows={5}
-              ></textarea>
-              {errors.message && (
-                <p className="text-red-500">{errors.message.message}</p>
-              )}
+              />
+              {errors.message && <p className="text-red-500 text-sm">{errors.message.message}</p>}
             </div>
-            <button
-              type="submit"
-              className="bg-teal-500 text-white py-2 px-4 rounded-md hover:bg-teal-600 transition-colors"
-            >
-              Send Message
+
+            <button type="submit" className="bg-teal-500 text-white py-2 px-4 rounded-md hover:bg-teal-600 transition-colors">
+              Submit
             </button>
           </form>
         </div>
       </div>
-
-      {/* Include Footer component */}
       <Footer />
     </div>
   );
 };
 
 export default Contact;
+

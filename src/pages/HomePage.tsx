@@ -9,6 +9,7 @@ import useApi from "../hooks/useApi";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { RootState } from "../Redux/store";
+import CartPage from "./CartPage";
 
 type SwiperSlide = {
   id: string;
@@ -218,7 +219,11 @@ const HomePage: React.FC = () => {
                 Add to Cart
               </button>
             </div>
+
+
+
           </div>
+          <CartPage></CartPage>
         </section>
 
         {/*Footer section  */}
@@ -227,6 +232,7 @@ const HomePage: React.FC = () => {
         </section>
       </main>
     </div>
+    
   );
 };
 

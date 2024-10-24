@@ -6,6 +6,7 @@ import useApi from "../../hooks/useApi";
 import { setUsers, setLoading, setError } from "../../Redux/Slice/user.slice";
 import { StatusDropdown } from "../../components/admin/SearhBarDropdown";
 import TableLayout from "../../layout/TableLayout";
+import { startLoading, stopLoading } from "../../Redux/Slice/spinner.slice";
 
 const ManageUsersPage: React.FC = () => {
   const { makeAPICallWithOutData } = useApi();
@@ -29,6 +30,8 @@ const ManageUsersPage: React.FC = () => {
     page_num = 1
   ) => {
     dispatch(setLoading(true));
+    //dispatch(startLoading());
+
 
     let endpoint = `/admin-panel/getAllUsers?status=${status}&search=${search}&limit=${limit}&page_num=${page_num}`;
 
@@ -57,7 +60,8 @@ const ManageUsersPage: React.FC = () => {
       setTotalPages(response?.data?.total_pages || 1);
       setCurrentPage(response?.data?.current_page || 1);
     }
-
+     
+    //dispatch(stopLoading());
     dispatch(setLoading(false));
   };
 

@@ -1,8 +1,37 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTruck, faPaw, faStethoscope, faCapsules, faPhoneAlt, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { faInstagram, faFacebook, faYoutube, faTwitter, faLinkedin } from '@fortawesome/free-brands-svg-icons';
+import { useEffect, useState } from 'react';
+import useApi from '../hooks/useApi';
 
 const Footer = () => {
+  const { makeAPICallWithOutData } = useApi();
+
+  // State for storing the contact info
+  const [contactInfo, setContactInfo] = useState({
+    phone: "",
+    email: "",
+  });
+
+  // Fetch contact information from the API
+  async function fetchContact() {
+    const { isError, response } = await makeAPICallWithOutData(
+      "get",
+      `/admin-panel/contact/getAllContact`
+    );
+    if (!isError && response?.data) {
+      setContactInfo({
+        phone: response?.data.contacts?.[0].contact || "Not available",
+        email: response.data.contacts?.[2].contact || "Not available",
+      });
+    }
+  }
+
+  // Use useEffect to call fetchContact when the component mounts
+  useEffect(() => {
+    fetchContact();
+  }, []);
+  
   return (
     <footer className="bg-gray-900 text-white py-10">
       <div className="container mx-auto px-4">
@@ -91,11 +120,11 @@ const Footer = () => {
             <h3 className="text-lg font-semibold">Get in touch</h3>
             <p>
               <FontAwesomeIcon icon={faPhoneAlt} className="text-teal-500 mr-2" />
-              Call us at <a href="tel:18005723575" className="text-teal-500 hover:underline">1800-5723-575</a>
+              Call us at <a href="tel:18005723575" className="text-teal-500 hover:underline">{contactInfo.phone}</a>
             </p>
             <p>
               <FontAwesomeIcon icon={faEnvelope} className="text-teal-500 mr-2" />
-              Email us at <a href="mailto:support@supertails.com" className="text-teal-500 hover:underline">support@supertails.com</a>
+              Email us at <a href="mailto:support@supertails.com" className="text-teal-500 hover:underline">{contactInfo.email}</a>
             </p>
           </div>
         </div>

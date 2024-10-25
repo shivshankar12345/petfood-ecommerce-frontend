@@ -37,7 +37,9 @@ const ManageProductPage: React.FC = () => {
         "get",
         `/products/getAllproducts?page=${currentPage}&limit=5&search=${debouncedSearch}`
       );
-
+  
+      console.log(response?.data); // Inspect the API response here
+  
       if (isError) {
         dispatch(setError(error?.message || "Failed to fetch products"));
       } else {
@@ -52,7 +54,7 @@ const ManageProductPage: React.FC = () => {
       dispatch(setLoading(false));
     }
   };
-
+  
   useEffect(() => {
     fetchProducts();
   }, [currentPage, debouncedSearch]);

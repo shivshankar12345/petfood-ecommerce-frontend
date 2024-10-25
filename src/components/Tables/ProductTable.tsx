@@ -28,12 +28,12 @@ const ProductTable: React.FC<ProductTableProps> = ({
     },
     {
       name: "Category",
-      selector: (row: Product) => row.categoryId || "",
+      selector: (row: Product) => row.category?.name || "",
       sortable: true,
     },
     {
       name:"Pet",
-      selector:(row:Product) => row.petType || "",
+      selector:(row:Product) => row.petType?.name|| "",
       sortable:true
     },
     {

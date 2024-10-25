@@ -171,7 +171,7 @@ const Navbar: React.FC = () => {
       {/* Pincode Modal */}
       <PincodeModal
         isOpen={isModalOpen}
-        onClose={() => {navigate ("/"); setIsModalOpen(false)}}
+        onClose={() => { setIsModalOpen(false)}}
       />
     </>
   );

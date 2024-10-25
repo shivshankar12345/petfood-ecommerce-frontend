@@ -37,6 +37,8 @@ const ManageContactPage = () => {
     }
     const { contacts } = response.data;
     setContacts(contacts);
+
+    
   }
 
   async function deleteContact(id: string): Promise<any> {

@@ -6,7 +6,7 @@ import HomePage from "./pages/HomePage";
 import AdminRoutes from "./routes/AdminRoutes";
 import AppRoutes from "./routes/AppRoutes";
 import { ToastContainer } from "react-toastify";
-import Loader from "./components/Loader";
+import Spinner from "./components/Spinner";
 
 function App() {
   return (
@@ -18,7 +18,7 @@ function App() {
         newestOnTop={false}
         closeOnClick
       />
-      <Loader />
+      <Spinner />
       <Router>
         <NavBar />
         {/* Define your routes here */}

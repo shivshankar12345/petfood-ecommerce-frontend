@@ -171,10 +171,11 @@ const Navbar: React.FC = () => {
       {/* Pincode Modal */}
       <PincodeModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => { setIsModalOpen(false)}}
       />
     </>
   );
 };
 
 export default Navbar;
+

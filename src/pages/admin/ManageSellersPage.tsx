@@ -11,6 +11,7 @@ import {
 import TableLayout from "../../layout/TableLayout";
 import { StatusDropdown } from "../../components/admin/SearhBarDropdown";
 import useDebounce from "../../hooks/useDebounce";
+import { startLoading, stopLoading } from "../../Redux/Slice/spinner.slice";
 
 const ManageSellerPage: React.FC = () => {
   const { makeAPICallWithOutData } = useApi();
@@ -34,7 +35,8 @@ const ManageSellerPage: React.FC = () => {
     limit = 10,
     page_num = 1
   ) => {
-    dispatch(setLoading(true));
+    //dispatch(setLoading(true));
+    dispatch(startLoading());
     let endpoint =
       status === "verified"
         ? `/admin-panel/getVerifiedSeller?status=verified&search=${search}&limit=${limit}&page_num=${page_num}`
@@ -57,7 +59,8 @@ const ManageSellerPage: React.FC = () => {
       setTotalPages(response?.data?.total_pages || 1);
       setCurrentPage(response?.data?.current_page || 1);
     }
-    dispatch(setLoading(false));
+    //dispatch(setLoading(false));
+    dispatch(stopLoading());
   };
 
   useEffect(() => {

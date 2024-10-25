@@ -29,7 +29,7 @@ const ManageUsersPage: React.FC = () => {
     limit = 10,
     page_num = 1
   ) => {
-    //dispatch(setLoading(true));
+    
     dispatch(startLoading());
 
 
@@ -65,7 +65,7 @@ const ManageUsersPage: React.FC = () => {
     }
      
     dispatch(stopLoading());
-    //dispatch(setLoading(false));
+    
   };
 
   useEffect(() => {

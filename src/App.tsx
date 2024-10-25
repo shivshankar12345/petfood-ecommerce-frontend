@@ -7,7 +7,6 @@ import AdminRoutes from "./routes/AdminRoutes";
 import AppRoutes from "./routes/AppRoutes";
 import { ToastContainer } from "react-toastify";
 import Spinner from "./components/Spinner";
-//import Loader from "./components/Loader";
 
 function App() {
   return (
@@ -19,7 +18,6 @@ function App() {
         newestOnTop={false}
         closeOnClick
       />
-      {/* <Loader /> */}
       <Spinner />
       <Router>
         <NavBar />

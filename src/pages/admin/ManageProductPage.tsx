@@ -14,6 +14,7 @@ import TableLayout from "../../layout/TableLayout";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ConfirmationModal from "../../components/ConfirmationModal";
+import { startLoading, stopLoading } from "../../Redux/Slice/spinner.slice";
 
 const ManageProductPage: React.FC = () => {
   const { makeAPICallWithOutData, makeAPICallWithData } = useApi();
@@ -31,7 +32,8 @@ const ManageProductPage: React.FC = () => {
   const debouncedSearch = useDebounce(search, 3000);
 
   const fetchProducts = async () => {
-    dispatch(setLoading(true));
+    //dispatch(setLoading(true));
+    dispatch(startLoading());
     try {
       const { isError, response, error } = await makeAPICallWithOutData(
         "get",
@@ -51,7 +53,8 @@ const ManageProductPage: React.FC = () => {
     } catch (err) {
       dispatch(setError("An unexpected error occurred"));
     } finally {
-      dispatch(setLoading(false));
+      //dispatch(setLoading(false));
+      dispatch(stopLoading());
     }
   };
   

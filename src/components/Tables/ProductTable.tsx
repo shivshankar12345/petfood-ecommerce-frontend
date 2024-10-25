@@ -1,7 +1,7 @@
 import React from "react";
 import DataTable, { TableColumn } from "react-data-table-component";
 import { Product, ProductTableProps } from "../../types/Product.types";
-import { FaTrash,FaEdit } from "react-icons/fa";
+import { FaTrash, FaEdit } from "react-icons/fa";
 
 const ProductTable: React.FC<ProductTableProps> = ({
   products,
@@ -65,21 +65,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
       },
       sortable: false,
     },
-    // {
-    //   name: "Created At",
-    //   selector: (row: Product) => {
-    //     return row.createdAt ? new Date(row.createdAt).toLocaleString() : "N/A";
-    //   },
-    //   sortable: true,
-    // },
-    // {
-    //   name: "Updated At",
-    //   selector: (row: Product) => {
-    //     return row.updatedAt ? new Date(row.updatedAt).toLocaleString() : "N/A";
-    //   },
-    //   sortable: true,
-    // },
-  
+
     {
       name: "Actions",
       cell: (row: Product) => (
@@ -95,7 +81,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
             onClick={() => onDelete(row.id as string)}
             className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 transition duration-200"
           >
-          <FaTrash></FaTrash>
+            <FaTrash></FaTrash>
           </button>
         </div>
       ),
@@ -120,5 +106,3 @@ const ProductTable: React.FC<ProductTableProps> = ({
 };
 
 export default ProductTable;
-
-

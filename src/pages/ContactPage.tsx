@@ -18,6 +18,7 @@ import { useSelector } from "react-redux";
 import { useForm, SubmitHandler } from "react-hook-form";
 import useApi from "../hooks/useApi";
 import { toast } from "react-toastify";
+import SellerModal from "./BecomeSellerModal";
 
 interface formInput {
   name: string;
@@ -34,6 +35,7 @@ type Contact = {
 const Contact = () => {
   const { role, isAuth } = useSelector((state: RootState) => state.auth);
   const { makeAPICallWithOutData, makeAPICallWithData } = useApi();
+  const [showSellerModal, setSellerModal] = useState(false);
 
   // State for storing the contact info
   const [contactInfo, setContactInfo] = useState({
@@ -94,6 +96,11 @@ const Contact = () => {
     toast.success("Query Raised Successfully !!");
   };
 
+  function handleClose() {
+    setSellerModal(false);
+  }
+
+  console.log(showSellerModal);
   return (
     <div className="min-h-screen flex flex-col justify-between bg-gray-100">
       <div className="container mx-auto py-12 px-6">
@@ -250,7 +257,10 @@ const Contact = () => {
             <p className="text-gray-600">
               List all your products on Supertails.
             </p>
-            <button className="mt-4 bg-teal-500 text-white py-2 px-4 rounded-md hover:bg-teal-600 transition-colors">
+            <button
+              className="mt-4 bg-teal-500 text-white py-2 px-4 rounded-md hover:bg-teal-600 transition-colors"
+              onClick={() => setSellerModal(true)}
+            >
               Become a Seller
             </button>
           </div>
@@ -316,6 +326,8 @@ const Contact = () => {
           </form>
         </div>
       </div>
+
+      <SellerModal isOpen={showSellerModal} handleClose={handleClose} />
       <Footer />
     </div>
   );

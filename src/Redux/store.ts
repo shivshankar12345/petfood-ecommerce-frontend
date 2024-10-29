@@ -15,6 +15,7 @@ import { productReducer } from "./Slice/Product.slice";
 import { spinnerReducer } from "./Slice/spinner.slice";
 import { userReducer } from "./Slice/user.slice";
 import { sellerReducer } from './Slice/seller.slice'
+import { carouselReducer } from "./Slice/carousel.slice";
  
  const persistConfig = {
   key: "root",
@@ -30,6 +31,7 @@ export const store = configureStore({
     spinner: spinnerReducer,
     user: userReducer,
     seller: sellerReducer,
+    carousel:carouselReducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({

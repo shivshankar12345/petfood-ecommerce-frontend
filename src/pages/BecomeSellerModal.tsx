@@ -1,4 +1,8 @@
 import { useForm, SubmitHandler } from "react-hook-form";
+import useApi from "../hooks/useApi";
+import { useSelector } from "react-redux";
+import { RootState } from "../Redux/store";
+import { toast } from "react-toastify";
 type BecomeSellerProps = {
   isOpen: boolean;
   handleClose: () => void;
@@ -8,19 +12,37 @@ type BecomeSeller = {
   gst_num: string;
   pan_num: string;
 };
+
 const SellerModal: React.FC<BecomeSellerProps> = ({ isOpen, handleClose }) => {
   const {
     register,
     formState: { errors },
     handleSubmit,
+    reset,
   } = useForm<BecomeSeller>();
+
+  const { makeAPICallWithData } = useApi();
+  const { accessToken } = useSelector((state: RootState) => state.auth);
   if (!isOpen) {
-    return <></>;
+    return;
   }
 
-  const onFormSubmit: SubmitHandler<BecomeSeller> = data => {
-    console.log(data);
+  const onFormSubmit: SubmitHandler<BecomeSeller> = async data => {
+    const { isError, error } = await makeAPICallWithData(
+      "patch",
+      "/users/createSellerRequest",
+      { ...data },
+      { headers: { Authorization: `Bearer ${accessToken}` } }
+    );
+    if (isError) {
+      toast.error(error?.response?.data?.message || "Something went wrong !!");
+      return;
+    }
+    toast.success("Seller Request Created Successfully !!");
+    handleClose();
+    reset({});
   };
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-[800px] max-h-[85vh] overflow-y-auto">

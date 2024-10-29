@@ -32,8 +32,15 @@ type Contact = {
   contact: string;
 };
 
+type UserInfo = {
+  email: string;
+  sellerRequest: boolean;
+};
 const Contact = () => {
-  const { role, isAuth } = useSelector((state: RootState) => state.auth);
+  const [userInformation, setUserInformation] = useState<UserInfo>();
+  const { role, isAuth, accessToken } = useSelector(
+    (state: RootState) => state.auth
+  );
   const { makeAPICallWithOutData, makeAPICallWithData } = useApi();
   const [showSellerModal, setSellerModal] = useState(false);
 
@@ -70,7 +77,10 @@ const Contact = () => {
   // Use useEffect to call fetchContact when the component mounts
   useEffect(() => {
     fetchContact();
-  }, []);
+    if (accessToken) {
+      fetchUser();
+    }
+  }, [onclose]);
 
   // Initializing react-hook-form
   const {
@@ -98,9 +108,26 @@ const Contact = () => {
 
   function handleClose() {
     setSellerModal(false);
+    fetchUser();
   }
 
-  console.log(showSellerModal);
+  async function fetchUser() {
+    const { isError, error, response } = await makeAPICallWithOutData(
+      "get",
+      "/users/getUser",
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      }
+    );
+    if (isError) {
+      toast.error(error.response.data.message);
+      return;
+    }
+    const { email, sellerRequest } = response?.data;
+    setUserInformation({ email, sellerRequest });
+    reset({ email });
+  }
+
   return (
     <div className="min-h-screen flex flex-col justify-between bg-gray-100">
       <div className="container mx-auto py-12 px-6">
@@ -257,12 +284,22 @@ const Contact = () => {
             <p className="text-gray-600">
               List all your products on Supertails.
             </p>
-            <button
-              className="mt-4 bg-teal-500 text-white py-2 px-4 rounded-md hover:bg-teal-600 transition-colors"
-              onClick={() => setSellerModal(true)}
-            >
-              Become a Seller
-            </button>
+            {userInformation?.sellerRequest ? (
+              <button
+                className="mt-4 bg-teal-300 text-gray-900 py-2 px-4 rounded-md cursor-not-allowed opacity-50"
+                onClick={() => setSellerModal(true)}
+                disabled
+              >
+                Submitted...
+              </button>
+            ) : (
+              <button
+                className="mt-4 bg-teal-500 text-white py-2 px-4 rounded-md hover:bg-teal-600 transition-colors"
+                onClick={() => setSellerModal(true)}
+              >
+                Become a Seller
+              </button>
+            )}
           </div>
         ) : null}
 

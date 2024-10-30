@@ -7,6 +7,7 @@ import ManageSellersPage from "../pages/admin/ManageSellersPage";
 
 import ManageProductPage from "../pages/admin/ManageProductPage";
 import ManageContactPage from "../pages/admin/ManageContactPage";
+import ManageCarouselPage from "../pages/admin/ManageCarouselPage";
 
 const AdminRoutes: React.FC = () => {
   return (
@@ -16,6 +17,7 @@ const AdminRoutes: React.FC = () => {
         <Route path="manage-sellers" element={<ManageSellersPage />} />
         <Route path="manage-product" element={<ManageProductPage />} />
         <Route path="manage-contact" element={<ManageContactPage />} />
+        <Route path="manage-carousel" element={<ManageCarouselPage />} />
         <Route path="roles" element={<Roles />} />
         {/* Fallback for not found routes */}
       </Route>

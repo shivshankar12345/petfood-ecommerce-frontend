@@ -35,7 +35,7 @@ const HomePage: React.FC = () => {
   }, []);
 
   return (
-    <div >
+    <div>
       {/* Welcome Section */}
       <div
         className="text-center p-8 rounded "
@@ -69,7 +69,7 @@ const HomePage: React.FC = () => {
             className="w-full"
           >
             {sliderImages.map((value: SwiperSlide) => (
-              <SwiperSlide>
+              <SwiperSlide key={value.id}>
                 <div
                   className="relative bg-cover bg-center h-[70vh] flex items-center justify-center"
                   style={{
@@ -219,9 +219,6 @@ const HomePage: React.FC = () => {
                 Add to Cart
               </button>
             </div>
-
-
-
           </div>
           <CartPage></CartPage>
         </section>
@@ -232,9 +229,7 @@ const HomePage: React.FC = () => {
         </section>
       </main>
     </div>
-    
   );
 };
 
 export default HomePage;
-

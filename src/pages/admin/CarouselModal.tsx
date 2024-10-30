@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import useFilePreview from "../../hooks/useFilePreview";
-import { AddCarouselModalProps, CarouselFormValues } from "../../types/Carousel.types";
+import {
+  AddCarouselModalProps,
+  CarouselFormValues,
+} from "../../types/Carousel.types";
 
-
-const AddCarouselModal: React.FC<AddCarouselModalProps> = ({
+const AddCarouselModal: React.FC<AddCarouselModalProps> = ({ 
   isOpen,
   onClose,
   onSubmit,
@@ -17,21 +19,21 @@ const AddCarouselModal: React.FC<AddCarouselModalProps> = ({
     setValue,
     reset,
     formState: { errors },
+    watch,
   } = useForm<CarouselFormValues>();
-
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [preview, setPreview] = useFilePreview(selectedFile);
   const [imageName, setImageName] = useState<string | null>(null);
-
+  console.log(watch());
   useEffect(() => {
     if (carousel) {
       Object.entries(carousel).forEach(([key, value]) => {
-        setValue(key as keyof CarouselFormValues, value );
+        setValue(key as keyof CarouselFormValues, value);
       });
-      if (typeof carousel.image === "string") {
-        setPreview(carousel.image);
+      if (typeof carousel.imageUrl === "string") {
+        setPreview(carousel.imageUrl);
         setSelectedFile(null);
-        setImageName(carousel.image.split("/").pop() || null);
+        setImageName((carousel.imageUrl as string).split("/").pop() || null);
       }
     } else {
       reset();
@@ -43,19 +45,26 @@ const AddCarouselModal: React.FC<AddCarouselModalProps> = ({
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
+    setValue("imageUrl", event.target.files?.[0] as File);
     setSelectedFile(file);
     setImageName(file ? file.name : null);
     setPreview(file ? URL.createObjectURL(file) : null);
   };
 
-  const submitHandler: SubmitHandler<CarouselFormValues> = data => {
+  const submitHandler: SubmitHandler<CarouselFormValues> = async data => {
     const formData = new FormData();
-    formData.append("name", data.name);
-    if (selectedFile) {
-      formData.append("image", selectedFile);
-    } else if (typeof carousel?.image === "string") {
-      formData.append("image", carousel.image);
-    }
+    Object.keys(data).forEach(key => {
+      const typedKey = key as keyof CarouselFormValues;
+      if (typedKey === "imageUrl") {
+        if (selectedFile) {
+          formData.append(key, selectedFile);
+        } else if (typeof carousel?.imageUrl === "string")  {
+          formData.append(key, carousel.imageUrl);
+        }
+      } else {
+        formData.append(key, data[typedKey]?.toString() || "");
+      }
+    });
     onSubmit(formData, carouselId);
     handleClose();
   };
@@ -98,8 +107,13 @@ const AddCarouselModal: React.FC<AddCarouselModalProps> = ({
             <input
               type="file"
               accept="image/*"
-              {...register("image", {
-                required: !carousel?.image ? "Image file is required" : false,
+              {...register("imageUrl", {
+                // required: { value: true, message: "This field is required" },
+                validate: data => {
+                  if (!data) {
+                    return "This field is Required !!";
+                  }
+                },
               })}
               className="hidden"
               onChange={handleFileChange}
@@ -119,8 +133,8 @@ const AddCarouselModal: React.FC<AddCarouselModalProps> = ({
               />
             )}
           </div>
-          {errors.image && (
-            <p className="text-red-500">{errors.image.message}</p>
+          {errors.imageUrl && (
+            <p className="text-red-500">{errors.imageUrl.message}</p>
           )}
 
           <div className="flex justify-end mt-4">

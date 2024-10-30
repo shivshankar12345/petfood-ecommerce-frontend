@@ -39,7 +39,7 @@ const CarouselTable: React.FC<CarouselTableProps> = ({
       name: "Image",
       cell: (row: Carousel) => (
         <img
-          src={row.image}
+          src={row.imageUrl as string}
           alt={row.name}
           style={{ width: "50px", height: "50px", borderRadius: "8px" }}
         />

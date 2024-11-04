@@ -137,7 +137,7 @@ const AdminSidebar: React.FC = () => {
             </li>
             <li>
               <NavLink
-                to="/admin-dashboard/notifications"
+                to="/admin-dashboard/manage-carousel"
                 className={({ isActive }) =>
                   isActive
                     ? "flex items-center bg-gray-600 p-2 rounded-lg transition-all duration-300"
@@ -145,7 +145,7 @@ const AdminSidebar: React.FC = () => {
                 }
               >
                 <FaBell className="mr-2" /> {/* Notifications Icon */}
-                Notifications
+                Manage Carousel
               </NavLink>
             </li>
             <li>

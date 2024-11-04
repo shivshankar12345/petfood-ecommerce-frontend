@@ -17,6 +17,7 @@ import { spinnerReducer } from "./Slice/spinner.slice";
 import { userReducer } from "./Slice/user.slice";
 import { sellerReducer } from "./Slice/seller.slice";
 import { petReducer } from "./Slice/Pet.slice";
+import { carouselReducer } from "./Slice/carousel.slice";
 
 // Persist Configuration
 const persistConfig = {
@@ -36,6 +37,7 @@ export const store = configureStore({
     spinner: spinnerReducer,
     user: userReducer,
     seller: sellerReducer,
+    carousel:carouselReducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({

@@ -6,12 +6,7 @@ import useDebounce from "../../hooks/useDebounce";
 import ContactTable from "../../components/Tables/ContactTable";
 import { userConfirm } from "../../utils/Confirmation";
 import AddContactModal from "./ContactModal";
-import {
-  Contact,
-  ContactOptional,
-  FormValues,
-  OptionalId,
-} from "../../types/contact.types";
+import { Contact, FormValues, OptionalId } from "../../types/contact.types";
 
 const ManageContactPage = () => {
   const { makeAPICallWithOutData, makeAPICallWithData } = useApi();
@@ -20,7 +15,7 @@ const ManageContactPage = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const debouncedSearch = useDebounce(searchTerm, 1000);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>(1);
+  const [totalPages] = useState<number>(1);
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
   useEffect(() => {
     fetchContact();
@@ -37,8 +32,6 @@ const ManageContactPage = () => {
     }
     const { contacts } = response.data;
     setContacts(contacts);
-
-    
   }
 
   async function deleteContact(id: string): Promise<any> {

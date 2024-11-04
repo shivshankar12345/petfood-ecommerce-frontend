@@ -1,6 +1,5 @@
 export interface Pet{
-    data: any;
-    id:string;
+    id?:string;
     name:string;
     description:string;
 }

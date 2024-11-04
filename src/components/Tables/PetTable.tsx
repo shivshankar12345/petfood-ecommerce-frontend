@@ -1,4 +1,3 @@
-import React from "react";
 import DataTable from "react-data-table-component";
 import { Pet, PetTableProps } from "../../types/Pet.types";
 import { FaEdit, FaTrash } from "react-icons/fa";
@@ -11,7 +10,7 @@ const PetTable: React.FC<PetTableProps> = ({
   onDelete,
 }) => {
   const columns = [
-    { name: "ID", selector: (row: Pet) => row.id, sortable: true },
+    { name: "ID", selector: (row: Pet) => row.id ?? "", sortable: true },
     { name: "Name", selector: (row: Pet) => row.name, sortable: true },
     {
       name: "Description",
@@ -28,7 +27,7 @@ const PetTable: React.FC<PetTableProps> = ({
           />
           <FaTrash
             className="text-red-500 cursor-pointer"
-            onClick={() => onDelete(row.id)}
+            onClick={() => onDelete(row.id as string)}
           />
         </div>
       ),
@@ -42,7 +41,7 @@ const PetTable: React.FC<PetTableProps> = ({
   return (
     <DataTable
       columns={columns}
-      data={Array.isArray(pets)?pets:[]}
+      data={Array.isArray(pets) ? pets : []}
       highlightOnHover
       striped
       persistTableHead

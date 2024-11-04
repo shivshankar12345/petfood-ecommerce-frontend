@@ -1,55 +1,55 @@
-import React, { useEffect } from "react";
+import  { useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Pet } from "../../types/Pet.types";
+import React from "react";
 
 interface AddPetModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (formData: { name: string; description: string }) => void;
-  pet?: Pet; 
+  onSubmit: (formData: FormData, petId?: string) => void; 
+  petId?: string;
+  pets: Pet;
 }
 
 const AddPetModal: React.FC<AddPetModalProps> = ({
   isOpen,
   onClose,
   onSubmit,
-  pet,
+  petId,
+  pets,
 }) => {
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<{
-    name: string;
-    description: string;
-  }>({
-    defaultValues: { name: pet?.name || "", description: pet?.description || "" },
-  });
- const handleclose = ()=>{
-       reset();
-      onClose();
-  }
+  } = useForm<Pet>();
 
-  useEffect(() => {
-    if (pet) {
-      reset({ name: pet.name, description: pet.description });
-    } else {
-      reset({ name: "", description: "" });
-    }
-  }, [pet, reset]);
-
-  const onSubmitHandler: SubmitHandler<Pet> = (data) => {
-    onSubmit(data);
+  const handleClose = () => {
+    reset();
+    onClose();
   };
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    reset({
+      ...pets
+    })
+  }, [ pets, reset]);
+
+  const onSubmitHandler: SubmitHandler<Pet> = (data:Pet) => {
+    const formData = new FormData();
+    
+    onSubmit(, petId);
+    handleClose();
+  };
+
+  if (!isOpen) return null; 
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
       <div className="bg-white p-6 rounded shadow-lg w-96">
         <h2 className="text-lg font-bold mb-4">
-          {pet ? "Edit Pet" : "Add Pet"}
+          {petId ? "Edit Pet" : "Add Pet"}
         </h2>
         <form onSubmit={handleSubmit(onSubmitHandler)}>
           <div className="mb-4">
@@ -63,9 +63,13 @@ const AddPetModal: React.FC<AddPetModalProps> = ({
               className={`border rounded w-full p-2 ${
                 errors.name ? "border-red-500" : ""
               }`}
+              aria-invalid={!!errors.name} 
+              aria-describedby="nameError" 
             />
             {errors.name && (
-              <p className="text-red-500 text-sm">{errors.name.message}</p>
+              <p id="nameError" className="text-red-500 text-sm">
+                {errors.name.message}
+              </p>
             )}
           </div>
 
@@ -81,9 +85,11 @@ const AddPetModal: React.FC<AddPetModalProps> = ({
               className={`border rounded w-full p-2 ${
                 errors.description ? "border-red-500" : ""
               }`}
+              aria-invalid={!!errors.description} 
+              aria-describedby="descriptionError"
             />
             {errors.description && (
-              <p className="text-red-500 text-sm">
+              <p id="descriptionError" className="text-red-500 text-sm">
                 {errors.description.message}
               </p>
             )}
@@ -92,7 +98,7 @@ const AddPetModal: React.FC<AddPetModalProps> = ({
           <div className="flex justify-between">
             <button
               type="button"
-              onClick={() => (pet? onClose() : handleclose())}
+              onClick={handleClose}
               className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded"
             >
               Cancel
@@ -101,7 +107,7 @@ const AddPetModal: React.FC<AddPetModalProps> = ({
               type="submit"
               className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded"
             >
-              {pet ? "Update Pet" : "Add Pet"}
+              {petId ? "Update Pet" : "Add Pet"}
             </button>
           </div>
         </form>

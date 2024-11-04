@@ -133,7 +133,7 @@ const Navbar: React.FC = () => {
             {role === "admin" /*|| role === "seller"*/ && (
               <NavLink to="/admin-dashboard/*">
                 <div className="flex justify-center">
-                  <button className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 transition duration-300">
+                  <button className="bg-red-500 text-white px-4 py-1 rounded shadow-md hover:bg-red-600 hover:scale-105 transition duration-300 cursor-pointer">
                     Admin
                   </button>
                 </div>
@@ -171,11 +171,12 @@ const Navbar: React.FC = () => {
       {/* Pincode Modal */}
       <PincodeModal
         isOpen={isModalOpen}
-        onClose={() => { setIsModalOpen(false)}}
+        onClose={() => {
+          setIsModalOpen(false);
+        }}
       />
     </>
   );
 };
 
 export default Navbar;
-

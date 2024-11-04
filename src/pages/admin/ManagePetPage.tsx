@@ -1,148 +1,77 @@
 import React, { useEffect, useState } from "react";
-import PetTable from "../../components/Tables/PetTable";
-import AddPetModal from "../admin/PetModal";
-import ConfirmationModal from "../../components/ConfirmationModal";
-import TableLayout from "../../layout/TableLayout";
-import { ToastContainer, toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../Redux/store";
-import {
-  fetchPets,
-  addNewPet,
-  deletePet,
-  updatePet,
-} from "../../Redux/Slice/Pet.slice";
+import { fetchPets, addNewPet, deletePet, updatePet } from "../../Redux/Slice/Pet.slice";
+import AddPetModal from "./PetModal";
 import { Pet } from "../../types/Pet.types";
-import useDebounce from "../../hooks/useDebounce";
+import TableLayout from "../../layout/TableLayout"; 
+import { AppDispatch } from "../../Redux/store";
+import { toast } from "react-toastify";
 
 const ManagePetPage: React.FC = () => {
-  const dispatch: AppDispatch = useDispatch();
-  const { pets, loading, error, selectedPet, totalPages } = useSelector(
-    (state: RootState) => state.pets
-  );
-
-  const [showModal, setShowModal] = useState(false);
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [petToDelete, setPetToDelete] = useState<string | null>(null);
+  const dispatch = useDispatch<AppDispatch>();
+  const { pets, loading, error, totalPages } = useSelector((state: any) => state.pets);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedPetId, setSelectedPetId] = useState<string | undefined>(undefined);
   const [search, setSearch] = useState("");
-
-  const debouncedSearch = useDebounce(search, 3000);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    dispatch(fetchPets({ currentPage, search: debouncedSearch }));
-  }, [dispatch, currentPage, debouncedSearch]);
+    dispatch(fetchPets({ currentPage, search }));
+  }, [dispatch, currentPage, search]);
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+
+
+  const handleSubmit = (formData: FormData, petId?: string) => {
+    if (petId) {
+      dispatch(updatePet({ id: petId, formData }));
+    } else {
+      dispatch(addNewPet(formData));
+    }
+  
+  };
+
+  const handleDelete = (petId: string) => {
+    if (toast.success("Are you sure you want to delete this pet?")) {
+      dispatch(deletePet({ id: petId, currentPage, search }));
+    }
+  };
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
   };
 
-  const handleAddPet = async (name: string, description: string) => {
-    try {
-      await dispatch(addNewPet({ name, description })).unwrap();
-      toast.success("Pet added successfully!");
-      setShowModal(false);
-      dispatch(fetchPets({ currentPage, search: "" }));
-    } catch (error) {
-      toast.error("Failed to add pet.");
+  const handlePageChange = (page: number) => {
+    if (page > 0 && page <= totalPages) {
+      setCurrentPage(page);
     }
-  };
-
-  const handleEditPet = async (
-    id: string,
-    name: string,
-    description: string
-  ) => {
-    if (selectedPet) {
-      try {
-        await dispatch(updatePet({ id, name, description })).unwrap();
-        toast.success("Pet updated successfully!");
-        setShowModal(false);
-        dispatch(fetchPets({ currentPage, search: "" }));
-      } catch (error) {
-        toast.error("Failed to update pet.");
-      }
-    }
-  };
-
-  const confirmDeletePet = (id: string) => {
-    setPetToDelete(id);
-    setShowConfirmModal(true);
-  };
-
-  const handleDeletePet = async () => {
-    if (petToDelete) {
-      try {
-        await dispatch(
-          deletePet({ id: petToDelete, currentPage, search: "" })
-        ).unwrap();
-        toast.success("Pet deleted successfully!");
-        dispatch(fetchPets({ currentPage, search: "" }));
-      } catch (error) {
-        toast.error("Failed to delete pet.");
-      } finally {
-        setShowConfirmModal(false);
-        setPetToDelete(null);
-      }
-    }
-  };
-
-  const openEditModal = (pet: Pet) => {
-    dispatch({ type: "pets/setSelectedPet", payload: pet });
-    setShowModal(true);
   };
 
   return (
-    <TableLayout
-      title="Manage Pets"
-      currentPage={currentPage}
-      totalPages={totalPages}
-      onPageChange={page => setCurrentPage(page)}
-      error={error ?? undefined}
-      searchPlaceholder="Search pets..."
-      searchValue={search}
-      onSearchChange={handleSearchChange}
-    >
-      <div className="w-full h-full border border-gray-300 overflow-auto p-4">
-        <button
-          onClick={() => {
-            dispatch({ type: "pets/setSelectedPet", payload: null });
-            setShowModal(true);
-          }}
-          className="p-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition duration-200"
-        >
-          Add Pet
-        </button>
-
-        <PetTable
-          pets={pets}
-          loading={loading}
-          error={error}
-          onEdit={openEditModal}
-          onDelete={confirmDeletePet}
-        />
-      </div>
+    <div className="p-4">
+      <TableLayout
+        title="Manage Pets"
+        searchPlaceholder="Search pets..."
+        searchValue={search}
+        onSearchChange={handleSearch}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+        error={error}
+      >
+      
+   
+      
+      </TableLayout>
 
       <AddPetModal
-        isOpen={showModal}
-        onClose={() => setShowModal(false)}
-        onSubmit={(formData: { name: string; description: string }) =>
-          selectedPet
-            ? handleEditPet(selectedPet.id, formData.name, formData.description)
-            : handleAddPet(formData.name, formData.description)
-        }
-        pet={selectedPet ?? undefined} 
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onSubmit={handleSubmit}
+        petId={selectedPetId}
+        data={pets}
       />
-
-      <ConfirmationModal
-        isOpen={showConfirmModal}
-        onClose={() => setShowConfirmModal(false)}
-        onConfirm={handleDeletePet}
-        message="Do you really want to delete this pet?"
-      />
-
-      <ToastContainer />
-    </TableLayout>
+    </div>
   );
 };
 

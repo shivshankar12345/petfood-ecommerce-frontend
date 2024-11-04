@@ -1,6 +1,12 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { Pet } from "../../types/Pet.types";
-import { fetchAllPets, AddPet, DeletePet, UpdatePet, FetchPetsResponse } from "../../api/PetApi";
+import {
+  fetchAllPets,
+  addPet,
+  deletePet as deletePetApi,
+  updatePet as updatePetApi,
+  FetchPetsResponse
+} from "../../api/PetApi";
 
 interface PetState {
   pets: Pet[];
@@ -32,11 +38,8 @@ export const fetchPets = createAsyncThunk(
 
 export const addNewPet = createAsyncThunk(
   "pets/add",
-  async (
-    { name, description }: { name: string; description: string },
-    thunkAPI
-  ) => {
-    const response = await AddPet(name, description);
+  async (formData: FormData, thunkAPI) => {
+    const response = await addPet(formData);
     if (!response) return thunkAPI.rejectWithValue("Failed to add pet");
     return response; 
   }
@@ -48,7 +51,7 @@ export const deletePet = createAsyncThunk(
     { id, currentPage, search }: { id: string; currentPage: number; search: string },
     thunkAPI
   ) => {
-    const response = await DeletePet(id, currentPage, search);
+    const response = await deletePetApi(id, currentPage, search);
     if (!response) return thunkAPI.rejectWithValue("Failed to delete pet");
     return response;
   }
@@ -57,10 +60,10 @@ export const deletePet = createAsyncThunk(
 export const updatePet = createAsyncThunk(
   "pets/update",
   async (
-    { id, name, description }: { id: string; name: string; description: string },
+    { id, formData }: { id: string; formData: FormData },
     thunkAPI
   ) => {
-    const response = await UpdatePet(id, name, description);
+    const response = await updatePetApi(id, formData);
     if (!response) return thunkAPI.rejectWithValue("Failed to update pet");
     return response;
   }

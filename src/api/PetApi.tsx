@@ -2,10 +2,10 @@ import { toast } from "react-toastify";
 import useApi from "../hooks/useApi";
 import { Pet } from "../types/Pet.types";
 
-const { makeAPICallWithOutData,makeAPICallWithData } = useApi();
+const { makeAPICallWithOutData, makeAPICallWithData } = useApi();
 
 export type FetchPetsResponse = {
-  data: Pet[];
+  data: Pet;
   pagination: {
     currentPage: number;
     itemsPerPage: number;
@@ -39,17 +39,12 @@ export const fetchAllPets = async (
   }
 };
 
-
-export const AddPet = async (
-  name: string,
-  description: string
-): Promise<Pet | null> => {
+export const addPet = async (formData: FormData): Promise<Pet | null> => {
   try {
-    const payload = { name, description };
     const { isError, response, error } = await makeAPICallWithData(
       "post",
       "/product-pet/createPet",
-      payload
+      formData
     );
 
     if (isError) {
@@ -65,7 +60,7 @@ export const AddPet = async (
   }
 };
 
-export const DeletePet = async (
+export const deletePet = async (
   id: string,
   currentPage: number,
   search: string
@@ -89,17 +84,12 @@ export const DeletePet = async (
   }
 };
 
-export const UpdatePet = async (
-  id: string,
-  name: string,
-  description: string
-): Promise<Pet | null> => {
+export const updatePet = async ( data:Pet,formData:FormData): Promise<Pet | null> => {
   try {
-    const payload = { name, description };
     const { isError, response, error } = await makeAPICallWithData(
       "put",
-      `/product-pet/updatePet?id=${id}`,
-      payload
+      `/product-pet/updatePet?id=${data.id}`,
+      formData 
     );
 
     if (isError) {

@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination } from "swiper/modules";
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import "swiper/css/autoplay";
 import Footer from "../components/Footer";
 import useApi from "../hooks/useApi";
 import { toast } from "react-toastify";
-import { useSelector } from "react-redux";
-import { RootState } from "../Redux/store";
 import CartPage from "./CartPage";
 
 type SwiperSlide = {
   id: string;
+  name: string;
   imageUrl: string;
 };
+
 const HomePage: React.FC = () => {
   const { makeAPICallWithOutData } = useApi();
   const [sliderImages, setSlideImages] = useState<SwiperSlide[]>([]);
@@ -60,11 +61,13 @@ const HomePage: React.FC = () => {
         {/* Hero Section with Carousel */}
         <section className="relative bg-gray-100 flex items-center justify-center">
           <Swiper
-            modules={[Navigation, Pagination]}
+            modules={[Navigation, Pagination, Autoplay]}
             spaceBetween={30}
             slidesPerView={1}
+            speed={2000}
             loop={true}
             pagination={{ clickable: true }}
+            autoplay={{ delay: 2000 }}
             navigation={true}
             className="w-full"
           >
@@ -73,53 +76,12 @@ const HomePage: React.FC = () => {
                 <div
                   className="relative bg-cover bg-center h-[70vh] flex items-center justify-center"
                   style={{
-                    backgroundImage:
-                      // 'url("https://supertails.com/cdn/shop/files/12th_oct_web_2-min_1600x.png?v=1728541127")',
-                      `url(${value.imageUrl})`,
+                    backgroundImage: `url(${value.imageUrl})`,
                     width: "100%",
-                    // backgroundSize: "contain",
                   }}
                 ></div>
               </SwiperSlide>
             ))}
-            {/* Carousel Slide 1 */}
-            {/* <SwiperSlide>
-              <div
-                className="relative bg-cover bg-center h-[70vh] flex items-center justify-center"
-                style={{
-                  backgroundImage:
-                    'url("https://supertails.com/cdn/shop/files/12th_oct_web_2-min_1600x.png?v=1728541127")',
-                  width: "100%",
-                  //backgroundSize: "contain",
-                }}
-              ></div>
-            </SwiperSlide> */}
-
-            {/* Carousel Slide 2 */}
-            {/* <SwiperSlide>
-              <div
-                className="relative bg-cover bg-center h-[70vh] flex items-center justify-center"
-                style={{
-                  backgroundImage:
-                    'url("https://supertails.com/cdn/shop/files/9th_oct_web_3-min_1600x.png?v=1728450246")',
-                  width: "100%",
-                  //backgroundSize: "contain",
-                }}
-              ></div>
-            </SwiperSlide> */}
-
-            {/* Carousel Slide 3 */}
-            {/* <SwiperSlide>
-              <div
-                className="relative bg-cover bg-center h-[70vh] flex items-center justify-center"
-                style={{
-                  backgroundImage:
-                    'url("https://supertails.com/cdn/shop/files/9th_oct_web_5-min_1600x.png?v=1728450245")',
-                  width: "100%",
-                  //backgroundSize: "contain",
-                }}
-              ></div>
-            </SwiperSlide> */}
           </Swiper>
         </section>
 

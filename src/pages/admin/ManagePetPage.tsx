@@ -1,166 +1,112 @@
 import React, { useEffect, useState } from "react";
 import PetTable from "../../components/Tables/PetTable";
-import useApi from "../../hooks/useApi";
-import AddPetModal from "./PetModal";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../Redux/store";
-import {
-  setLoading,
-  setPets,
-  setError,
-} from "../../Redux/Slice/Pet.slice";
-import useDebounce from "../../hooks/useDebounce";
+import AddPetModal from "../admin/PetModal";
+import ConfirmationModal from "../../components/ConfirmationModal";
 import TableLayout from "../../layout/TableLayout";
 import { ToastContainer, toast } from "react-toastify";
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
-
-const MySwal = withReactContent(Swal);
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../Redux/store";
+import {
+  fetchPets,
+  addNewPet,
+  deletePet,
+  updatePet,
+} from "../../Redux/Slice/Pet.slice";
+import { Pet } from "../../types/Pet.types";
+import useDebounce from "../../hooks/useDebounce";
 
 const ManagePetPage: React.FC = () => {
-  const { makeAPICallWithOutData, makeAPICallWithData } = useApi();
-  const dispatch = useDispatch();
-  const { pets, loading, error } = useSelector(
+  const dispatch: AppDispatch = useDispatch();
+  const { pets, loading, error, selectedPet, totalPages } = useSelector(
     (state: RootState) => state.pets
   );
 
-  const [showModal, setShowModal] = useState<boolean>(false);
-  const [search, setSearch] = useState<string>("");
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>(1);
-  const [selectedPet, setSelectedPet] = useState<any>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [petToDelete, setPetToDelete] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
 
   const debouncedSearch = useDebounce(search, 3000);
 
-  const fetchPets = async () => {
-    dispatch(setLoading(true));
-    try {
-      const { isError, response } = await makeAPICallWithOutData(
-        "get",
-        `/pets/getAllpets?page=${currentPage}&limit=5&search=${debouncedSearch}`
-      );
-
-      if (isError) {
-        dispatch(setError("Failed to fetch pets"));
-      } else {
-        const { data, pagination } = response?.data || {};
-        dispatch(setPets(data || []));
-        setTotalPages(pagination?.totalPages || 0);
-      }
-    } catch (err) {
-      dispatch(setError("An unexpected error occurred"));
-    } finally {
-      dispatch(setLoading(false));
-    }
-  };
-
   useEffect(() => {
-    fetchPets();
-  }, [currentPage, debouncedSearch]);
+    dispatch(fetchPets({ currentPage, search: debouncedSearch }));
+  }, [dispatch, currentPage, debouncedSearch]);
 
-  const handleAddPet = async (formData: FormData) => {
-    if (isSubmitting) return;
-    setIsSubmitting(true);
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+  };
+
+  const handleAddPet = async (name: string, description: string) => {
     try {
-      const { isError } = await makeAPICallWithData(
-        "post",
-        "/pets/createPet",
-        formData
-      );
-
-      if (!isError) {
-        toast.success("Pet added successfully!");
-        fetchPets();
-        setShowModal(false);
-      } else {
-        toast.error("Failed to add pet");
-      }
-    } catch (err) {
-      toast.error("An unexpected error occurred while adding the pet");
-    } finally {
-      setIsSubmitting(false);
+      await dispatch(addNewPet({ name, description })).unwrap();
+      toast.success("Pet added successfully!");
+      setShowModal(false);
+      dispatch(fetchPets({ currentPage, search: "" }));
+    } catch (error) {
+      toast.error("Failed to add pet.");
     }
   };
 
-  const handleEditPet = async (formData: FormData, id: string) => {
-    if (!id) {
-      console.error("ID is required to update the pet");
-      return;
-    }
-    try {
-      const { isError } = await makeAPICallWithData(
-        "put",
-        `/pets/updatePet?id=${id}`,
-        formData
-      );
-
-      if (!isError) {
+  const handleEditPet = async (
+    id: string,
+    name: string,
+    description: string
+  ) => {
+    if (selectedPet) {
+      try {
+        await dispatch(updatePet({ id, name, description })).unwrap();
         toast.success("Pet updated successfully!");
-        fetchPets();
         setShowModal(false);
-      } else {
-        toast.error("Failed to update pet");
+        dispatch(fetchPets({ currentPage, search: "" }));
+      } catch (error) {
+        toast.error("Failed to update pet.");
       }
-    } catch (err) {
-      toast.error("An unexpected error occurred while updating the pet");
     }
   };
 
   const confirmDeletePet = (id: string) => {
-    MySwal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        handleDeletePet(id);
-      }
-    });
+    setPetToDelete(id);
+    setShowConfirmModal(true);
   };
 
-  const handleDeletePet = async (id: string) => {
-    try {
-      const { isError } = await makeAPICallWithOutData(
-        "delete",
-        `/pets/delete?id=${id}`
-      );
-
-      if (!isError) {
+  const handleDeletePet = async () => {
+    if (petToDelete) {
+      try {
+        await dispatch(
+          deletePet({ id: petToDelete, currentPage, search: "" })
+        ).unwrap();
         toast.success("Pet deleted successfully!");
-        fetchPets();
-      } else {
-        toast.error("Failed to delete pet");
+        dispatch(fetchPets({ currentPage, search: "" }));
+      } catch (error) {
+        toast.error("Failed to delete pet.");
+      } finally {
+        setShowConfirmModal(false);
+        setPetToDelete(null);
       }
-    } catch (err) {
-      toast.error("An unexpected error occurred while deleting the pet");
     }
   };
 
-  const openEditModal = (pet: any) => {
-    setSelectedPet(pet);
+  const openEditModal = (pet: Pet) => {
+    dispatch({ type: "pets/setSelectedPet", payload: pet });
     setShowModal(true);
   };
 
   return (
     <TableLayout
       title="Manage Pets"
-      searchPlaceholder="Search pets..."
-      searchValue={search}
-      onSearchChange={(e) => setSearch(e.target.value)}
       currentPage={currentPage}
       totalPages={totalPages}
-      onPageChange={(page) => setCurrentPage(page)}
+      onPageChange={page => setCurrentPage(page)}
       error={error ?? undefined}
+      searchPlaceholder="Search pets..."
+      searchValue={search}
+      onSearchChange={handleSearchChange}
     >
       <div className="w-full h-full border border-gray-300 overflow-auto p-4">
         <button
           onClick={() => {
-            setSelectedPet(null);
+            dispatch({ type: "pets/setSelectedPet", payload: null });
             setShowModal(true);
           }}
           className="p-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition duration-200"
@@ -180,10 +126,19 @@ const ManagePetPage: React.FC = () => {
       <AddPetModal
         isOpen={showModal}
         onClose={() => setShowModal(false)}
-        onSubmit={(formData) =>
-          selectedPet ? handleEditPet(formData, selectedPet.id) : handleAddPet(formData)
+        onSubmit={(formData: { name: string; description: string }) =>
+          selectedPet
+            ? handleEditPet(selectedPet.id, formData.name, formData.description)
+            : handleAddPet(formData.name, formData.description)
         }
-        pet={selectedPet}
+        pet={selectedPet ?? undefined} 
+      />
+
+      <ConfirmationModal
+        isOpen={showConfirmModal}
+        onClose={() => setShowConfirmModal(false)}
+        onConfirm={handleDeletePet}
+        message="Do you really want to delete this pet?"
       />
 
       <ToastContainer />

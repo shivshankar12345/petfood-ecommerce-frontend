@@ -120,11 +120,11 @@ const Footer = () => {
             <h3 className="text-lg font-semibold">Get in touch</h3>
             <p>
               <FontAwesomeIcon icon={faPhoneAlt} className="text-teal-500 mr-2" />
-              Call us at <a href="tel:18005723575" className="text-teal-500 hover:underline">{contactInfo.phone}</a>
+              Call us at <a href="tel:18005723575" className="text-teal-500 hover:underline">:8003398749</a>
             </p>
             <p>
               <FontAwesomeIcon icon={faEnvelope} className="text-teal-500 mr-2" />
-              Email us at <a href="mailto:support@supertails.com" className="text-teal-500 hover:underline">{contactInfo.email}</a>
+              Email us at <a href="mailto:support@supertails.com" className="text-teal-500 hover:underline">:xyz@gmai.com</a>
             </p>
           </div>
         </div>

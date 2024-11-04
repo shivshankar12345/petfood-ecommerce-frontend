@@ -49,6 +49,6 @@ export interface AddProductModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (formData: FormData, id?: string) => Promise<void>; // Include an optional ID parameter
-  product?: Product; // Accept the product data for editing
+  product?: Product; 
   productId?: string;
 }

@@ -42,7 +42,7 @@ const PetTable: React.FC<PetTableProps> = ({
   return (
     <DataTable
       columns={columns}
-      data={pets}
+      data={Array.isArray(pets)?pets:[]}
       highlightOnHover
       striped
       persistTableHead

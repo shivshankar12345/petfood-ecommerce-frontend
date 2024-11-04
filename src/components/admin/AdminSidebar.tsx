@@ -98,6 +98,19 @@ const AdminSidebar: React.FC = () => {
             </li>
             <li>
               <NavLink
+                to="/admin-dashboard/manage-pet"
+                className={({ isActive }) =>
+                  isActive
+                    ? "flex items-center bg-gray-600 p-2 rounded-lg transition-all duration-300"
+                    : "flex items-center p-2 rounded-lg hover:bg-gray-700 transition-all duration-300"
+                }
+              >
+                <FaUserShield className="mr-2" /> {/* Roles Icon */}
+                ManagePets
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
                 to="/admin-dashboard/roles"
                 className={({ isActive }) =>
                   isActive

@@ -5,8 +5,8 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import useFilePreview from "../../hooks/useFilePreview";
 import useApi from "../../hooks/useApi";
 import { Category } from "../../types/Category.types";
-import { petType } from "../../types/Pet.types";
 import CategoryModal from "../admin/CategoryModal"; 
+import { Pet } from "../../types/Pet.types";
 
 const AddProductModal: React.FC<AddProductModalProps> = ({
   isOpen,
@@ -27,7 +27,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
   const [preview, setPreview] = useFilePreview(selectedFile);
   const [imageName, setImageName] = useState<string | null>(null);
   const [categoriesList, setCategoriesList] = useState<Category[]>([]);
-  const [PetList, setPetList] = useState<petType[]>([]);
+  const [PetList, setPetList] = useState<Pet[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false); // State for CategoryModal
 

@@ -161,22 +161,22 @@ const Contact = () => {
           <p className="text-gray-600">
             <FontAwesomeIcon icon={faWhatsapp} className="text-green-500 mr-2" />
             WhatsApp us at{" "}
-            <a href={`tel:${contactInfo.phone}`} className="text-teal-500 hover:underline">
-              {contactInfo.phone}
+            <a href={`tel:${contactInfo.phone}`} className="text-teal-500 hover:underline">:
+              +91-8003398749
             </a>
           </p>
           <p className="text-gray-600">
             <FontAwesomeIcon icon={faPhoneAlt} className="mr-2" />
             Call us at{" "}
             <a href={`tel:${contactInfo.phone}`} className="text-teal-500 hover:underline">
-              {contactInfo.phone}
+              :+91-7976322402
             </a>
           </p>
           <p className="text-gray-600">
             <FontAwesomeIcon icon={faEnvelope} className="text-teal-500 mr-2" />
             Email us at{" "}
             <a href={`mailto:${contactInfo.email}`} className="text-teal-500 hover:underline">
-              {contactInfo.email}
+             : xyz@email.com
             </a>
           </p>
         </div>

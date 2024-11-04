@@ -4,7 +4,6 @@ import useApi from "../../hooks/useApi";
 import AddProductModal from "./ProductModal";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  setLoading,
   setProducts,
   setError,
 } from "../../Redux/Slice/Product.slice";
@@ -32,7 +31,6 @@ const ManageProductPage: React.FC = () => {
   const debouncedSearch = useDebounce(search, 3000);
 
   const fetchProducts = async () => {
-    //dispatch(setLoading(true));
     dispatch(startLoading());
     try {
       const { isError, response, error } = await makeAPICallWithOutData(
@@ -40,7 +38,7 @@ const ManageProductPage: React.FC = () => {
         `/products/getAllproducts?page=${currentPage}&limit=5&search=${debouncedSearch}`
       );
   
-      console.log(response?.data); // Inspect the API response here
+      console.log(response?.data);
   
       if (isError) {
         dispatch(setError(error?.message || "Failed to fetch products"));
@@ -53,7 +51,6 @@ const ManageProductPage: React.FC = () => {
     } catch (err) {
       dispatch(setError("An unexpected error occurred"));
     } finally {
-      //dispatch(setLoading(false));
       dispatch(stopLoading());
     }
   };
@@ -157,7 +154,7 @@ const ManageProductPage: React.FC = () => {
       error={error ?? undefined}
     >
       <div className="w-full h-full border border-gray-300 overflow-auto p-4">
-        {/* Add Product Button */}
+ 
         <button
           onClick={() => {
             setSelectedProducts(null);
@@ -168,9 +165,7 @@ const ManageProductPage: React.FC = () => {
           Add Product
         </button>
 
-        {/* Add Product Modal */}
-
-        {/* Product Table */}
+   
         <ProductTable
           products={products}
           loading={loading}
@@ -184,7 +179,7 @@ const ManageProductPage: React.FC = () => {
         onClose={() => setShowModal(false)}
         onSubmit={(formData) => selectedProducts ? handleEditProduct(formData, selectedProducts.id) : handleAddProduct(formData)} // Pass id when editing
         product={selectedProducts}
-        productId={selectedProducts?.id} // Pass the product ID here
+        productId={selectedProducts?.id} 
       />
       <ToastContainer />
       <ConfirmationModal

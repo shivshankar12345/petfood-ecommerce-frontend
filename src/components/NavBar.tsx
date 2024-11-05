@@ -12,6 +12,7 @@ import {
   clearRefreshToken,
   clearRole,
 } from "../Redux/Slice/auth.slice";
+import { userConfirm } from "../utils/Confirmation";
 
 const Navbar: React.FC = () => {
   const {
@@ -30,10 +31,26 @@ const Navbar: React.FC = () => {
     navigate("/");
   };
 
-  function handleLogout() {
+  async function handleLogout(
+    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+  ) {
+    e.preventDefault();
+    const confirm = await userConfirm(
+      "Are you Sure ",
+      "Do you want to Logout .?",
+      "Yes, logout !!",
+      "warning",
+      true,
+      "#3085d6",
+      "#d33"
+    );
+    if (!confirm) {
+      return;
+    }
     dispatch(clearAccessToken());
     dispatch(clearRefreshToken());
     dispatch(clearRole());
+    navigate("/signout");
   }
 
   return (

@@ -1,4 +1,4 @@
-import  { useEffect } from "react";
+import { useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Pet } from "../../types/Pet.types";
 import React from "react";
@@ -6,17 +6,19 @@ import React from "react";
 interface AddPetModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (formData: FormData, petId?: string) => void; 
-  petId?: string;
-  pets: Pet;
+  onSubmit: (formData: any, id: string) => void;
+  id: string;
+  pets: Pet[];
+  selectedPet: Pet | null;
 }
 
 const AddPetModal: React.FC<AddPetModalProps> = ({
   isOpen,
   onClose,
   onSubmit,
-  petId,
+  id,
   pets,
+  selectedPet,
 }) => {
   const {
     register,
@@ -26,30 +28,32 @@ const AddPetModal: React.FC<AddPetModalProps> = ({
   } = useForm<Pet>();
 
   const handleClose = () => {
-    reset();
+    reset({ name: "", description: "" });
     onClose();
   };
 
   useEffect(() => {
-    reset({
-      ...pets
-    })
-  }, [ pets, reset]);
+    if (id) {
+      if (selectedPet) {
+        reset(selectedPet);
+      }
+    } else {
+      reset();
+    }
+  }, [id, pets, reset]);
 
-  const onSubmitHandler: SubmitHandler<Pet> = (data:Pet) => {
-    const formData = new FormData();
-    
-    onSubmit(, petId);
+  const onSubmitHandler: SubmitHandler<Pet> = data => {
+    onSubmit(data, id || "");
     handleClose();
   };
 
-  if (!isOpen) return null; 
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
       <div className="bg-white p-6 rounded shadow-lg w-96">
         <h2 className="text-lg font-bold mb-4">
-          {petId ? "Edit Pet" : "Add Pet"}
+          {id ? "Edit Pet" : "Add Pet"}
         </h2>
         <form onSubmit={handleSubmit(onSubmitHandler)}>
           <div className="mb-4">
@@ -63,8 +67,8 @@ const AddPetModal: React.FC<AddPetModalProps> = ({
               className={`border rounded w-full p-2 ${
                 errors.name ? "border-red-500" : ""
               }`}
-              aria-invalid={!!errors.name} 
-              aria-describedby="nameError" 
+              aria-invalid={!!errors.name}
+              aria-describedby="nameError"
             />
             {errors.name && (
               <p id="nameError" className="text-red-500 text-sm">
@@ -85,7 +89,7 @@ const AddPetModal: React.FC<AddPetModalProps> = ({
               className={`border rounded w-full p-2 ${
                 errors.description ? "border-red-500" : ""
               }`}
-              aria-invalid={!!errors.description} 
+              aria-invalid={!!errors.description}
               aria-describedby="descriptionError"
             />
             {errors.description && (
@@ -107,7 +111,7 @@ const AddPetModal: React.FC<AddPetModalProps> = ({
               type="submit"
               className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded"
             >
-              {petId ? "Update Pet" : "Add Pet"}
+              {id ? "Update Pet" : "Add Pet"}
             </button>
           </div>
         </form>

@@ -5,8 +5,6 @@ import { FaTrash, FaEdit } from "react-icons/fa";
 
 const ProductTable: React.FC<ProductTableProps> = ({
   products,
-  loading,
-  error,
   onEdit,
   onDelete,
 }) => {
@@ -90,9 +88,6 @@ const ProductTable: React.FC<ProductTableProps> = ({
       button: true,
     },
   ];
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
 
   return (
     <DataTable

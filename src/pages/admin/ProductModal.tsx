@@ -290,7 +290,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
               ) : (
                 <>
                   <option value="">Select Pet</option>
-                  {PetList.map((petType) => (
+                  {Array.isArray(PetList) &&PetList.map((petType) => (
                     <option key={petType.name} value={petType.name}>{petType.name}</option>
                   ))}
                 </>

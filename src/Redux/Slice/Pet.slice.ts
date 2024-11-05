@@ -9,21 +9,18 @@ import {
 } from "../../api/PetApi";
 
 interface PetState {
-  pets: Pet[];
-  loading: boolean;
-  error: string | null;
-  selectedPet: Pet | null;
-  totalPages: number;
+  pets: Pet[];  // This is an array of Pet objects
+  selectedPet: Pet | null; // A selected pet, if any
+  totalPages: number; // Total pages for pagination
 }
 
 const initialState: PetState = {
   pets: [],
-  loading: false,
-  error: null,
   selectedPet: null,
   totalPages: 1,
 };
 
+// Async action to fetch all pets
 export const fetchPets = createAsyncThunk(
   "pets/fetchAll",
   async (
@@ -32,19 +29,21 @@ export const fetchPets = createAsyncThunk(
   ) => {
     const response = await fetchAllPets(currentPage, search);
     if (!response) return thunkAPI.rejectWithValue("Failed to fetch pets");
-    return response; 
+    return response; // Make sure response structure is correct
   }
 );
 
+// Async action to add a new pet
 export const addNewPet = createAsyncThunk(
   "pets/add",
-  async (formData: FormData, thunkAPI) => {
+  async (formData: any, thunkAPI) => {
     const response = await addPet(formData);
     if (!response) return thunkAPI.rejectWithValue("Failed to add pet");
-    return response; 
+    return response; // Make sure this returns a single Pet object
   }
 );
 
+// Async action to delete a pet
 export const deletePet = createAsyncThunk(
   "pets/delete",
   async (
@@ -53,52 +52,48 @@ export const deletePet = createAsyncThunk(
   ) => {
     const response = await deletePetApi(id, currentPage, search);
     if (!response) return thunkAPI.rejectWithValue("Failed to delete pet");
-    return response;
+    return response; // Ensure response structure is correct
   }
 );
 
+// Async action to update a pet
 export const updatePet = createAsyncThunk(
   "pets/update",
   async (
-    { id, formData }: { id: string; formData: FormData },
+    { id, formData }: { id: string; formData:any },
     thunkAPI
   ) => {
     const response = await updatePetApi(id, formData);
     if (!response) return thunkAPI.rejectWithValue("Failed to update pet");
-    return response;
+    return response; // Ensure response is a Pet object
   }
 );
 
+// Slice to manage pet data
 const petSlice = createSlice({
   name: "pets",
   initialState,
-  reducers: {},
+  reducers: {}, // You can define additional synchronous actions if needed
   extraReducers: builder => {
-    builder.addCase(fetchPets.pending, state => {
-      state.loading = true;
-      state.error = null;
-    });
     builder.addCase(
       fetchPets.fulfilled,
       (state, action: PayloadAction<FetchPetsResponse>) => {
-        state.loading = false;
-        state.pets = action.payload.data;
-        state.totalPages = action.payload.pagination.totalPages; 
+        // Ensure that action.payload.data is an array of Pet
+        state.pets = action.payload.data;  
+        state.totalPages = action.payload.pagination.totalPages;
       }
     );
-    builder.addCase(fetchPets.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload as string;
-    });
     builder.addCase(
       addNewPet.fulfilled,
       (state, action: PayloadAction<Pet>) => {
-        state.pets.push(action.payload);
+        // action.payload should be a single Pet object
+        state.pets.push(action.payload);  
       }
     );
     builder.addCase(deletePet.fulfilled, (state, action: PayloadAction<FetchPetsResponse | null>) => {
-      if (action.payload) {
-        state.pets = action.payload.data;
+      // Make sure action.payload contains updated pets
+      if (action.payload && action.payload.data) {
+        state.pets = action.payload.data;  // Assign updated list after deletion
       }
     });
     builder.addCase(
@@ -106,7 +101,7 @@ const petSlice = createSlice({
       (state, action: PayloadAction<Pet>) => {
         const index = state.pets.findIndex(pet => pet.id === action.payload.id);
         if (index !== -1) {
-          state.pets[index] = action.payload;
+          state.pets[index] = action.payload;  // Updating pet in array
         }
       }
     );

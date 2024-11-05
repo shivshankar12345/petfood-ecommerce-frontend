@@ -21,8 +21,6 @@ export interface Product {
 
 export interface ProductTableProps {
   products: Product[];
-  loading: boolean;
-  error: string | null;
   search?: string;
   onEdit: (product: any) => void; 
   onDelete: (id: string) => void;

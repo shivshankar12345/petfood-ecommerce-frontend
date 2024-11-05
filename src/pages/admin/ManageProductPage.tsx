@@ -18,7 +18,7 @@ import { startLoading, stopLoading } from "../../Redux/Slice/spinner.slice";
 const ManageProductPage: React.FC = () => {
   const { makeAPICallWithOutData, makeAPICallWithData } = useApi();
   const dispatch = useDispatch();
-  const { products, loading, error } = useSelector(
+  const { products, error } = useSelector(
     (state: RootState) => state.products
   );
   const [showConfirmModal,setShowConfirmModal] = useState<boolean>(false);
@@ -168,8 +168,6 @@ const ManageProductPage: React.FC = () => {
    
         <ProductTable
           products={products}
-          loading={loading}
-          error={error}
           onDelete={openDeleteModel}
           onEdit={openEditModal}
         />

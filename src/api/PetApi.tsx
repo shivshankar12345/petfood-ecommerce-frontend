@@ -39,7 +39,7 @@ export const fetchAllPets = async (
   }
 };
 
-export const addPet = async (formData: FormData): Promise<Pet | null> => {
+export const addPet = async (formData: any): Promise<Pet | null> => {
   try {
     const { isError, response, error } = await makeAPICallWithData(
       "post",
@@ -84,11 +84,11 @@ export const deletePet = async (
   }
 };
 
-export const updatePet = async ( data:Pet,formData:FormData): Promise<Pet | null> => {
+export const updatePet = async ( id:string,formData:any): Promise<Pet | null> => {
   try {
     const { isError, response, error } = await makeAPICallWithData(
       "put",
-      `/product-pet/updatePet?id=${data.id}`,
+      `/product-pet/updatePet?id=${id}`,
       formData 
     );
 

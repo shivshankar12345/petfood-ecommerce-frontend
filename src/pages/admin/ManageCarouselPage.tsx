@@ -37,7 +37,7 @@ const ManageCarouselPage: React.FC = () => {
     try {
       const { isError, response, error } = await makeAPICallWithOutData(
         "get",
-        `/admin-panel/landingpage/crousel/getImages?page=${currentPage}&limit=5&search=${debouncedSearch}`
+        `/crousel/getImages?page=${currentPage}&limit=5&search=${debouncedSearch}`
       );
       if (isError) {
         dispatch(setError(error?.message || "Failed to fetch carousels"));
@@ -71,7 +71,7 @@ const ManageCarouselPage: React.FC = () => {
       dispatch(startLoading())
       const { isError } = await makeAPICallWithData(
         "post",
-        "/admin-panel/landingpage/crousel/addImage",
+        "/crousel/addImage",
         formData
       );
       if (!isError) {
@@ -100,7 +100,7 @@ const ManageCarouselPage: React.FC = () => {
     try {
       const { isError } = await makeAPICallWithData(
         "put",
-        `/carousels/update?id=${id}`,
+        `/crousel/updateImage/${id}`,
         formData
       );
       if (!isError) {
@@ -118,7 +118,7 @@ const ManageCarouselPage: React.FC = () => {
     try {
       const { isError } = await makeAPICallWithOutData(
         "delete",
-        `/carousels/delete?id=${id}`
+        `/crousel/deleteImage/${id}`
       );
       if (!isError) {
         toast.success("Carousel deleted successfully!");

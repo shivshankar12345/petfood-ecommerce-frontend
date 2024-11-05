@@ -33,19 +33,19 @@ const ManageUsersPage: React.FC = () => {
     dispatch(startLoading());
 
 
-    let endpoint = `/admin-panel/getAllUsers?status=${status}&search=${search}&limit=${limit}&page_num=${page_num}`;
+    let endpoint = `/users/getAllUsers?status=${status}&search=${search}&limit=${limit}&page_num=${page_num}`;
 
     if (status === "all") {
-      endpoint = `/admin-panel/getAllUsers?search=${search}&limit=${limit}&page_num=${page_num}`;
+      endpoint = `/users/getAllUsers?search=${search}&limit=${limit}&page_num=${page_num}`;
     }
     if (status === "active") {
-      endpoint = `/admin-panel/getUsersByStatus?search=${search}&limit=${limit}&page_num=${page_num}&status=true`;
+      endpoint = `/users/getUsersByStatus?search=${search}&limit=${limit}&page_num=${page_num}&status=true`;
     }
     if (status === "inactive") {
-      endpoint = `/admin-panel/getUsersByStatus?search=${search}&limit=${limit}&page_num=${page_num}&status=false`;
+      endpoint = `/users/getUsersByStatus?search=${search}&limit=${limit}&page_num=${page_num}&status=false`;
     }
     if (status === "delete") {
-      endpoint = `/admin-panel/getDeletedUser?status=${status}&search=${search}&limit=${limit}&page_num=${page_num}`;
+      endpoint = `/users/getDeletedUser?status=${status}&search=${search}&limit=${limit}&page_num=${page_num}`;
     }
 
     const { isError, response, error } = await makeAPICallWithOutData(

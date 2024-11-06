@@ -45,7 +45,7 @@ const ManageCarouselPage: React.FC = () => {
       } else {
         const { crousel, total_pages } = response?.data || {};
         dispatch(setCarousels(crousel || []));
-        setTotalPages(totalPages || 0);
+        setTotalPages(total_pages || 0);
         dispatch(setError(null));
       }
     } catch (err) {

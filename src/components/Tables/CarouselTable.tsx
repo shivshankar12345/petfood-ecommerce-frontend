@@ -29,11 +29,13 @@ const CarouselTable: React.FC<CarouselTableProps> = ({
       name: "ID",
       selector: (row: Carousel) => row.id,
       sortable: true,
+      width: "30%",
     },
     {
       name: "Priority Index",
       selector: (row: Carousel) => row.priority,
       sortable: true,
+      center: true,
     },
     {
       name: "Name",
@@ -46,7 +48,12 @@ const CarouselTable: React.FC<CarouselTableProps> = ({
         <img
           src={row.imageUrl as string}
           alt={row.name}
-          style={{ width: "50px", height: "50px", borderRadius: "8px" }}
+          className="my-2"
+          style={{
+            width: "50px",
+            height: "50px",
+            borderRadius: "8px",
+          }}
         />
       ),
       sortable: false,

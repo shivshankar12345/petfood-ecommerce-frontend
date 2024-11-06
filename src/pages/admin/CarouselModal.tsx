@@ -124,9 +124,15 @@ const AddCarouselModal: React.FC<AddCarouselModalProps> = ({
               type="file"
               accept="image/*"
               {...register("imageUrl", {
-                required: !carousel?.imageUrl
-                  ? "Image file is required"
-                  : false,
+                validate: file => {
+                  if (
+                    (typeof file == "string" && file) ||
+                    file instanceof File
+                  ) {
+                    return true;
+                  }
+                  return "Image is Required !!";
+                },
               })}
               className="hidden"
               onChange={handleFileChange}

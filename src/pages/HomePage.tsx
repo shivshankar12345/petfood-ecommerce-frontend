@@ -23,13 +23,13 @@ const HomePage: React.FC = () => {
   async function fetchSliderImages() {
     const { response, isError } = await makeAPICallWithOutData(
       "get",
-      "/admin-panel/landingpage/crousel/getImages"
+      "/crousel/getImages"
     );
     if (isError || !response) {
       toast.error("Network Error");
       return;
     }
-    setSlideImages(response?.data?.crouselData);
+    setSlideImages(response?.data?.crousel);
   }
   useEffect(() => {
     fetchSliderImages();

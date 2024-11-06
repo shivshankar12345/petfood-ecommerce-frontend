@@ -1,7 +1,7 @@
 import React from "react";
 import DataTable, { TableColumn } from "react-data-table-component";
 import { FaTrash, FaEdit } from "react-icons/fa";
-import {Carousel,CarouselTableProps} from "../../types/Carousel.types"
+import { Carousel, CarouselTableProps } from "../../types/Carousel.types";
 
 // interface Carousel {
 //   id: string;
@@ -28,6 +28,11 @@ const CarouselTable: React.FC<CarouselTableProps> = ({
     {
       name: "ID",
       selector: (row: Carousel) => row.id,
+      sortable: true,
+    },
+    {
+      name: "Priority Index",
+      selector: (row: Carousel) => row.priority,
       sortable: true,
     },
     {
@@ -69,9 +74,6 @@ const CarouselTable: React.FC<CarouselTableProps> = ({
       button: true,
     },
   ];
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
 
   return (
     <DataTable

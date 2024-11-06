@@ -3,6 +3,7 @@ export interface Carousel {
   id: string;
   name: string;
   imageUrl: string | File | null;
+  priority: number;
 }
 
 export interface CarouselTableProps {
@@ -22,7 +23,7 @@ export interface AddCarouselModalProps {
 }
 
 export interface CarouselFormValues {
+  priority: number;
   name: string;
-  imageUrl: File | string |null;
-
+  imageUrl: File | string | null;
 }

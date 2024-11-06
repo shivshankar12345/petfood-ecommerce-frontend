@@ -6,7 +6,7 @@ import {
   CarouselFormValues,
 } from "../../types/Carousel.types";
 
-const AddCarouselModal: React.FC<AddCarouselModalProps> = ({ 
+const AddCarouselModal: React.FC<AddCarouselModalProps> = ({
   isOpen,
   onClose,
   onSubmit,
@@ -33,7 +33,7 @@ const AddCarouselModal: React.FC<AddCarouselModalProps> = ({
       if (typeof carousel.imageUrl === "string") {
         setPreview(carousel.imageUrl);
         setSelectedFile(null);
-        setImageName((carousel.imageUrl as string).split("/").pop() || null);
+        setImageName(carousel.imageUrl.split("/").pop() || null);
       }
     } else {
       reset();
@@ -58,7 +58,7 @@ const AddCarouselModal: React.FC<AddCarouselModalProps> = ({
       if (typedKey === "imageUrl") {
         if (selectedFile) {
           formData.append(key, selectedFile);
-        } else if (typeof carousel?.imageUrl === "string")  {
+        } else if (typeof carousel?.imageUrl === "string") {
           formData.append(key, carousel.imageUrl);
         }
       } else {
@@ -87,6 +87,22 @@ const AddCarouselModal: React.FC<AddCarouselModalProps> = ({
         <form onSubmit={handleSubmit(submitHandler)} className="space-y-4">
           <div className="grid grid-cols-1 gap-4">
             <label className="block text-gray-700 font-bold mb-2">
+              Carousel Priority Index
+            </label>
+            <input
+              type="number"
+              placeholder="Enter Priority Index"
+              className="border rounded w-full py-2 px-3 text-gray-700"
+              {...register("priority", {
+                required: "Priority Index is Required",
+              })}
+            />
+            {errors.priority && (
+              <p className="text-red-500">{errors.priority.message}</p>
+            )}
+          </div>
+          <div className="grid grid-cols-1 gap-4">
+            <label className="block text-gray-700 font-bold mb-2">
               Carousel Name
             </label>
             <input
@@ -108,12 +124,9 @@ const AddCarouselModal: React.FC<AddCarouselModalProps> = ({
               type="file"
               accept="image/*"
               {...register("imageUrl", {
-                // required: { value: true, message: "This field is required" },
-                validate: data => {
-                  if (!data) {
-                    return "This field is Required !!";
-                  }
-                },
+                required: !carousel?.imageUrl
+                  ? "Image file is required"
+                  : false,
               })}
               className="hidden"
               onChange={handleFileChange}

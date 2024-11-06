@@ -11,14 +11,15 @@ import {
 import { RootState } from "../../Redux/store";
 import useDebounce from "../../hooks/useDebounce";
 import TableLayout from "../../layout/TableLayout";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
+import { useLoaderService } from "../../hooks/useLoader";
 import "react-toastify/dist/ReactToastify.css";
 import ConfirmationModal from "../../components/ConfirmationModal";
-import { startLoading, stopLoading } from "../../Redux/Slice/spinner.slice";
-import { CarouselFormValues } from "../../types/Carousel.types";
+import { Carousel, CarouselFormValues } from "../../types/Carousel.types";
 
 const ManageCarouselPage: React.FC = () => {
   const { makeAPICallWithOutData, makeAPICallWithData } = useApi();
+  const { startLoader, stopLoader } = useLoaderService();
   const dispatch = useDispatch();
   const { carousels, loading, error } = useSelector(
     (state: RootState) => state.carousel
@@ -33,7 +34,7 @@ const ManageCarouselPage: React.FC = () => {
   const debouncedSearch = useDebounce(search, 3000);
 
   const fetchCarousels = async () => {
-    dispatch(startLoading());
+    startLoader();
     try {
       const { isError, response, error } = await makeAPICallWithOutData(
         "get",
@@ -42,15 +43,15 @@ const ManageCarouselPage: React.FC = () => {
       if (isError) {
         dispatch(setError(error?.message || "Failed to fetch carousels"));
       } else {
-        const { crouselData, pagination } = response?.data || {};
-        dispatch(setCarousels(crouselData || []));
-        setTotalPages(pagination?.totalPages || 0);
+        const { crousel, total_pages } = response?.data || {};
+        dispatch(setCarousels(crousel || []));
+        setTotalPages(totalPages || 0);
         dispatch(setError(null));
       }
     } catch (err) {
       dispatch(setError("An unexpected error occurred"));
     } finally {
-      dispatch(stopLoading());
+      stopLoader();
     }
   };
 
@@ -68,7 +69,7 @@ const ManageCarouselPage: React.FC = () => {
     console.log(formData);
     setIsSubmitting(true);
     try {
-      dispatch(startLoading())
+      startLoader();
       const { isError } = await makeAPICallWithData(
         "post",
         "/crousel/addImage",
@@ -85,21 +86,15 @@ const ManageCarouselPage: React.FC = () => {
       toast.error("An unexpected error occurred while adding the carousel");
     } finally {
       setIsSubmitting(false);
-      dispatch(stopLoading());
+      stopLoader();
     }
   };
 
-  const handleEditCarousel = async (
-    formData: FormData,
-    id: string
-  ) => {
-    if (!id) {
-      console.error("ID is required to update the carousel");
-      return;
-    }
+  const handleEditCarousel = async (formData: FormData, id: string) => {
+    startLoader();
     try {
       const { isError } = await makeAPICallWithData(
-        "put",
+        "patch",
         `/crousel/updateImage/${id}`,
         formData
       );
@@ -111,11 +106,14 @@ const ManageCarouselPage: React.FC = () => {
       }
     } catch (err) {
       toast.error("An unexpected error occurred while updating the carousel");
+    } finally {
+      stopLoader();
     }
   };
 
   const handleDeleteCarousel = async (id: string) => {
     try {
+      startLoader();
       const { isError } = await makeAPICallWithOutData(
         "delete",
         `/crousel/deleteImage/${id}`
@@ -128,10 +126,12 @@ const ManageCarouselPage: React.FC = () => {
       }
     } catch (err) {
       toast.error("An unexpected error occurred while deleting the carousel");
+    } finally {
+      stopLoader();
     }
   };
 
-  const openEditModal = (carousel: any) => {
+  const openEditModal = (carousel: Carousel) => {
     setSelectedCarousel(carousel);
     setShowModal(true);
   };
@@ -176,7 +176,7 @@ const ManageCarouselPage: React.FC = () => {
       <AddCarouselModal
         isOpen={showModal}
         onClose={() => setShowModal(false)}
-        onSubmit={async formData =>
+        onSubmit={formData =>
           selectedCarousel
             ? handleEditCarousel(formData, selectedCarousel.id)
             : handleAddCarousel(formData)
@@ -184,7 +184,6 @@ const ManageCarouselPage: React.FC = () => {
         carousel={selectedCarousel}
         carouselId={selectedCarousel?.id}
       />
-      <ToastContainer />
       <ConfirmationModal
         isOpen={showConfirmModal}
         onClose={() => setShowConfirmModal(false)}

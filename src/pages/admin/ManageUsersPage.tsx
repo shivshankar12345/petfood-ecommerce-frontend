@@ -6,7 +6,8 @@ import useApi from "../../hooks/useApi";
 import { setUsers, setLoading, setError } from "../../Redux/Slice/user.slice";
 import { StatusDropdown } from "../../components/admin/SearhBarDropdown";
 import TableLayout from "../../layout/TableLayout";
-import { startLoading, stopLoading } from "../../Redux/Slice/spinner.slice";
+import { useLoaderService } from "../../hooks/useLoader";
+import { toast } from "react-toastify";
 
 const ManageUsersPage: React.FC = () => {
   const { makeAPICallWithOutData } = useApi();
@@ -15,6 +16,9 @@ const ManageUsersPage: React.FC = () => {
   const { users, loading, error } = useSelector(
     (state: RootState) => state.user
   );
+
+  const { accessToken } = useSelector((state: RootState) => state.auth);
+  const { startLoader, stopLoader } = useLoaderService();
 
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
@@ -29,9 +33,7 @@ const ManageUsersPage: React.FC = () => {
     limit = 10,
     page_num = 1
   ) => {
-    
-    dispatch(startLoading());
-
+    startLoader();
 
     let endpoint = `/users/getAllUsers?status=${status}&search=${search}&limit=${limit}&page_num=${page_num}`;
 
@@ -50,22 +52,18 @@ const ManageUsersPage: React.FC = () => {
 
     const { isError, response, error } = await makeAPICallWithOutData(
       "get",
-      endpoint
+      endpoint,
+      { headers: { Authorization: `Bearer ${accessToken}` } }
     );
-
-
     if (isError) {
       dispatch(setError(error.message || "Failed to fetch users"));
-    }  else {
-      // setTimeout(()=>{dispatch(startLoading());
-      // },8000)
+      toast.error("Something went wrong");
+    } else {
       dispatch(setUsers(response?.data?.users || []));
       setTotalPages(response?.data?.total_pages || 1);
       setCurrentPage(response?.data?.current_page || 1);
     }
-     
-    dispatch(stopLoading());
-    
+    stopLoader();
   };
 
   useEffect(() => {
@@ -104,7 +102,6 @@ const ManageUsersPage: React.FC = () => {
             fetchUsers(selectedStatus, searchTerm, limit, currentPage)
           }
           selectedStatus={selectedStatus}
-          //onEditUser={handleEditUser} // Pass the edit handler
         />
       </TableLayout>
     </>

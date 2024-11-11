@@ -24,6 +24,7 @@ const ManageCarouselPage: React.FC = () => {
   const { carousels, loading, error } = useSelector(
     (state: RootState) => state.carousel
   );
+  const { accessToken } = useSelector((state: RootState) => state.auth);
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [search, setSearch] = useState<string>("");
@@ -38,7 +39,8 @@ const ManageCarouselPage: React.FC = () => {
     try {
       const { isError, response, error } = await makeAPICallWithOutData(
         "get",
-        `/crousel/getImages?page=${currentPage}&limit=5&search=${debouncedSearch}`
+        `/crousel/getImages?page=${currentPage}&limit=5&search=${debouncedSearch}`,
+        { headers: { Authorization: `Bearer ${accessToken}` } }
       );
       if (isError) {
         dispatch(setError(error?.message || "Failed to fetch carousels"));
@@ -73,7 +75,8 @@ const ManageCarouselPage: React.FC = () => {
       const { isError } = await makeAPICallWithData(
         "post",
         "/crousel/addImage",
-        formData
+        formData,
+        { headers: { Authorization: `Bearer ${accessToken}` } }
       );
       if (!isError) {
         toast.success("Carousel added successfully!");
@@ -96,7 +99,8 @@ const ManageCarouselPage: React.FC = () => {
       const { isError } = await makeAPICallWithData(
         "patch",
         `/crousel/updateImage/${id}`,
-        formData
+        formData,
+        { headers: { Authorization: `Bearer ${accessToken}` } }
       );
       if (!isError) {
         toast.success("Carousel updated successfully!");
@@ -116,7 +120,8 @@ const ManageCarouselPage: React.FC = () => {
       startLoader();
       const { isError } = await makeAPICallWithOutData(
         "delete",
-        `/crousel/deleteImage/${id}`
+        `/crousel/deleteImage/${id}`,
+        { headers: { Authorization: `Bearer ${accessToken}` } }
       );
       if (!isError) {
         toast.success("Carousel deleted successfully!");

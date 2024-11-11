@@ -19,22 +19,40 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
 
   return (
     <div className="flex items-center space-x-2">
-      <FaPencilAlt className="text-blue-500 cursor-pointer" title="Edit" onClick={()=>onEdit(id)} />
-      <FaTrash className="text-red-500 cursor-pointer" title="Delete" onClick={() => onDelete(id)} />
-      <FaEllipsisV className="text-gray-500 cursor-pointer" title="More" onClick={toggleDropdown} />
+      <FaPencilAlt
+        className="text-blue-500 cursor-pointer"
+        title="Edit"
+        onClick={() => onEdit(id)}
+      />
+      <FaTrash
+        className="text-red-500 cursor-pointer"
+        title="Delete"
+        onClick={() => onDelete(id)}
+      />
+      <FaEllipsisV
+        className="text-gray-500 cursor-pointer"
+        title="More"
+        onClick={toggleDropdown}
+      />
 
       {showDropdown && (
         <div className="absolute right-0 bottom-full bg-white shadow-lg p-2 rounded-lg z-10">
           {isActive ? (
             <button
-              onClick={() => onDeactivate(id)}
+              onClick={() => {
+                onDeactivate(id);
+                setShowDropdown(false);
+              }}
               className="bg-red-500 text-white px-2 py-1 rounded block"
             >
               In Active
             </button>
           ) : (
             <button
-              onClick={() => onActivate(id)}
+              onClick={() => {
+                onActivate(id);
+                setShowDropdown(false);
+              }}
               className="bg-green-500 text-white px-2 py-1 rounded block"
             >
               Active
@@ -43,7 +61,6 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
         </div>
       )}
     </div>
-    
   );
 };
 

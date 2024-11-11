@@ -1,5 +1,5 @@
 import axios, { AxiosResponse, InternalAxiosRequestConfig } from "axios";
- 
+
 // Create an instance of axios
 const apiClient = axios.create({
   baseURL: "http://localhost:4000",
@@ -8,22 +8,22 @@ const apiClient = axios.create({
     "Content-Type": "application/json",
   },
 });
- 
+
 // Flag to indicate whether a token refresh is in progress
 let isRefreshing = false;
 let refreshSubscribers: Array<(token: string) => void> = [];
- 
+
 // Function to add subscribers to the queue
 function subscribeTokenRefresh(cb: (token: string) => void) {
   refreshSubscribers.push(cb);
 }
- 
+
 // Function to notify all subscribers
 function onRefreshed(token: string) {
-  refreshSubscribers.forEach((cb) => cb(token));
+  refreshSubscribers.forEach(cb => cb(token));
   refreshSubscribers = []; // Clear the subscribers after notifying
 }
- 
+
 // Request interceptor to add the access token to headers
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
@@ -33,29 +33,33 @@ apiClient.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  error => Promise.reject(error)
 );
- 
+
 // Response interceptor to handle 403 errors and refresh token
 apiClient.interceptors.response.use(
   (response: AxiosResponse) => response,
-  async (error) => {
+  async error => {
     const { config, response } = error;
     const originalRequest = config;
- 
+
     // Check for 403 Forbidden error and retry with refreshed token
-    if (response && response.status === 403 && !originalRequest._retry) {
+    if (response && response.status === 403 && response.data.tokenExpired) {
       if (!isRefreshing) {
         originalRequest._retry = true;
         isRefreshing = true;
- 
         try {
-          const verifyResponse = await apiClient.post("/user/token", {
-            refreshToken: localStorage.getItem("refreshToken"),
+          const data = JSON.parse(
+            localStorage.getItem("persist:root") as string
+          );
+          const refreshToken = JSON.parse(data.refreshToken as string);
+          const verifyResponse = await apiClient.post("/users/refreshToken", {
+            refreshToken,
           });
- 
+
           const { accessToken } = verifyResponse.data;
-          localStorage.setItem("accessToken", accessToken);
+          data.accessToken = JSON.stringify(accessToken);
+          localStorage.setItem("persist:root", accessToken);
           isRefreshing = false;
           onRefreshed(accessToken);
           originalRequest.headers["Authorization"] = `Bearer ${accessToken}`;
@@ -64,11 +68,12 @@ apiClient.interceptors.response.use(
           console.error("Refresh token expired", refreshError);
           isRefreshing = false;
           // Redirect to login page if refresh token is expired
-          window.location.href = "/login"; // Change to your login page path
+          // window.location.href = "/signout"; // Change to your login page path
+          console.log("Inside");
           return Promise.reject(refreshError);
         }
       } else {
-        return new Promise((resolve) => {
+        return new Promise(resolve => {
           subscribeTokenRefresh((token: string) => {
             originalRequest.headers["Authorization"] = `Bearer ${token}`;
             resolve(apiClient(originalRequest));
@@ -76,10 +81,9 @@ apiClient.interceptors.response.use(
         });
       }
     }
- 
+
     return Promise.reject(error);
   }
 );
- 
+
 export default apiClient;
- 

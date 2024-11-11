@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../Redux/store";
 import UserTable from "../../components/Tables/UserTable";
 import useApi from "../../hooks/useApi";
-import { setUsers, setLoading, setError } from "../../Redux/Slice/user.slice";
+import { setUsers, setError } from "../../Redux/Slice/user.slice";
 import { StatusDropdown } from "../../components/admin/SearhBarDropdown";
 import TableLayout from "../../layout/TableLayout";
 import { useLoaderService } from "../../hooks/useLoader";

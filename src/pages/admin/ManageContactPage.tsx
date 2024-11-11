@@ -17,7 +17,7 @@ const ManageContactPage = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const debouncedSearch = useDebounce(searchTerm, 1000);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>(1);
+  const [totalPages] = useState<number>(1);
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
   const { accessToken } = useSelector((state: RootState) => state.auth);
   useEffect(() => {

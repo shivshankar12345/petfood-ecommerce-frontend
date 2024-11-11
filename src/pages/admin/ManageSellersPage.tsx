@@ -39,8 +39,8 @@ const ManageSellerPage: React.FC = () => {
     dispatch(startLoading());
     let endpoint =
       status === "verified"
-        ? `/admin-panel/getVerifiedSeller?status=verified&search=${search}&limit=${limit}&page_num=${page_num}`
-        : `/admin-panel/getPendingSeller?search=${search}&limit=${limit}&page_num=${page_num}`;
+        ? `/seller/getVerifiedSeller?status=verified&search=${search}&limit=${limit}&page_num=${page_num}`
+        : `/seller/getPendingSeller?search=${search}&limit=${limit}&page_num=${page_num}`;
 
     const { isError, response, error } = await makeAPICallWithOutData(
       "get",

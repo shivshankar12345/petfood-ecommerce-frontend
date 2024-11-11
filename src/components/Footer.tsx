@@ -31,7 +31,7 @@ const Footer = () => {
   async function fetchContact() {
     const { isError, response } = await makeAPICallWithOutData(
       "get",
-      `/admin-panel/contact/getAllContact`
+      `/contact/getAllContact`
     );
     if (!isError && response?.data) {
       const phone = response.data.contacts.filter(

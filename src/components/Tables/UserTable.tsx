@@ -60,7 +60,7 @@ const UserTable: React.FC<UserTableProps> = ({
     try {
       const result = await makeAPICallWithData(
         "patch",
-        "/admin-panel/modifyUser",
+        "/users/modifyUser",
         { id, is_active: true }
       );
       if (!result.isError) {
@@ -82,7 +82,7 @@ const UserTable: React.FC<UserTableProps> = ({
     try {
       const result = await makeAPICallWithData(
         "patch",
-        "/admin-panel/modifyUser",
+        "/users/modifyUser",
         { id, is_active: false }
       );
       if (!result.isError) {
@@ -123,7 +123,7 @@ const UserTable: React.FC<UserTableProps> = ({
     try {
       const result = await makeAPICallWithOutData(
         "delete", // Change the method to 'delete'
-        `/admin-panel/deleteUser/${id}` // Use the appropriate endpoint
+        `/users/deleteUser/${id}` // Use the appropriate endpoint
       );
       if (!result.isError) {
         toast.success(`User Deleted Successfully`);
@@ -139,9 +139,7 @@ const UserTable: React.FC<UserTableProps> = ({
     }
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
-
+  
   const columns = [
     {
       name: "ID",

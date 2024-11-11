@@ -56,7 +56,7 @@ const SellerTable: React.FC<SellerTableProps> = ({
     try {
       const result = await makeAPICallWithData(
         "patch",
-        "/admin-panel/changeSellerStatus/approvedSeller",
+        "/seller/changeSellerStatus/approvedSeller",
         { id }
       );
       if (!result.isError) {
@@ -80,7 +80,7 @@ const SellerTable: React.FC<SellerTableProps> = ({
     try {
       const result = await makeAPICallWithData(
         "patch",
-        "/admin-panel/changeSellerStatus/rejectSeller",
+        "/seller/changeSellerStatus/rejectSeller",
         { id }
       );
       if (!result.isError) {
@@ -98,9 +98,7 @@ const SellerTable: React.FC<SellerTableProps> = ({
     }
   };
 
-  // Loading and error states
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+ 
 
   // Columns definition for DataTable
   const columns = [

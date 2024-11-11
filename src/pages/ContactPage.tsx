@@ -55,7 +55,7 @@ const Contact = () => {
   async function fetchContact() {
     const { isError, response } = await makeAPICallWithOutData(
       "get",
-      `/admin-panel/contact/getAllContact`
+      `/contact/getAllContact`
     );
 
     if (!isError && response?.data) {
@@ -94,7 +94,7 @@ const Contact = () => {
   const onSubmit: SubmitHandler<formInput> = async data => {
     const { isError } = await makeAPICallWithData(
       "post",
-      "/admin-panel/contact/connectWithUs",
+      "/contact/connectWithUs",
       data
     );
 

@@ -18,7 +18,7 @@ function App() {
         newestOnTop={false}
         closeOnClick
       />
-      <Spinner />
+      {/* <Spinner /> */}
       <Router>
         <NavBar />
         {/* Define your routes here */}

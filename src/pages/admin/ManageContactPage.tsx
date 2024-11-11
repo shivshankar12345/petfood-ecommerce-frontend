@@ -24,7 +24,7 @@ const ManageContactPage = () => {
   async function fetchContact() {
     const { isError, response, error } = await makeAPICallWithOutData(
       "get",
-      `/admin-panel/contact/getAllContact`
+      `/contact/getAllContact`
     );
     if (isError || !response) {
       toast.error(error?.response?.data?.message || "Network Error");
@@ -47,7 +47,7 @@ const ManageContactPage = () => {
     if (confirmByUser) {
       const { isError, error } = await makeAPICallWithOutData(
         "delete",
-        `/admin-panel/contact/deleteContact?id=${id}`
+        `/contact/deleteContact?id=${id}`
       );
       if (isError) {
         toast.error(
@@ -78,7 +78,7 @@ const ManageContactPage = () => {
     const { contact, contact_type } = data;
     const { isError, error } = await makeAPICallWithData(
       "post",
-      "/admin-panel/contact/addContact",
+      "/contact/addContact",
       { contact, contact_type }
     );
     if (isError) {
@@ -91,7 +91,7 @@ const ManageContactPage = () => {
   async function updateContact(data: Contact) {
     const { isError, error } = await makeAPICallWithData(
       "patch",
-      "/admin-panel/contact/updateContact",
+      "/contact/updateContact",
       data
     );
     if (isError) {

@@ -38,7 +38,7 @@ const ManageProductPage: React.FC = () => {
       } else {
         const { data, pagination } = response?.data || {};
         dispatch(setProducts(data || []));
-        setTotalPages(pagination?.totalPages || 0);
+        setTotalPages(pagination?.totalPages );
       }
     } catch (err) {
       console.error("An unexpected error occurred");

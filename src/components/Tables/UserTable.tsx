@@ -12,8 +12,6 @@ import { userConfirm } from "../../utils/Confirmation";
 
 const UserTable: React.FC<UserTableProps> = ({
   users,
-  loading,
-  error,
   onUserChange,
   selectedStatus,
 }) => {

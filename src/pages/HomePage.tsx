@@ -7,8 +7,6 @@ import "swiper/css/pagination";
 import Footer from "../components/Footer";
 import useApi from "../hooks/useApi";
 import { toast } from "react-toastify";
-import { useSelector } from "react-redux";
-import { RootState } from "../Redux/store";
 import CartPage from "./CartPage";
 
 type SwiperSlide = {

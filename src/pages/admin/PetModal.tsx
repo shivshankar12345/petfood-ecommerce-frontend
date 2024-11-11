@@ -28,7 +28,7 @@ const AddPetModal: React.FC<AddPetModalProps> = ({
   } = useForm<Pet>();
 
   const handleClose = () => {
-    reset({ name: "", description: "" });
+    reset({});
     onClose();
   };
 
@@ -50,7 +50,7 @@ const AddPetModal: React.FC<AddPetModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50">
+    <div className="fixed inset-0 flex items-center justify-center z-50  bg-black bg-opacity-50">
       <div className="bg-white p-6 rounded shadow-lg w-96">
         <h2 className="text-lg font-bold mb-4">
           {id ? "Edit Pet" : "Add Pet"}

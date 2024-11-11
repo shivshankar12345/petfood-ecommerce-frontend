@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPets, addNewPet, deletePet, updatePet } from "../../Redux/Slice/Pet.slice";
+import {
+  fetchPets,
+  addNewPet,
+  deletePet,
+  updatePet,
+} from "../../Redux/Slice/Pet.slice";
 import AddPetModal from "./PetModal";
-import TableLayout from "../../layout/TableLayout"; 
+import TableLayout from "../../layout/TableLayout";
 import { AppDispatch } from "../../Redux/store";
 import { startLoading, stopLoading } from "../../Redux/Slice/spinner.slice";
 import { toast } from "react-toastify";
@@ -15,7 +20,7 @@ const ManagePetPage: React.FC = () => {
   const { pets, totalPages } = useSelector((state: RootState) => state.pets);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPetId, setSelectedPetId] = useState<string>("");
-  const[selectedPet , setSelectedPet] = useState<Pet|null>(null);
+  const [selectedPet, setSelectedPet] = useState<Pet | null>(null);
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -30,7 +35,6 @@ const ManagePetPage: React.FC = () => {
     }
   };
   useEffect(() => {
-
     fetchData();
   }, [dispatch, currentPage, search]);
 
@@ -87,47 +91,43 @@ const ManagePetPage: React.FC = () => {
   };
 
   return (
-    <div className="p-4">
-      <TableLayout
-        title="Manage Pets"
-        searchPlaceholder="Search pets..."
-        searchValue={search}
-        onSearchChange={handleSearch}
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-      >
-        <div className="flex justify-between mb-4">
-          <button
-            onClick={handleAddPetClick}
-            className="px-4 py-2 text-white bg-blue-500 hover:bg-blue-600 rounded"
-          >
-            Add Pet
-          </button>
-        </div>
+    <TableLayout
+      title="Manage Pets"
+      searchPlaceholder="Search pets..."
+      searchValue={search}
+      onSearchChange={handleSearch}
+      currentPage={currentPage}
+      totalPages={totalPages}
+      onPageChange={handlePageChange}
+    >
+      <div className="w-full h-full border border-gray-300 overflow-auto p-4">
+        <button
+          onClick={handleAddPetClick}
+         className=" p-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 transition duration-200"
+        >
+          Add Pet
+        </button>
+
         <PetTable
           pets={pets}
           onDelete={handleDelete}
-          onEdit={(pet) => {
+          onEdit={pet => {
             setSelectedPetId(pet.id);
             setSelectedPet(pet);
             setIsModalOpen(true);
-          }} 
-          loading={false} 
-          error={null}        
+          }}
         />
-      </TableLayout>
+      </div>
 
       <AddPetModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         onSubmit={handleSubmit}
-        id ={selectedPetId} 
+        id={selectedPetId}
         pets={pets}
         selectedPet={selectedPet}
-        
       />
-    </div>
+    </TableLayout>
   );
 };
 

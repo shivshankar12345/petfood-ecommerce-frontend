@@ -4,14 +4,12 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 
 const PetTable: React.FC<PetTableProps> = ({
   pets,
-  loading,
-  error,
   onEdit,
   onDelete,
 }) => {
   const columns = [
     { name: "ID", selector: (row: Pet) => row.id ?? "", sortable: true },
-    { name: "Name", selector: (row: Pet) => row.name, sortable: true },
+    { name: "Name", selector: (row: Pet) => row.name ?? "", sortable: true },
     {
       name: "Description",
       selector: (row: Pet) => row.description,
@@ -34,9 +32,6 @@ const PetTable: React.FC<PetTableProps> = ({
       center: true,
     },
   ];
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
 
   return (
     <DataTable

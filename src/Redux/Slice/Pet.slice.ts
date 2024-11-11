@@ -9,7 +9,7 @@ import {
 } from "../../api/PetApi";
 
 interface PetState {
-  pets: Pet[];  // This is an array of Pet objects
+  pets: Pet[] ;  // This is an array of Pet objects
   selectedPet: Pet | null; // A selected pet, if any
   totalPages: number; // Total pages for pagination
 }
@@ -24,7 +24,7 @@ const initialState: PetState = {
 export const fetchPets = createAsyncThunk(
   "pets/fetchAll",
   async (
-    { currentPage, search }: { currentPage: number; search: string },
+    { currentPage, search }: { currentPage?: number; search?: string },
     thunkAPI
   ) => {
     const response = await fetchAllPets(currentPage, search);
@@ -47,7 +47,7 @@ export const addNewPet = createAsyncThunk(
 export const deletePet = createAsyncThunk(
   "pets/delete",
   async (
-    { id, currentPage, search }: { id: string; currentPage: number; search: string },
+    { id, currentPage, search }: { id: string; currentPage?: number; search?: string },
     thunkAPI
   ) => {
     const response = await deletePetApi(id, currentPage, search);
@@ -78,7 +78,6 @@ const petSlice = createSlice({
     builder.addCase(
       fetchPets.fulfilled,
       (state, action: PayloadAction<FetchPetsResponse>) => {
-        // Ensure that action.payload.data is an array of Pet
         state.pets = action.payload.data;  
         state.totalPages = action.payload.pagination.totalPages;
       }
@@ -86,14 +85,12 @@ const petSlice = createSlice({
     builder.addCase(
       addNewPet.fulfilled,
       (state, action: PayloadAction<Pet>) => {
-        // action.payload should be a single Pet object
         state.pets.push(action.payload);  
       }
     );
     builder.addCase(deletePet.fulfilled, (state, action: PayloadAction<FetchPetsResponse | null>) => {
-      // Make sure action.payload contains updated pets
       if (action.payload && action.payload.data) {
-        state.pets = action.payload.data;  // Assign updated list after deletion
+        state.pets = action.payload.data;  
       }
     });
     builder.addCase(
@@ -101,7 +98,7 @@ const petSlice = createSlice({
       (state, action: PayloadAction<Pet>) => {
         const index = state.pets.findIndex(pet => pet.id === action.payload.id);
         if (index !== -1) {
-          state.pets[index] = action.payload;  // Updating pet in array
+          state.pets[index] = action.payload;  
         }
       }
     );

@@ -15,8 +15,8 @@ export type FetchPetsResponse = {
 };
 
 export const fetchAllPets = async (
-  currentPage: number,
-  search: string
+  currentPage?: number,
+  search?: string
 ): Promise<FetchPetsResponse | null> => {
   try {
     const { isError, response, error } = await makeAPICallWithOutData(
@@ -62,8 +62,8 @@ export const addPet = async (formData: any): Promise<Pet | null> => {
 
 export const deletePet = async (
   id: string,
-  currentPage: number,
-  search: string
+  currentPage?: number,
+  search?: string
 ): Promise<FetchPetsResponse | null> => {
   try {
     const { isError, error } = await makeAPICallWithOutData(

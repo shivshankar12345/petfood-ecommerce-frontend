@@ -3,8 +3,7 @@ import CarouselTable from "../../components/Tables/CarouselTable";
 import useApi from "../../hooks/useApi";
 import AddCarouselModal from "./CarouselModal";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setLoading,
+import {  
   setCarousels,
   setError,
 } from "../../Redux/Slice/carousel.slice";

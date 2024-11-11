@@ -5,8 +5,6 @@ import { FaTrash, FaEdit } from "react-icons/fa";
 
 const ProductTable: React.FC<ProductTableProps> = ({
   products,
-  loading,
-  error,
   onEdit,
   onDelete,
 }) => {
@@ -28,13 +26,13 @@ const ProductTable: React.FC<ProductTableProps> = ({
     },
     {
       name: "Category",
-      selector: (row: Product) => row.categoryId || "",
+      selector: (row: Product) => row.category?.name || "",
       sortable: true,
     },
     {
-      name: "Pet",
-      selector: (row: Product) => row.petType || "",
-      sortable: true,
+      name:"Pet",
+      selector:(row:Product) => row.petType?.name|| "",
+      sortable:true
     },
     {
       name: "Stock",
@@ -90,8 +88,6 @@ const ProductTable: React.FC<ProductTableProps> = ({
       button: true,
     },
   ];
-
-  
 
   return (
     <DataTable

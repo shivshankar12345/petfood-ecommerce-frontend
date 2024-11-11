@@ -189,7 +189,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
               ? "m"
               : data.gender === "Female"
               ? "f"
-              : "o", // Map gender values back to the expected format
+              : "o", 
         }
       );
 

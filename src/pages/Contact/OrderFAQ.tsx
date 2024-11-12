@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Footer from "../../components/Footer";
 
 // Define the structure for FAQ items
 interface FAQItem {
@@ -69,6 +70,7 @@ const OrderFAQ: React.FC = () => {
   };
 
   return (
+    <>
     <div className="container mx-auto p-4 sm:p-8">
       <h1 className="text-3xl font-extrabold mb-6 text-center text-indigo-600">Order Related FAQs</h1>
       <div className="space-y-4">
@@ -99,6 +101,8 @@ const OrderFAQ: React.FC = () => {
         ))}
       </div>
     </div>
+    <Footer />
+    </>
   );
 };
 

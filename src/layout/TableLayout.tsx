@@ -44,7 +44,7 @@ const TableLayout: React.FC<TableLayoutProps> = ({
         </div>
       </div>
 
-      {error && <p className="text-red-600 mb-4">{error}</p>}
+      {/* {error && <p className="text-red-600 mb-4">{error}</p>} */}
 
       <div className="bg-gray-50 rounded-lg shadow-inner">
         <div className="min-w-full">{children}</div>

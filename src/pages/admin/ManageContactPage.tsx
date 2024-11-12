@@ -7,6 +7,8 @@ import ContactTable from "../../components/Tables/ContactTable";
 import { userConfirm } from "../../utils/Confirmation";
 import AddContactModal from "./ContactModal";
 import { Contact, FormValues, OptionalId } from "../../types/contact.types";
+import { useSelector } from "react-redux";
+import { RootState } from "../../Redux/store";
 
 const ManageContactPage = () => {
   const { makeAPICallWithOutData, makeAPICallWithData } = useApi();
@@ -15,8 +17,9 @@ const ManageContactPage = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const debouncedSearch = useDebounce(searchTerm, 1000);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>(1);
+  const [totalPages] = useState<number>(1);
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
+  const { accessToken } = useSelector((state: RootState) => state.auth);
   useEffect(() => {
     fetchContact();
   }, []);
@@ -47,7 +50,8 @@ const ManageContactPage = () => {
     if (confirmByUser) {
       const { isError, error } = await makeAPICallWithOutData(
         "delete",
-        `/contact/deleteContact?id=${id}`
+        `/contact/deleteContact?id=${id}`,
+        { headers: { Authorization: `Bearer ${accessToken}` } }
       );
       if (isError) {
         toast.error(
@@ -79,7 +83,8 @@ const ManageContactPage = () => {
     const { isError, error } = await makeAPICallWithData(
       "post",
       "/contact/addContact",
-      { contact, contact_type }
+      { contact, contact_type },
+      { headers: { Authorization: `Bearer ${accessToken}` } }
     );
     if (isError) {
       toast.error(error?.response?.data?.message || "Something went wrong !!");
@@ -92,7 +97,8 @@ const ManageContactPage = () => {
     const { isError, error } = await makeAPICallWithData(
       "patch",
       "/contact/updateContact",
-      data
+      data,
+      { headers: { Authorization: `Bearer ${accessToken}` } }
     );
     if (isError) {
       toast.error(error?.response?.data?.message);

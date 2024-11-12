@@ -145,6 +145,9 @@ import React from "react";
 import { User } from "../../types/user.types";
 import { useForm } from "react-hook-form";
 import useApi from "../../hooks/useApi";
+import { useSelector } from "react-redux";
+import { RootState } from "../../Redux/store";
+import { toast } from "react-toastify";
 
 interface EditUserModalProps {
   user: User;
@@ -157,9 +160,14 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
   onClose,
   onSave,
 }) => {
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<User>();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<User>();
   const { makeAPICallWithData } = useApi();
-
+  const { accessToken } = useSelector((state: RootState) => state.auth);
   // Populate form with the user data when the modal opens
   React.useEffect(() => {
     reset({
@@ -174,38 +182,32 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
   }, [user, reset]);
 
   const onSubmit = async (data: User) => {
-    try {
-      // Make API call to update user
-      const response = await makeAPICallWithData(
-        "patch",
-        "/admin-panel/modifyUser",
-        {
-          id: data.id,
-          name: data.name,
-          email: data.email,
-          phone: data.phone,
-          gender:
-            data.gender === "Male"
-              ? "m"
-              : data.gender === "Female"
-              ? "f"
-              : "o", // Map gender values back to the expected format
-        }
-      );
+    // Make API call to update user
+    const { isError, error, response } = await makeAPICallWithData(
+      "patch",
+      "/users/modifyUser",
+      {
+        id: data.id,
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        gender:
+          data.gender === "Male" ? "m" : data.gender === "Female" ? "f" : "o", // Map gender values back to the expected format
+      },
+      { headers: { Authorization: `Bearer ${accessToken}` } }
+    );
 
-      if (response.isError) {
-        throw new Error("Failed to update user");
-      }
-
-      const result = await response.response?.data;
-      console.log("User updated successfully", result);
-
-      // Call onSave to refresh the user list after saving
-      onSave();
-      onClose();
-    } catch (error) {
-      console.error("Error updating user:", error);
+    if (isError) {
+      toast.error(error?.response?.data?.message || "Something went wrong");
+      return;
     }
+
+    const result = response?.data;
+    console.log("User updated successfully", result);
+
+    // Call onSave to refresh the user list after saving
+    onSave();
+    onClose();
   };
 
   return (
@@ -222,9 +224,15 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
             <input
               type="text"
               {...register("name", { required: true })}
-              className={`mt-1 block w-full border rounded-md shadow-sm p-2 focus:ring-2 focus:ring-blue-500 ${errors.name ? "border-red-500" : "border-gray-300"}`}
+              className={`mt-1 block w-full border rounded-md shadow-sm p-2 focus:ring-2 focus:ring-blue-500 ${
+                errors.name ? "border-red-500" : "border-gray-300"
+              }`}
             />
-            {errors.name && <span className="text-red-500 text-sm">This field is required</span>}
+            {errors.name && (
+              <span className="text-red-500 text-sm">
+                This field is required
+              </span>
+            )}
           </div>
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -233,9 +241,15 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
             <input
               type="email"
               {...register("email", { required: true })}
-              className={`mt-1 block w-full border rounded-md shadow-sm p-2 focus:ring-2 focus:ring-blue-500 ${errors.email ? "border-red-500" : "border-gray-300"}`}
+              className={`mt-1 block w-full border rounded-md shadow-sm p-2 focus:ring-2 focus:ring-blue-500 ${
+                errors.email ? "border-red-500" : "border-gray-300"
+              }`}
             />
-            {errors.email && <span className="text-red-500 text-sm">This field is required</span>}
+            {errors.email && (
+              <span className="text-red-500 text-sm">
+                This field is required
+              </span>
+            )}
           </div>
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -244,9 +258,15 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
             <input
               type="tel"
               {...register("phone", { required: true })}
-              className={`mt-1 block w-full border rounded-md shadow-sm p-2 focus:ring-2 focus:ring-blue-500 ${errors.phone ? "border-red-500" : "border-gray-300"}`}
+              className={`mt-1 block w-full border rounded-md shadow-sm p-2 focus:ring-2 focus:ring-blue-500 ${
+                errors.phone ? "border-red-500" : "border-gray-300"
+              }`}
             />
-            {errors.phone && <span className="text-red-500 text-sm">This field is required</span>}
+            {errors.phone && (
+              <span className="text-red-500 text-sm">
+                This field is required
+              </span>
+            )}
           </div>
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -254,14 +274,20 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
             </label>
             <select
               {...register("gender", { required: true })}
-              className={`mt-1 block w-full border rounded-md shadow-sm p-2 focus:ring-2 focus:ring-blue-500 ${errors.gender ? "border-red-500" : "border-gray-300"}`}
+              className={`mt-1 block w-full border rounded-md shadow-sm p-2 focus:ring-2 focus:ring-blue-500 ${
+                errors.gender ? "border-red-500" : "border-gray-300"
+              }`}
             >
               <option value="">Select Gender</option>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
               <option value="Others">Others</option>
             </select>
-            {errors.gender && <span className="text-red-500 text-sm">This field is required</span>}
+            {errors.gender && (
+              <span className="text-red-500 text-sm">
+                This field is required
+              </span>
+            )}
           </div>
           <div className="flex justify-between mt-6">
             <button
@@ -285,6 +311,3 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
 };
 
 export default EditUserModal;
-
-
-

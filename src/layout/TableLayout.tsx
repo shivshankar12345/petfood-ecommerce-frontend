@@ -8,7 +8,7 @@ interface TableLayoutProps {
   onSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   children: React.ReactNode;
   currentPage: number;
-  totalPages: number;
+  totalPages?: number; 
   onPageChange: (page: number) => void;
   error?: string;
 }
@@ -20,12 +20,12 @@ const TableLayout: React.FC<TableLayoutProps> = ({
   onSearchChange,
   children,
   currentPage,
-  totalPages,
+  totalPages = 1,
   onPageChange,
   error,
 }) => {
   return (
-    <div className="p-4 bg-white shadow-lg rounded-lg w-[100%] h-[120%]">
+    <div className="p-4 bg-white shadow-lg rounded-lg w-full h-full">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-3xl font-semibold text-gray-800">{title}</h2>
       </div>
@@ -47,8 +47,6 @@ const TableLayout: React.FC<TableLayoutProps> = ({
       {error && <p className="text-red-600 mb-4">{error}</p>}
 
       <div className="bg-gray-50 rounded-lg shadow-inner">
-        {" "}
-        {/* Set max height for scrollbar */}
         <div className="min-w-full">{children}</div>
       </div>
 
@@ -65,7 +63,7 @@ const TableLayout: React.FC<TableLayoutProps> = ({
           Previous
         </button>
         <span className="px-4 py-2 text-lg font-medium text-gray-600 bg-gray-200 rounded-lg">
-          Page {currentPage} of {totalPages}
+          Page {totalPages > 0 ? currentPage : 1} of {totalPages > 0 ? totalPages : 1}
         </span>
         <button
           onClick={() => onPageChange(currentPage + 1)}

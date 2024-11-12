@@ -38,7 +38,7 @@ const ManageProductPage: React.FC = () => {
       } else {
         const { data, pagination } = response?.data || {};
         dispatch(setProducts(data || []));
-        setTotalPages(pagination?.totalPages );
+        setTotalPages(pagination?.totalPages);
       }
     } catch (err) {
       console.error("An unexpected error occurred");
@@ -121,6 +121,28 @@ const ManageProductPage: React.FC = () => {
       toast.error("An unexpected error occurred while deleting the product");
     }
   };
+  const IsFeaturedProduct = async (id: string, IsFeatured: boolean) => {
+    try {
+      const { isError } = await makeAPICallWithData(
+        "patch",
+        `/products/isfeatured?id=${id}`,
+        {}
+      );
+
+      if (!isError) {
+        if (IsFeatured) {
+          toast.success("Removed from featuring section");
+        } else {
+          toast.success("Product successfully featured");
+        }
+        fetchProducts();
+      } else {
+        toast.error("Failed to feature product");
+      }
+    } catch (err) {
+      toast.error("An unexpected error occurred while featuring the product");
+    }
+  };
 
   const openEditModal = (product: any) => {
     setSelectedProducts(product);
@@ -142,23 +164,23 @@ const ManageProductPage: React.FC = () => {
         setCurrentPage(page)
       }
     >
-      <div className="w-full h-full border border-gray-300 overflow-auto p-4">
-        <button
-          onClick={() => {
-            setSelectedProducts(null);
-            setShowModal(true);
-          }}
-          className=" p-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 transition duration-200"
-        >
-          Add Product
-        </button>
+      <button
+        onClick={() => {
+          setSelectedProducts(null);
+          setShowModal(true);
+        }}
+        className=" p-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 transition duration-200"
+      >
+        Add Product
+      </button>
 
-        <ProductTable
-          products={products}
-          onDelete={openDeleteModel}
-          onEdit={openEditModal}
-        />
-      </div>
+      <ProductTable
+        products={products}
+        onDelete={openDeleteModel}
+        onEdit={openEditModal}
+        toggleFeatured={IsFeaturedProduct}
+      />
+
       <AddProductModal
         isOpen={showModal}
         onClose={() => setShowModal(false)}

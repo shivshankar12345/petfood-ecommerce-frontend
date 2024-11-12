@@ -25,7 +25,7 @@ const TableLayout: React.FC<TableLayoutProps> = ({
   error,
 }) => {
   return (
-    <div className="p-4 bg-white shadow-lg rounded-lg w-full h-full">
+    <div className="p-4 bg-white shadow-lg rounded-lg w-[90%] h-full">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-3xl font-semibold text-gray-800">{title}</h2>
       </div>

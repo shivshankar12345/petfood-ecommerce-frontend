@@ -5,8 +5,7 @@ const apiClient = axios.create({
   baseURL: "http://localhost:4000", // Base URL for your API
   timeout: 10000, // Timeout limit for requests
   headers: {
-    "Content-Type": 'multipart/form-data', // Content type header
-
+    "Content-Type": "multipart/form-data", // Content type header
   },
 });
 
@@ -29,7 +28,11 @@ function onRefreshed(token: string) {
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     // Skip adding Authorization for image requests
-    if (!config.url?.includes("/images") && !config.url?.includes(".jpg") && !config.url?.includes(".png")) {
+    if (
+      !config.url?.includes("/images") &&
+      !config.url?.includes(".jpg") &&
+      !config.url?.includes(".png")
+    ) {
       const accessToken = localStorage.getItem("accessToken");
       if (accessToken && config.headers) {
         config.headers["Authorization"] = `Bearer ${accessToken}`;
@@ -61,7 +64,7 @@ apiClient.interceptors.response.use(
             window.location.href = "/login";
             return Promise.reject(error);
           }
-          
+
           const parsedState = JSON.parse(persistedState);
           const refreshToken = parsedState.refreshToken; // Assuming refreshToken is stored like this
 

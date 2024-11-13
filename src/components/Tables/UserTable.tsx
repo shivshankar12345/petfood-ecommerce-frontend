@@ -2,10 +2,9 @@ import React, { useState } from "react";
 import DataTable from "react-data-table-component";
 import { User, UserTableProps } from "../../types/user.types";
 import useApi from "../../hooks/useApi";
-import { useDispatch, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
-import { setError, setLoading } from "../../Redux/Slice/user.slice";
 import ActionButtons from "../admin/ActionButtons";
 import EditUserModal from "../../pages/admin/UserModal";
 import { userConfirm } from "../../utils/Confirmation";
@@ -18,7 +17,7 @@ const UserTable: React.FC<UserTableProps> = ({
   selectedStatus,
 }) => {
   const { makeAPICallWithOutData, makeAPICallWithData } = useApi();
-  const dispatch = useDispatch();
+ 
   const { startLoader, stopLoader } = useLoaderService();
 
   const [isModalOpen, setModalOpen] = useState(false);
@@ -59,7 +58,7 @@ const UserTable: React.FC<UserTableProps> = ({
   const handleActivate = async (id: string) => {
     startLoader();
 
-    const { isError, error, response } = await makeAPICallWithData(
+    const { isError, error } = await makeAPICallWithData(
       "patch",
       "/users/modifyUser",
       {
@@ -80,7 +79,7 @@ const UserTable: React.FC<UserTableProps> = ({
   const handleDeactivate = async (id: string) => {
     startLoader();
 
-    const { isError, error, response } = await makeAPICallWithData(
+    const { isError, error} = await makeAPICallWithData(
       "patch",
       "/users/modifyUser",
       {
@@ -121,7 +120,7 @@ const UserTable: React.FC<UserTableProps> = ({
     }
 
     startLoader();
-    const { error, isError, response } = await makeAPICallWithOutData(
+    const { error, isError } = await makeAPICallWithOutData(
       "delete", // Change the method to 'delete'
       `/users/deleteUser/${id}`, // Use the appropriate endpoint
       { headers: { Authorization: `Bearer ${accessToken}` } }

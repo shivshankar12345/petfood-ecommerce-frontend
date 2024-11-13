@@ -67,9 +67,9 @@ const Contact = () => {
       );
 
       setContactInfo({
-        callPhone: phoneContact[0].contact || "NA",
-        whatsAppPhone: phoneContact[1].contact || "NA",
-        email: emailContact[0].contact || "NA",
+        callPhone: phoneContact[0]?.contact || "NA",
+        whatsAppPhone: phoneContact[1]?.contact || "NA",
+        email: emailContact[0]?.contact || "NA",
       });
     }
   }
@@ -123,7 +123,11 @@ const Contact = () => {
       toast.error(error.response.data.message);
       return;
     }
-    const { email, sellerRequest } = response?.data;
+
+    if (!response?.data) {
+      return;
+    }
+    const { email = "", sellerRequest = "" } = response?.data;
     setUserInformation({ email, sellerRequest });
     reset({ email });
   }

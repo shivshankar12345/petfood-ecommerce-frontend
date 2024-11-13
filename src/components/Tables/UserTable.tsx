@@ -2,13 +2,15 @@ import React, { useState } from "react";
 import DataTable from "react-data-table-component";
 import { User, UserTableProps } from "../../types/user.types";
 import useApi from "../../hooks/useApi";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import { setError, setLoading } from "../../Redux/Slice/user.slice";
 import ActionButtons from "../admin/ActionButtons";
 import EditUserModal from "../../pages/admin/UserModal";
 import { userConfirm } from "../../utils/Confirmation";
+import { useLoaderService } from "../../hooks/useLoader";
+import { RootState } from "../../Redux/store";
 
 const UserTable: React.FC<UserTableProps> = ({
   users,
@@ -17,10 +19,11 @@ const UserTable: React.FC<UserTableProps> = ({
 }) => {
   const { makeAPICallWithOutData, makeAPICallWithData } = useApi();
   const dispatch = useDispatch();
+  const { startLoader, stopLoader } = useLoaderService();
 
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null); // State to hold the selected user
-
+  const { accessToken } = useSelector((state: RootState) => state.auth);
   const confirmActivation = (id: string) => {
     Swal.fire({
       title: "Are you sure?",
@@ -54,47 +57,47 @@ const UserTable: React.FC<UserTableProps> = ({
   };
 
   const handleActivate = async (id: string) => {
-    dispatch(setLoading(true));
-    try {
-      const result = await makeAPICallWithData(
-        "patch",
-        "/users/modifyUser",
-        { id, is_active: true }
-      );
-      if (!result.isError) {
-        toast.success(`User Activated`);
-        onUserChange();
-      } else {
-        throw new Error(result.error?.message || "Failed to activate user");
-      }
-    } catch (err: any) {
-      toast.error(err.message || "Failed to activate user");
-      dispatch(setError(err.message || "Failed to activate user"));
-    } finally {
-      dispatch(setLoading(false));
+    startLoader();
+
+    const { isError, error, response } = await makeAPICallWithData(
+      "patch",
+      "/users/modifyUser",
+      {
+        id,
+        is_active: true,
+      },
+      { headers: { Authorization: `Bearer ${accessToken}` } }
+    );
+    if (!isError) {
+      toast.success(`User Activated`);
+      onUserChange();
+    } else {
+      toast.error(error?.response?.data?.message || "Something went wrong !");
     }
+    stopLoader();
   };
 
   const handleDeactivate = async (id: string) => {
-    dispatch(setLoading(true));
-    try {
-      const result = await makeAPICallWithData(
-        "patch",
-        "/users/modifyUser",
-        { id, is_active: false }
+    startLoader();
+
+    const { isError, error, response } = await makeAPICallWithData(
+      "patch",
+      "/users/modifyUser",
+      {
+        id,
+        is_active: false,
+      },
+      { headers: { Authorization: `Bearer ${accessToken}` } }
+    );
+    if (!isError) {
+      toast.success(`User Deactivated`);
+      onUserChange();
+    } else {
+      toast.error(
+        error?.response?.data?.message || "Failed to deactivate user"
       );
-      if (!result.isError) {
-        toast.success(`User Deactivated`);
-        onUserChange();
-      } else {
-        throw new Error(result.error?.message || "Failed to deactivate user");
-      }
-    } catch (err: any) {
-      toast.error(err.message || "Failed to deactivate user");
-      dispatch(setError(err.message || "Failed to deactivate user"));
-    } finally {
-      dispatch(setLoading(false));
     }
+    stopLoader();
   };
 
   const handleEdit = (id: string) => {
@@ -117,27 +120,23 @@ const UserTable: React.FC<UserTableProps> = ({
       return;
     }
 
-    dispatch(setLoading(true));
-    try {
-      const result = await makeAPICallWithOutData(
-        "delete", // Change the method to 'delete'
-        `/users/deleteUser/${id}` // Use the appropriate endpoint
+    startLoader();
+    const { error, isError, response } = await makeAPICallWithOutData(
+      "delete", // Change the method to 'delete'
+      `/users/deleteUser/${id}`, // Use the appropriate endpoint
+      { headers: { Authorization: `Bearer ${accessToken}` } }
+    );
+    if (isError) {
+      toast.success(`User Deleted Successfully`);
+      onUserChange(); // Refresh the user list
+    } else {
+      throw new Error(
+        error?.response?.data?.message || "Failed to delete user"
       );
-      if (!result.isError) {
-        toast.success(`User Deleted Successfully`);
-        onUserChange(); // Refresh the user list
-      } else {
-        throw new Error(result.error?.message || "Failed to delete user");
-      }
-    } catch (err: any) {
-      toast.error(err.message || "Failed to delete user");
-      dispatch(setError(err.message || "Failed to delete user"));
-    } finally {
-      dispatch(setLoading(false));
     }
+    stopLoader();
   };
 
-  
   const columns = [
     {
       name: "ID",

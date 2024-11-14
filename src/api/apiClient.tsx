@@ -1,11 +1,11 @@
-import axios, { AxiosResponse, InternalAxiosRequestConfig } from "axios";
+import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from "axios";
 
 // Create an instance of axios
 const apiClient = axios.create({
   baseURL: "http://localhost:4000", // Base URL for your API
   timeout: 10000, // Timeout limit for requests
   headers: {
-    "Content-Type": "multipart/form-data", // Content type header
+    "Content-Type": "application/json", // Default Content-Type for JSON requests
   },
 });
 
@@ -27,7 +27,14 @@ function onRefreshed(token: string) {
 // Request interceptor to add the access token to headers
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    // Skip adding Authorization for image requests
+    // Set 'Content-Type' based on the type of data being sent
+    if (config.data instanceof FormData) {
+      delete config.headers['Content-Type']; // Let the browser set it automatically for `FormData`
+    } else {
+      config.headers['Content-Type'] = 'application/json'; // Set for JSON payloads
+    }
+
+    // Skip authorization header for specific URLs
     if (
       !config.url?.includes("/images") &&
       !config.url?.includes(".jpg") &&
@@ -38,6 +45,7 @@ apiClient.interceptors.request.use(
         config.headers["Authorization"] = `Bearer ${accessToken}`;
       }
     }
+
     return config;
   },
   error => Promise.reject(error)
@@ -87,7 +95,7 @@ apiClient.interceptors.response.use(
           originalRequest.headers["Authorization"] = `Bearer ${accessToken}`;
           return apiClient(originalRequest); // Retry the original request
         } catch (refreshError) {
-          console.error("Refresh token expired", refreshError);
+          console.error("Refresh token expired. Error details:", (refreshError as AxiosError).response || (refreshError as AxiosError).message);
           isRefreshing = false;
 
           // Clear the session and redirect to login if refresh fails

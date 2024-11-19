@@ -3,7 +3,7 @@ import Sidebar from "./Sidebar";
 import useNavbar from "../hooks/useNavBar";
 
 import PincodeModal from "../pages/PincodePage";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../Redux/store";
@@ -13,6 +13,8 @@ import {
   clearRole,
 } from "../Redux/Slice/auth.slice";
 import { userConfirm } from "../utils/Confirmation";
+import { FaBars } from "react-icons/fa";
+import AdminSidebar from "./admin/AdminSidebar";
 
 const Navbar: React.FC = () => {
   const {
@@ -22,6 +24,22 @@ const Navbar: React.FC = () => {
     handleSearchChange,
     handleSearchSubmit,
   } = useNavbar();
+
+  const [isAdminSidebarOpen,setIsAdminSidebar]=useState(false);
+  const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 1024);
+  const toggleAdminSidebar = () => {
+    setIsAdminSidebar(!isAdminSidebarOpen);
+  };
+  useEffect(() => {
+    // Update isLargeScreen state based on window width
+    const handleResize = () => setIsLargeScreen(window.innerWidth >= 1024);
+    
+    window.addEventListener("resize", handleResize);
+    
+    // Clean up event listener on component unmount
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const { role, isAuth } = useSelector((state: RootState) => state.auth);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
@@ -30,6 +48,7 @@ const Navbar: React.FC = () => {
   const handleClick = () => {
     navigate("/");
   };
+
 
   async function handleLogout(
     e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
@@ -50,8 +69,12 @@ const Navbar: React.FC = () => {
     dispatch(clearAccessToken());
     dispatch(clearRefreshToken());
     dispatch(clearRole());
+    //localStorage.setItem("onClick","clicked");
+    localStorage.removeItem("onClick");
     navigate("/signout");
   }
+
+  const isAdminPage = location.pathname.startsWith("/admin-dashboard");
 
   return (
     <>
@@ -59,6 +82,12 @@ const Navbar: React.FC = () => {
       <nav className="bg-indigo-600 p-4 shadow-md ">
         <div className="container mx-auto flex justify-between items-center">
           <div className="flex items-center space-x-4 cursor-pointer">
+          <button
+              onClick={toggleAdminSidebar}
+              className="lg:hidden text-white mr-2"
+            >
+              {isAdminPage && (<FaBars className="text-2xl" />)}
+            </button>
             <img
               src="https://supertails.com/cdn/shop/files/supertails-logo-for-dark-theme_200x_2x_200x_2x_909b1df1-0f68-4734-9eeb-1d0e0a39c91f.webp?v=1705757214&width=200" // Replace with your logo path
               alt="Logo"
@@ -68,25 +97,28 @@ const Navbar: React.FC = () => {
             {/* <span className="text-white text-2xl font-bold">Website</span> */}
           </div>
 
-          {/* Search Field */}
-          <form
-            onSubmit={handleSearchSubmit}
-            className="hidden lg:flex items-center"
-          >
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={handleSearchChange}
-              placeholder="Search..."
-              className="p-2 w-full rounded-l-md border border-gray-300 border-r-0 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-            />
-            <button
-              type="submit"
-              className="p-2 bg-indigo-500 text-white rounded-r-md border border-indigo-500 border-l-0 hover:bg-indigo-600 transition duration-300"
+
+           {!isAdminPage && (
+            <form
+              onSubmit={handleSearchSubmit}
+              className="hidden lg:flex items-center"
             >
-              Search
-            </button>
-          </form>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={handleSearchChange}
+                placeholder="Search..."
+                className="p-2 w-full rounded-l-md border border-gray-300 border-r-0 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              />
+              <button
+                type="submit"
+                className="p-2 bg-indigo-500 text-white rounded-r-md border border-indigo-500 border-l-0 hover:bg-indigo-600 transition duration-300"
+              >
+                Search
+              </button>
+            </form>
+          )}
+
 
           {/* Desktop Menu */}
           <div className="hidden lg:flex space-x-6">
@@ -115,12 +147,12 @@ const Navbar: React.FC = () => {
               to="/cart"
               className={({ isActive }) =>
                 `text-white hover:text-gray-200 transition duration-300 ${
-                  isActive ? "font-bold" : ""
+                  isActive ? "font-bold" : ""                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
                 }`
               }
             >
               Cart
-            </NavLink>
+            </NavLink>                                                                                                                                                     
             {!isAuth ? (
               <NavLink
                 to="/signup"
@@ -177,6 +209,9 @@ const Navbar: React.FC = () => {
           </button>
         </div>
       </nav>
+      {!isLargeScreen && isAdminPage && (
+        <AdminSidebar isOpen={isAdminSidebarOpen} toggleSidebar={toggleAdminSidebar} />
+      )}
 
       {/* Sidebar */}
       <Sidebar
@@ -197,3 +232,7 @@ const Navbar: React.FC = () => {
 };
 
 export default Navbar;
+
+
+
+

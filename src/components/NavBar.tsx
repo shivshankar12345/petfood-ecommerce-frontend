@@ -147,14 +147,24 @@ const Navbar: React.FC = () => {
             )}
 
             {/* Admin Button (Visible only if the role is admin or seller) */}
-            {role === "admin" /*|| role === "seller"*/ && (
+            {role === "admin" ? (
               <NavLink to="/admin-dashboard/*">
                 <div className="flex justify-center">
-                  <button className="bg-red-500 text-white px-4 py-1 rounded shadow-md hover:bg-red-600 hover:scale-105 transition duration-300 cursor-pointer">
-                    Admin
+                  <button className="bg-red-500 text-white px-6 py-1 rounded shadow-md hover:bg-red-600 hover:scale-105 transition duration-300 ease-in-out transform cursor-pointer">
+                    Admin Panel
                   </button>
                 </div>
               </NavLink>
+            ) : role === "seller" ? (
+              <NavLink to="/seller-dashboard/*">
+                <div className="flex justify-center">
+                  <button className="bg-yellow-500 text-white px-6 py-1 rounded-lg shadow-md hover:bg-yellow-600 hover:scale-105 transition duration-300 ease-in-out transform cursor-pointer">
+                    Seller Panel
+                  </button>
+                </div>
+              </NavLink>
+            ) : (
+              <></>
             )}
           </div>
 

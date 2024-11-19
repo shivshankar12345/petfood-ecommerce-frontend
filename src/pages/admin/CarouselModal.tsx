@@ -95,6 +95,10 @@ const AddCarouselModal: React.FC<AddCarouselModalProps> = ({
               className="border rounded w-full py-2 px-3 text-gray-700"
               {...register("priority", {
                 required: "Priority Index is Required",
+                min: {
+                  value: 1,
+                  message: "Minimum Priority Index Should be 1 !!",
+                },
               })}
             />
             {errors.priority && (

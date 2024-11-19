@@ -33,16 +33,11 @@ const AdminSidebar: React.FC = () => {
       </button>
 
       <div className="flex flex-col h-full overflow-hidden">
-        {" "}
-        {/* Disable scrolling */}
-        {/* Logo Section */}
         <div className="flex items-center justify-center h-16 bg-gray-900">
           <h1 className="text-2xl font-bold">Admin Panel</h1>
         </div>
         {/* Navigation Links */}
         <div className="flex-1 overflow-y-hidden p-4">
-          {" "}
-          {/* Remove vertical scrollbar */}
           <ul className="space-y-4">
             <li>
               <NavLink

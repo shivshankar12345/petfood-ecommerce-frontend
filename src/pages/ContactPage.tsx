@@ -127,7 +127,7 @@ const Contact = () => {
     if (!response?.data) {
       return;
     }
-    const { email = "", sellerRequest = "" } = response?.data;
+    const { email = "", sellerRequest = "" } = response?.data?.user;
     setUserInformation({ email, sellerRequest });
     reset({ email });
   }

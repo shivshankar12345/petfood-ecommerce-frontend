@@ -3,10 +3,6 @@ import axios, { AxiosResponse, InternalAxiosRequestConfig } from "axios";
 // Create an instance of axios
 const apiClient = axios.create({
   baseURL: "http://localhost:4000",
-  timeout: 10000,
-  headers: {
-    "Content-Type": "application/json",
-  },
 });
 
 // Flag to indicate whether a token refresh is in progress
@@ -53,13 +49,19 @@ apiClient.interceptors.response.use(
             localStorage.getItem("persist:root") as string
           );
           const refreshToken = JSON.parse(data.refreshToken as string);
-          const verifyResponse = await apiClient.post("/users/refreshToken", {
-            refreshToken,
-          });
+          const verifyResponse = await apiClient.post(
+            "/api/users/refreshToken",
+            {
+              refreshToken,
+            }
+          );
 
           const { accessToken } = verifyResponse.data;
           data.accessToken = JSON.stringify(accessToken);
-          localStorage.setItem("persist:root", accessToken);
+          localStorage.setItem(
+            "persist:root",
+            JSON.stringify({ ...data, accessToken })
+          );
           isRefreshing = false;
           onRefreshed(accessToken);
           originalRequest.headers["Authorization"] = `Bearer ${accessToken}`;

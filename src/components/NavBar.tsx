@@ -148,7 +148,7 @@ const Navbar: React.FC = () => {
 
             {/* Admin Button (Visible only if the role is admin or seller) */}
             {role === "admin" ? (
-              <NavLink to="/admin-dashboard/*">
+              <NavLink to="/admin-dashboard/">
                 <div className="flex justify-center">
                   <button className="bg-red-500 text-white px-6 py-1 rounded shadow-md hover:bg-red-600 hover:scale-105 transition duration-300 ease-in-out transform cursor-pointer">
                     Admin Panel

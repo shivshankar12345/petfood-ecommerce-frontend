@@ -7,6 +7,13 @@ import PincodeModal from "../pages/PincodePage";
 import LogOutPage from "../pages/user/LogOutPage";
 import { useSelector } from "react-redux";
 import { RootState } from "../Redux/store";
+import ReturnOrder from "../pages/Contact/ReturnOrder";
+import TrackOrder from "../pages/Contact/TrackOrder";
+import OrderFAQ from "../pages/Contact/OrderFAQ";
+import ReturnsAndCancellationsFAQ from "../pages/Contact/ReturnFAQ";
+import PaymentFAQ from "../pages/Contact/PaymentFAQ";
+import CouponFAQ from "../pages/Contact/CouponFAQ";
+import GeneralFAQ from "../pages/Contact/GeneralFAQ";
 
 const AppRoutes: React.FC = () => {
     const isAuthenticated =Boolean( useSelector((state: RootState) => state.auth.role));
@@ -34,6 +41,13 @@ const AppRoutes: React.FC = () => {
             <Navigate to="/" replace />
           ) :(<LogOutPage /> )}  />
       <Route path="cart" element={<CartPage />} />
+      <Route path="/track-order" element={<TrackOrder></TrackOrder>} />
+      <Route path="/return-order" element={<ReturnOrder></ReturnOrder>} />
+      <Route path="/orders" element={< OrderFAQ />} />
+      <Route path="/returns-cancellations" element={< ReturnsAndCancellationsFAQ />} />
+      <Route path="/payments-refunds" element={< PaymentFAQ />} />
+      <Route path="/coupons-discounts" element={< CouponFAQ />} />
+      <Route path="/general-enquiry" element={< GeneralFAQ />} />
     </Routes>
   );
 };

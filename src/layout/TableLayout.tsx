@@ -13,22 +13,22 @@
     error?: string;
   }
 
-  const TableLayout: React.FC<TableLayoutProps> = ({
-    title,
-    searchPlaceholder,
-    searchValue,
-    onSearchChange,
-    children,
-    currentPage,
-    totalPages = 1,
-    onPageChange,
-    error,
-  }) => {
-    return (
-      <div className="p-4 bg-white shadow-lg rounded-lg w-full h-full flex flex-col">
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-3xl font-semibold text-gray-800">{title}</h2>
-        </div>
+const TableLayout: React.FC<TableLayoutProps> = ({
+  title,
+  searchPlaceholder,
+  searchValue,
+  onSearchChange,
+  children,
+  currentPage,
+  totalPages = 1,
+  onPageChange,
+  error,
+}) => {
+  return (
+    <div className="p-4 bg-white shadow-lg rounded-lg w-[90%] h-full">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-3xl font-semibold text-gray-800">{title}</h2>
+      </div>
 
         <div className="relative mb-6">
           <input
@@ -44,7 +44,7 @@
           </div>
         </div>
 
-        {error && <p className="text-red-600 mb-4">{error}</p>}
+      {/* {error && <p className="text-red-600 mb-4">{error}</p>} */}
 
         <div className="bg-gray-50 rounded-lg shadow-inner   flex-1 overflow-auto">
           <div className="min-w-full">{children}</div>

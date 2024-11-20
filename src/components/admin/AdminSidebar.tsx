@@ -27,7 +27,9 @@ const AdminSidebar: React.FC<{ isOpen?: boolean, toggleSidebar?: () => void }> =
 
       <div className="flex flex-col h-full overflow-y-auto">
         <div className="flex items-center justify-center h-16 bg-gray-900">
-          <h1 className="text-2xl font-bold">Admin Panel</h1>
+          <NavLink to="">
+            <h1 className="text-2xl font-bold">Admin Panel</h1>
+          </NavLink>
         </div>
         <div className="flex-1 space-y-4 p-4">
           <ul className="space-y-4">
@@ -40,7 +42,7 @@ const AdminSidebar: React.FC<{ isOpen?: boolean, toggleSidebar?: () => void }> =
             {/* Additional Sidebar Links */}
             <li>
               <NavLink
-                to="/admin-dashboard/manage-sellers"
+                to="manage-sellers"
                 className={({ isActive }) =>
                   isActive
                     ? "flex items-center bg-gray-600 p-2 rounded-lg transition-all duration-300"
@@ -53,7 +55,7 @@ const AdminSidebar: React.FC<{ isOpen?: boolean, toggleSidebar?: () => void }> =
             </li>
             <li>
               <NavLink
-                to="/admin-dashboard/manage-product"
+                to="manage-product"
                 className={({ isActive }) =>
                   isActive
                     ? "flex items-center bg-gray-600 p-2 rounded-lg transition-all duration-300"
@@ -66,7 +68,7 @@ const AdminSidebar: React.FC<{ isOpen?: boolean, toggleSidebar?: () => void }> =
             </li>
             <li>
               <NavLink
-                to="/admin-dashboard/orders"
+                to="manage-orders"
                 className={({ isActive }) =>
                   isActive
                     ? "flex items-center bg-gray-600 p-2 rounded-lg transition-all duration-300"
@@ -79,7 +81,7 @@ const AdminSidebar: React.FC<{ isOpen?: boolean, toggleSidebar?: () => void }> =
             </li>
             <li>
               <NavLink
-                to="/admin-dashboard/manage-pet"
+                to="manage-pet"
                 className={({ isActive }) =>
                   isActive
                     ? "flex items-center bg-gray-600 p-2 rounded-lg transition-all duration-300"
@@ -92,7 +94,7 @@ const AdminSidebar: React.FC<{ isOpen?: boolean, toggleSidebar?: () => void }> =
             </li>
             <li>
               <NavLink
-                to="/admin-dashboard/roles"
+                to="manage-roles"
                 className={({ isActive }) =>
                   isActive
                     ? "flex items-center bg-gray-600 p-2 rounded-lg transition-all duration-300"
@@ -105,7 +107,7 @@ const AdminSidebar: React.FC<{ isOpen?: boolean, toggleSidebar?: () => void }> =
             </li>
             <li>
               <NavLink
-                to="/admin-dashboard/permissions"
+                to="manage-permissions"
                 className={({ isActive }) =>
                   isActive
                     ? "flex items-center bg-gray-600 p-2 rounded-lg transition-all duration-300"
@@ -118,7 +120,7 @@ const AdminSidebar: React.FC<{ isOpen?: boolean, toggleSidebar?: () => void }> =
             </li>
             <li>
               <NavLink
-                to="/admin-dashboard/manage-carousel"
+                to="manage-carousel"
                 className={({ isActive }) =>
                   isActive
                     ? "flex items-center bg-gray-600 p-2 rounded-lg transition-all duration-300"
@@ -131,7 +133,7 @@ const AdminSidebar: React.FC<{ isOpen?: boolean, toggleSidebar?: () => void }> =
             </li>
             <li>
               <NavLink
-                to="/admin-dashboard/manage-contact"
+                to="manage-contact"
                 className={({ isActive }) =>
                   isActive
                     ? "flex items-center bg-gray-600 p-2 rounded-lg transition-all duration-300"
@@ -144,7 +146,7 @@ const AdminSidebar: React.FC<{ isOpen?: boolean, toggleSidebar?: () => void }> =
             </li>
             <li>
               <NavLink
-                to="/admin-dashboard/reporting"
+                to="manage-reports"
                 className={({ isActive }) =>
                   isActive
                     ? "flex items-center bg-gray-600 p-2 rounded-lg transition-all duration-300"
@@ -157,7 +159,7 @@ const AdminSidebar: React.FC<{ isOpen?: boolean, toggleSidebar?: () => void }> =
             </li>
             <li>
               <NavLink
-                to="/admin-dashboard/settings"
+                to="settings"
                 className={({ isActive }) =>
                   isActive
                     ? "flex items-center bg-gray-600 p-2 rounded-lg transition-all duration-300"

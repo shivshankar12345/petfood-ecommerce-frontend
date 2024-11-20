@@ -14,7 +14,7 @@ import { toast } from "react-toastify";
 import { useLoaderService } from "../../hooks/useLoader";
 import "react-toastify/dist/ReactToastify.css";
 import ConfirmationModal from "../../components/ConfirmationModal";
-import { Carousel, CarouselFormValues } from "../../types/Carousel.types";
+import { Carousel } from "../../types/Carousel.types";
 
 const ManageCarouselPage: React.FC = () => {
   const { makeAPICallWithOutData, makeAPICallWithData } = useApi();

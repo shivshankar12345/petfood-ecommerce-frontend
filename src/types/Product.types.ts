@@ -1,4 +1,5 @@
 export interface Product {
+  IsFeatured: any;
   id?: string;
   name: string;
   category:{
@@ -24,6 +25,7 @@ export interface ProductTableProps {
   search?: string;
   onEdit: (product: any) => void; 
   onDelete: (id: string) => void;
+  toggleFeatured:(id:string,IsFeatured:boolean) => void;
 }
 export interface ProductInputFieldProps {
   label: string;

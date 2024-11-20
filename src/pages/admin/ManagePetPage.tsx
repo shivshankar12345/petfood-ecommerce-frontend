@@ -40,6 +40,7 @@ const ManagePetPage: React.FC = () => {
 
   const handleSubmit = async (formData: any, id: string) => {
     dispatch(startLoading());
+  console.log(formData);
     try {
       if (id) {
         await dispatch(updatePet({ id, formData })).unwrap();

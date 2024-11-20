@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { PincodeModalProps } from '../types/common.types';
+import { Navigate, useNavigate } from 'react-router-dom';
  
 const PincodeModal: React.FC<PincodeModalProps> = ({ isOpen, onClose }) => {
   const [pincode, setPincode] = useState('');
+  const navigate=useNavigate();
  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Handle the pincode submission logic here
     console.log('Pincode submitted:', pincode);
     onClose?onClose():""; // Close
+    navigate("/");
   };
  
   if (!isOpen) return null;

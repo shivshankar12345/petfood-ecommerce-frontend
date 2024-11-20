@@ -55,23 +55,16 @@ apiClient.interceptors.response.use(
               refreshToken,
             }
           );
-
           const { accessToken } = verifyResponse.data;
           data.accessToken = JSON.stringify(accessToken);
-          localStorage.setItem(
-            "persist:root",
-            JSON.stringify({ ...data, accessToken })
-          );
+          localStorage.setItem("persist:root", JSON.stringify({ ...data }));
           isRefreshing = false;
           onRefreshed(accessToken);
           originalRequest.headers["Authorization"] = `Bearer ${accessToken}`;
           return apiClient(originalRequest);
-        } catch (refreshError) {
-          console.error("Refresh token expired", refreshError);
+        } catch (refreshError: any) {
           isRefreshing = false;
-          // Redirect to login page if refresh token is expired
-          // window.location.href = "/signout"; // Change to your login page path
-          console.log("Inside");
+          window.location.href = "/signout"; // Change to your login page path
           return Promise.reject(refreshError);
         }
       } else {

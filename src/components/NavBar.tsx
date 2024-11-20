@@ -53,6 +53,8 @@ const Navbar: React.FC = () => {
     navigate("/signout");
   }
 
+  const isAdminPage = location.pathname.startsWith("/admin-dashboard");
+
   return (
     <>
       {/* Navbar */}
@@ -68,25 +70,28 @@ const Navbar: React.FC = () => {
             {/* <span className="text-white text-2xl font-bold">Website</span> */}
           </div>
 
-          {/* Search Field */}
-          <form
-            onSubmit={handleSearchSubmit}
-            className="hidden lg:flex items-center"
-          >
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={handleSearchChange}
-              placeholder="Search..."
-              className="p-2 w-full rounded-l-md border border-gray-300 border-r-0 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-            />
-            <button
-              type="submit"
-              className="p-2 bg-indigo-500 text-white rounded-r-md border border-indigo-500 border-l-0 hover:bg-indigo-600 transition duration-300"
+
+           {!isAdminPage && (
+            <form
+              onSubmit={handleSearchSubmit}
+              className="hidden lg:flex items-center"
             >
-              Search
-            </button>
-          </form>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={handleSearchChange}
+                placeholder="Search..."
+                className="p-2 w-full rounded-l-md border border-gray-300 border-r-0 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              />
+              <button
+                type="submit"
+                className="p-2 bg-indigo-500 text-white rounded-r-md border border-indigo-500 border-l-0 hover:bg-indigo-600 transition duration-300"
+              >
+                Search
+              </button>
+            </form>
+          )}
+
 
           {/* Desktop Menu */}
           <div className="hidden lg:flex space-x-6">
@@ -115,12 +120,12 @@ const Navbar: React.FC = () => {
               to="/cart"
               className={({ isActive }) =>
                 `text-white hover:text-gray-200 transition duration-300 ${
-                  isActive ? "font-bold" : ""
+                  isActive ? "font-bold" : ""                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
                 }`
               }
             >
               Cart
-            </NavLink>
+            </NavLink>                                                                                                                                                     
             {!isAuth ? (
               <NavLink
                 to="/signup"

@@ -1,4 +1,4 @@
-import { AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { baseURL } from "../env";
 import apiClient from "../api/apiClient";
 
@@ -10,7 +10,7 @@ const useApi = () => {
     headers?: AxiosRequestConfig
   ): Promise<{ isError: boolean; response?: AxiosResponse; error?: any }> => {
     try {
-      const response = await apiClient[method](
+      const response = await axios[method](
         `${baseURL}${path}`,
         body,
         headers

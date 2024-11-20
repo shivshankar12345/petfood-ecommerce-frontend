@@ -1,4 +1,4 @@
-import axios, { AxiosResponse, InternalAxiosRequestConfig } from "axios";
+import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from "axios";
 
 // Create an instance of axios
 const apiClient = axios.create({
@@ -23,10 +23,25 @@ function onRefreshed(token: string) {
 // Request interceptor to add the access token to headers
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    const accessToken = localStorage.getItem("accessToken");
-    if (accessToken && config.headers) {
-      config.headers["Authorization"] = `Bearer ${accessToken}`;
+    // Set 'Content-Type' based on the type of data being sent
+    if (config.data instanceof FormData) {
+      delete config.headers['Content-Type']; // Let the browser set it automatically for `FormData`
+    } else {
+      config.headers['Content-Type'] = 'application/json'; // Set for JSON payloads
     }
+
+    // Skip authorization header for specific URLs
+    if (
+      !config.url?.includes("/images") &&
+      !config.url?.includes(".jpg") &&
+      !config.url?.includes(".png")
+    ) {
+      const accessToken = localStorage.getItem("accessToken");
+      if (accessToken && config.headers) {
+        config.headers["Authorization"] = `Bearer ${accessToken}`;
+      }
+    }
+
     return config;
   },
   error => Promise.reject(error)
@@ -34,7 +49,7 @@ apiClient.interceptors.request.use(
 
 // Response interceptor to handle 403 errors and refresh token
 apiClient.interceptors.response.use(
-  (response: AxiosResponse) => response,
+  (response: AxiosResponse) => response, // If the response is successful, return it
   async error => {
     const { config, response } = error;
     const originalRequest = config;
@@ -42,8 +57,9 @@ apiClient.interceptors.response.use(
     // Check for 403 Forbidden error and retry with refreshed token
     if (response && response.status === 403 && response.data.tokenExpired) {
       if (!isRefreshing) {
-        originalRequest._retry = true;
+        originalRequest._retry = true; // Mark the request to avoid retrying multiple times
         isRefreshing = true;
+
         try {
           const data = JSON.parse(
             localStorage.getItem("persist:root") as string
@@ -60,6 +76,8 @@ apiClient.interceptors.response.use(
           localStorage.setItem("persist:root", JSON.stringify({ ...data }));
           isRefreshing = false;
           onRefreshed(accessToken);
+
+          // Update the request with the new token and retry
           originalRequest.headers["Authorization"] = `Bearer ${accessToken}`;
           return apiClient(originalRequest);
         } catch (refreshError: any) {
@@ -68,10 +86,11 @@ apiClient.interceptors.response.use(
           return Promise.reject(refreshError);
         }
       } else {
+        // If the token refresh is already in progress, queue the original request
         return new Promise(resolve => {
           subscribeTokenRefresh((token: string) => {
             originalRequest.headers["Authorization"] = `Bearer ${token}`;
-            resolve(apiClient(originalRequest));
+            resolve(apiClient(originalRequest)); // Retry the request with the new token
           });
         });
       }

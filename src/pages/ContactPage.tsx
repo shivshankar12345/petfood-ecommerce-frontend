@@ -19,6 +19,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import useApi from "../hooks/useApi";
 import { toast } from "react-toastify";
 import SellerModal from "./BecomeSellerModal";
+import { NavLink } from "react-router-dom";
 
 interface formInput {
   name: string;
@@ -148,10 +149,12 @@ const Contact = () => {
             <p className="text-gray-600 mb-6">
               Sign in to get help with recent orders
             </p>
+            <NavLink to="/signup">
             <button className="bg-teal-500 text-white py-2 px-4 rounded-md hover:bg-teal-600 transition-colors">
               <FontAwesomeIcon icon={faSignInAlt} className="mr-2" />
               SIGN IN
             </button>
+            </NavLink>
           </div>
         )}
 

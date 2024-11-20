@@ -105,7 +105,9 @@ const Footer = () => {
                 <p>Exclusive</p>
               </div>
             </div>
-          </div>
+            </div>
+            
+           
 
           {/* Column 2: Online Shopping */}
           <div className="space-y-4">
@@ -154,7 +156,7 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href="/faqs" className="hover:text-teal-500">
+                <a href="/contact" className="hover:text-teal-500">
                   FAQs
                 </a>
               </li>
@@ -164,7 +166,7 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href="/contact-us" className="hover:text-teal-500">
+                <a href="/contact" className="hover:text-teal-500">
                   Contact Us
                 </a>
               </li>

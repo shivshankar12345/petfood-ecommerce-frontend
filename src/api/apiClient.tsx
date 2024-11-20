@@ -2,11 +2,7 @@ import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from "ax
 
 // Create an instance of axios
 const apiClient = axios.create({
-  baseURL: "http://localhost:4000", // Base URL for your API
-  timeout: 10000, // Timeout limit for requests
-  headers: {
-    "Content-Type": "application/json", // Default Content-Type for JSON requests
-  },
+  baseURL: "http://localhost:4000",
 });
 
 // Flag to indicate whether a token refresh is in progress
@@ -65,42 +61,28 @@ apiClient.interceptors.response.use(
         isRefreshing = true;
 
         try {
-          // Fetch the persisted state to get the refreshToken
-          const persistedState = localStorage.getItem("persist:root");
-          if (!persistedState) {
-            // If there's no persisted state, direct user to login (refresh token is missing)
-            window.location.href = "/login";
-            return Promise.reject(error);
-          }
-
-          const parsedState = JSON.parse(persistedState);
-          const refreshToken = parsedState.refreshToken; // Assuming refreshToken is stored like this
-
-          // Request to refresh the token
-          const verifyResponse = await apiClient.post("/users/refreshToken", {
-            refreshToken,
-          });
-
+          const data = JSON.parse(
+            localStorage.getItem("persist:root") as string
+          );
+          const refreshToken = JSON.parse(data.refreshToken as string);
+          const verifyResponse = await apiClient.post(
+            "/api/users/refreshToken",
+            {
+              refreshToken,
+            }
+          );
           const { accessToken } = verifyResponse.data;
-
-          // Update the accessToken in persisted state
-          parsedState.accessToken = accessToken; // Update access token in persisted state
-          localStorage.setItem("persist:root", JSON.stringify(parsedState));
-
-          // Notify all waiting subscribers with the new token
+          data.accessToken = JSON.stringify(accessToken);
+          localStorage.setItem("persist:root", JSON.stringify({ ...data }));
           isRefreshing = false;
           onRefreshed(accessToken);
 
           // Update the request with the new token and retry
           originalRequest.headers["Authorization"] = `Bearer ${accessToken}`;
-          return apiClient(originalRequest); // Retry the original request
-        } catch (refreshError) {
-          console.error("Refresh token expired. Error details:", (refreshError as AxiosError).response || (refreshError as AxiosError).message);
+          return apiClient(originalRequest);
+        } catch (refreshError: any) {
           isRefreshing = false;
-
-          // Clear the session and redirect to login if refresh fails
-          localStorage.removeItem("persist:root");
-          window.location.href = "/login"; // Redirect to login page
+          window.location.href = "/signout"; // Change to your login page path
           return Promise.reject(refreshError);
         }
       } else {

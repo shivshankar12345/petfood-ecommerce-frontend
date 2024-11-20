@@ -3,10 +3,6 @@ import axios, { AxiosResponse, InternalAxiosRequestConfig } from "axios";
 // Create an instance of axios
 const apiClient = axios.create({
   baseURL: "http://localhost:4000",
-  timeout: 10000,
-  headers: {
-    "Content-Type": "application/json",
-  },
 });
 
 // Flag to indicate whether a token refresh is in progress
@@ -53,23 +49,22 @@ apiClient.interceptors.response.use(
             localStorage.getItem("persist:root") as string
           );
           const refreshToken = JSON.parse(data.refreshToken as string);
-          const verifyResponse = await apiClient.post("/users/refreshToken", {
-            refreshToken,
-          });
-
+          const verifyResponse = await apiClient.post(
+            "/api/users/refreshToken",
+            {
+              refreshToken,
+            }
+          );
           const { accessToken } = verifyResponse.data;
           data.accessToken = JSON.stringify(accessToken);
-          localStorage.setItem("persist:root", accessToken);
+          localStorage.setItem("persist:root", JSON.stringify({ ...data }));
           isRefreshing = false;
           onRefreshed(accessToken);
           originalRequest.headers["Authorization"] = `Bearer ${accessToken}`;
           return apiClient(originalRequest);
-        } catch (refreshError) {
-          console.error("Refresh token expired", refreshError);
+        } catch (refreshError: any) {
           isRefreshing = false;
-          // Redirect to login page if refresh token is expired
-          // window.location.href = "/signout"; // Change to your login page path
-          console.log("Inside");
+          window.location.href = "/signout"; // Change to your login page path
           return Promise.reject(refreshError);
         }
       } else {

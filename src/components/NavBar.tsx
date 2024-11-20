@@ -70,8 +70,7 @@ const Navbar: React.FC = () => {
             {/* <span className="text-white text-2xl font-bold">Website</span> */}
           </div>
 
-
-           {!isAdminPage && (
+          {!isAdminPage && (
             <form
               onSubmit={handleSearchSubmit}
               className="hidden lg:flex items-center"
@@ -92,9 +91,8 @@ const Navbar: React.FC = () => {
             </form>
           )}
 
-
           {/* Desktop Menu */}
-          <div className="hidden lg:flex space-x-6">
+          <div className="hidden lg:flex space-x-6 items-center">
             <NavLink
               to="/pincode"
               onClick={() => setIsModalOpen(true)}
@@ -120,12 +118,12 @@ const Navbar: React.FC = () => {
               to="/cart"
               className={({ isActive }) =>
                 `text-white hover:text-gray-200 transition duration-300 ${
-                  isActive ? "font-bold" : ""                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+                  isActive ? "font-bold" : ""
                 }`
               }
             >
               Cart
-            </NavLink>                                                                                                                                                     
+            </NavLink>
             {!isAuth ? (
               <NavLink
                 to="/signup"

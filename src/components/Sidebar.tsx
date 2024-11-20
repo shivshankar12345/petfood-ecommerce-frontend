@@ -44,7 +44,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
             </NavLink>
           </li>
           {/* Admin Button (Visible only if the role is admin or seller) */}
-          {(role === "admin" || role === "seller") && (
+          {role === "admin"  ? (
             <div className="flex justify-center">
               <li>
                 <button className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 transition duration-300">
@@ -57,7 +57,18 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
                 </button>
               </li>
             </div>
-          )}
+          ): role === "seller"?(<div className="flex justify-center">
+            <li>
+              <button className="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600 transition duration-300">
+                <NavLink
+                  to="/admin-dashboard"
+                  className="block hover:bg-yellow-600 p-2"
+                >
+                  Seller
+                </NavLink>
+              </button>
+            </li>
+          </div>):(<></>)}
         </ul>
       </div>
     </div>

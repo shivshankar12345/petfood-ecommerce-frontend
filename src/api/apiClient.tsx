@@ -21,31 +21,31 @@ function onRefreshed(token: string) {
 }
 
 // Request interceptor to add the access token to headers
-apiClient.interceptors.request.use(
-  (config: InternalAxiosRequestConfig) => {
-    // Set 'Content-Type' based on the type of data being sent
-    if (config.data instanceof FormData) {
-      delete config.headers['Content-Type']; // Let the browser set it automatically for `FormData`
-    } else {
-      config.headers['Content-Type'] = 'application/json'; // Set for JSON payloads
-    }
+// apiClient.interceptors.request.use(
+//   (config: InternalAxiosRequestConfig) => {
+//     // Set 'Content-Type' based on the type of data being sent
+//     if (config.data instanceof FormData) {
+//       delete config.headers['Content-Type']; // Let the browser set it automatically for `FormData`
+//     } else {
+//       config.headers['Content-Type'] = 'application/json'; // Set for JSON payloads
+//     }
 
-    // Skip authorization header for specific URLs
-    if (
-      !config.url?.includes("/images") &&
-      !config.url?.includes(".jpg") &&
-      !config.url?.includes(".png")
-    ) {
-      const accessToken = localStorage.getItem("accessToken");
-      if (accessToken && config.headers) {
-        config.headers["Authorization"] = `Bearer ${accessToken}`;
-      }
-    }
+//     // Skip authorization header for specific URLs
+//     if (
+//       !config.url?.includes("/images") &&
+//       !config.url?.includes(".jpg") &&
+//       !config.url?.includes(".png")
+//     ) {
+//       const accessToken = localStorage.getItem("accessToken");
+//       if (accessToken && config.headers) {
+//         config.headers["Authorization"] = `Bearer ${accessToken}`;
+//       }
+//     }
 
-    return config;
-  },
-  error => Promise.reject(error)
-);
+//     return config;
+//   },
+//   error => Promise.reject(error)
+// );
 
 // Response interceptor to handle 403 errors and refresh token
 apiClient.interceptors.response.use(

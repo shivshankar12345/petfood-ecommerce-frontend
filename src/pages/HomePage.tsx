@@ -29,14 +29,15 @@ const HomePage: React.FC = () => {
       toast.error("Network Error");
       return;
     }
-    setSlideImages(response?.data?.crouselData);
+    setSlideImages(response?.data?.crouselData || []);
   }
+
   useEffect(() => {
     fetchSliderImages();
   }, []);
 
   return (
-    <div>
+    <div className="bg-backgroundLight dark:bg-backgroundDark text-gray-800 dark:text-gray-200 min-h-screen">
       {/* Welcome Section */}
       <div
         className="text-center p-8 rounded "
@@ -71,17 +72,21 @@ const HomePage: React.FC = () => {
             navigation={true}
             className="w-full"
           >
-            {sliderImages.map((value: SwiperSlide) => (
-              <SwiperSlide key={value.id}>
-                <div
-                  className="relative bg-cover bg-center h-[70vh] flex items-center justify-center"
-                  style={{
-                    backgroundImage: `url(${value.imageUrl})`,
-                    width: "100%",
-                  }}
-                ></div>
-              </SwiperSlide>
-            ))}
+            {sliderImages && sliderImages.length > 0 ? (
+              sliderImages.map((value: SwiperSlide) => (
+                <SwiperSlide key={value.id}>
+                  <div
+                    className="relative bg-cover bg-center h-[70vh] flex items-center justify-center"
+                    style={{
+                      backgroundImage: `url(${value.imageUrl})`,
+                      width: "100%",
+                    }}
+                  ></div>
+                </SwiperSlide>
+              ))
+            ) : (
+              <div className="text-center text-white">Loading images...</div>
+            )}
           </Swiper>
         </section>
 
@@ -182,10 +187,10 @@ const HomePage: React.FC = () => {
               </button>
             </div>
           </div>
-          <CartPage></CartPage>
+          <CartPage />
         </section>
 
-        {/*Footer section  */}
+        {/* Footer Section */}
         <section>
           <Footer />
         </section>

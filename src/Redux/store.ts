@@ -1,4 +1,3 @@
-// store.ts
 import { configureStore } from "@reduxjs/toolkit";
 import { authReducers } from "./Slice/auth.slice";
 import {
@@ -11,24 +10,22 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist";
-import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
+import storage from "redux-persist/lib/storage"; 
 import { productReducer } from "./Slice/Product.slice";
 import { spinnerReducer } from "./Slice/spinner.slice";
 import { userReducer } from "./Slice/user.slice";
 import { sellerReducer } from "./Slice/seller.slice";
 import { petReducer } from "./Slice/Pet.slice";
 import { carouselReducer } from "./Slice/carousel.slice";
+import { themeReducer } from "./Slice/theme.slice";
 
-// Persist Configuration
 const persistConfig = {
   key: "root",
   storage,
 };
 
-// Persisted Reducer
 const persistedReducer = persistReducer(persistConfig, authReducers);
 
-// Configure Store
 export const store = configureStore({
   reducer: {
     auth: persistedReducer,
@@ -38,6 +35,7 @@ export const store = configureStore({
     user: userReducer,
     seller: sellerReducer,
     carousel:carouselReducer,
+    theme:themeReducer
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
@@ -47,9 +45,7 @@ export const store = configureStore({
     }),
 });
 
-// Persist Store
 export const persister = persistStore(store);
 
-// Type Definitions
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

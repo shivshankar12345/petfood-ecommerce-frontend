@@ -3,7 +3,7 @@ import Sidebar from "./Sidebar";
 import useNavbar from "../hooks/useNavBar";
 
 import PincodeModal from "../pages/PincodePage";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../Redux/store";
@@ -13,6 +13,9 @@ import {
   clearRole,
 } from "../Redux/Slice/auth.slice";
 import { userConfirm } from "../utils/Confirmation";
+import { toggleTheme } from "../Redux/Slice/theme.slice";
+import { FaMoon, FaSun } from "react-icons/fa";
+import React from "react";
 
 const Navbar: React.FC = () => {
   const {
@@ -25,7 +28,20 @@ const Navbar: React.FC = () => {
   const { role, isAuth } = useSelector((state: RootState) => state.auth);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
+  
+  const { theme } = useSelector((state: RootState) => state.theme);
   const dispatch = useDispatch();
+
+  // Manage theme in the document root
+  
+  React.useEffect(() => {
+    document.documentElement.className = theme; // Apply theme class to `html`
+  }, [theme]);
+
+
+  const handleToggle = () => {
+    dispatch(toggleTheme()); // This will toggle between light and dark themes
+  };
 
   const handleClick = () => {
     navigate("/");
@@ -58,7 +74,7 @@ const Navbar: React.FC = () => {
   return (
     <>
       {/* Navbar */}
-      <nav className="bg-indigo-600 p-4 shadow-md ">
+      <nav className="bg-indigo-600 dark:bg-indigo-900 p-4 shadow-md">
         <div className="container mx-auto flex justify-between items-center">
           <div className="flex items-center space-x-4 cursor-pointer">
             <img
@@ -67,11 +83,9 @@ const Navbar: React.FC = () => {
               className="h-8"
               onClick={handleClick}
             />
-            {/* <span className="text-white text-2xl font-bold">Website</span> */}
           </div>
 
-
-           {!isAdminPage && (
+          {!isAdminPage && (
             <form
               onSubmit={handleSearchSubmit}
               className="hidden lg:flex items-center"
@@ -91,7 +105,6 @@ const Navbar: React.FC = () => {
               </button>
             </form>
           )}
-
 
           {/* Desktop Menu */}
           <div className="hidden lg:flex space-x-6">
@@ -120,12 +133,22 @@ const Navbar: React.FC = () => {
               to="/cart"
               className={({ isActive }) =>
                 `text-white hover:text-gray-200 transition duration-300 ${
-                  isActive ? "font-bold" : ""                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+                  isActive ? "font-bold" : ""
                 }`
               }
             >
               Cart
-            </NavLink>                                                                                                                                                     
+            </NavLink>
+
+            {/* Theme Toggle */}
+            <div
+              onClick={handleToggle}
+              className="cursor-pointer text-white hover:text-gray-300 transition duration-300"
+            >
+              {theme === "light" ? <FaMoon size={24} /> : <FaSun size={24} />}
+            </div>
+
+            {/* Auth Links */}
             {!isAuth ? (
               <NavLink
                 to="/signup"

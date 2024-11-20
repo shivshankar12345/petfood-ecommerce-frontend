@@ -42,8 +42,8 @@ const Footer = () => {
         (value: Contact) => value.contact_type == "Email"
       );
       setContactInfo({
-        phone: phone?.[0].contact || "N/A",
-        email: email?.[0].contact || "N/A",
+        phone: phone?.[0]?.contact || "N/A",
+        email: email?.[0]?.contact || "N/A",
       });
     }
   }

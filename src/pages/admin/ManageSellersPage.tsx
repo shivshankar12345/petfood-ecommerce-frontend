@@ -16,7 +16,7 @@ import { startLoading, stopLoading } from "../../Redux/Slice/spinner.slice";
 const ManageSellerPage: React.FC = () => {
   const { makeAPICallWithOutData } = useApi();
   const dispatch = useDispatch();
-
+  const { accessToken } = useSelector((state: RootState) => state.auth);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [limit] = useState<number>(10);
@@ -35,7 +35,6 @@ const ManageSellerPage: React.FC = () => {
     limit = 10,
     page_num = 1
   ) => {
-    //dispatch(setLoading(true));
     dispatch(startLoading());
     let endpoint =
       status === "verified"
@@ -44,7 +43,8 @@ const ManageSellerPage: React.FC = () => {
 
     const { isError, response, error } = await makeAPICallWithOutData(
       "get",
-      endpoint
+      endpoint,
+      { headers: { Authorization: `Bearer ${accessToken}` } }
     );
 
     if (isError) {
@@ -59,7 +59,6 @@ const ManageSellerPage: React.FC = () => {
       setTotalPages(response?.data?.total_pages || 1);
       setCurrentPage(response?.data?.current_page || 1);
     }
-    //dispatch(setLoading(false));
     dispatch(stopLoading());
   };
 

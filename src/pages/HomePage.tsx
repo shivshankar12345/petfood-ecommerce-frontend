@@ -20,6 +20,43 @@ type SwiperSlideType = {
 const HomePage: React.FC = () => {
   const { makeAPICallWithOutData } = useApi();
   const [sliderImages, setSlideImages] = useState<SwiperSlideType[]>([]);
+  const caregoryobj= [
+    {
+      img: "https://supertails.com/cdn/shop/files/7th_Oct_Popular_Categories-min_1429c56f-23c6-47b7-b6a7-3c0178c2fb9a_480x.png?v=1728279390",
+      label: "Dog Food",
+    },
+    {
+      img: "https://supertails.com/cdn/shop/files/7th_Oct_Popular_Categories-2-min_cbe23362-36e0-43ff-9e43-41ce998bf4aa_480x.png?v=1728279390",
+      label: "Cat Food",
+    },
+    {
+      img: "https://supertails.com/cdn/shop/files/1st_July_Popular_Categories_125_1b8043d7-414b-4d76-9080-18803afa09a1_480x.png?v=1727781543",
+      label: "Accessories",
+    },
+  ];
+
+  const cartobj = [
+    {
+      img: "https://supertails.com/cdn/shop/files/Frame344684057_280x.png?v=1716445251",
+      title: "Dog Kibble",
+      price: "$19.99",
+    },
+    {
+      img: "https://supertails.com/cdn/shop/files/Frame_344684069_1.png?v=1718002649",
+      title: "Cat Wet Food",
+      price: "$29.99",
+    },
+    {
+      img: "https://cdn.shopify.com/s/files/1/0565/8021/0861/files/Combo_21.png?v=1696417035",
+      title: "Pet Accessories Set",
+      price: "$39.99",
+    },
+    {
+      img: "https://cdn.shopify.com/s/files/1/0565/8021/0861/products/Frame1-2022-05-14T125036.756-527280.png?v=1696545663",
+      title: "Comfortable Pet Bed",
+      price: "$49.99",
+    },
+  ]
 
   async function fetchSliderImages() {
     const { response, isError } = await makeAPICallWithOutData(
@@ -74,20 +111,7 @@ const HomePage: React.FC = () => {
             Explore Our Categories
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {[
-              {
-                img: "https://supertails.com/cdn/shop/files/7th_Oct_Popular_Categories-min_1429c56f-23c6-47b7-b6a7-3c0178c2fb9a_480x.png?v=1728279390",
-                label: "Dog Food",
-              },
-              {
-                img: "https://supertails.com/cdn/shop/files/7th_Oct_Popular_Categories-2-min_cbe23362-36e0-43ff-9e43-41ce998bf4aa_480x.png?v=1728279390",
-                label: "Cat Food",
-              },
-              {
-                img: "https://supertails.com/cdn/shop/files/1st_July_Popular_Categories_125_1b8043d7-414b-4d76-9080-18803afa09a1_480x.png?v=1727781543",
-                label: "Accessories",
-              },
-            ].map((item, idx) => (
+            {caregoryobj.map((item, idx) => (
               <div
                 key={idx}
                 className="relative overflow-hidden rounded-lg shadow-lg"
@@ -111,28 +135,7 @@ const HomePage: React.FC = () => {
             Featured Products
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-            {[
-              {
-                img: "https://supertails.com/cdn/shop/files/Frame344684057_280x.png?v=1716445251",
-                title: "Dog Kibble",
-                price: "$19.99",
-              },
-              {
-                img: "https://supertails.com/cdn/shop/files/Frame_344684069_1.png?v=1718002649",
-                title: "Cat Wet Food",
-                price: "$29.99",
-              },
-              {
-                img: "https://cdn.shopify.com/s/files/1/0565/8021/0861/files/Combo_21.png?v=1696417035",
-                title: "Pet Accessories Set",
-                price: "$39.99",
-              },
-              {
-                img: "https://cdn.shopify.com/s/files/1/0565/8021/0861/products/Frame1-2022-05-14T125036.756-527280.png?v=1696545663",
-                title: "Comfortable Pet Bed",
-                price: "$49.99",
-              },
-            ].map((product, idx) => (
+            {cartobj.map((product, idx) => (
               <div
                 key={idx}
                 className="border rounded-lg p-4 bg-white dark:bg-gray-700 shadow-md"

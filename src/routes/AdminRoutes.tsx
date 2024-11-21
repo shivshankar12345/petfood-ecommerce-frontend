@@ -17,7 +17,7 @@ const AdminRoutes: React.FC = () => {
     <Routes>
       <Route element={<ProtectedRoute />}>
       <Route path="/*" element={<AdminLayout />}>
-      <Route path="" element={<AdminLayout />}>
+      {/* <Route path="/*" element={<AdminPage />}> */}
         <Route index={true} element={<AdminPage />} />
         <Route path="manage-users" element={<ManageUsersPage />} />
         <Route path="manage-sellers" element={<ManageSellersPage />} />
@@ -54,7 +54,7 @@ const AdminRoutes: React.FC = () => {
         />
         <Route element={<>Hello</>} />
       </Route>
-      </Route>
+      {/* </Route> */}
       </Route>
     </Routes>
   );

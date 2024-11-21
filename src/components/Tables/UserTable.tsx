@@ -153,6 +153,21 @@ const UserTable: React.FC<UserTableProps> = ({
       sortable: true,
     },
     {
+      name: "Email",
+      selector: (row: User) => row.email,
+      sortable: true,
+    },
+    {
+      name: "Email",
+      selector: (row: User) => row.email,
+      sortable: true,
+    },
+    {
+      name: "Email",
+      selector: (row: User) => row.email,
+      sortable: true,
+    },
+    {
       name: "Phone",
       selector: (row: User) => row.phone,
       sortable: true,
@@ -205,6 +220,7 @@ const UserTable: React.FC<UserTableProps> = ({
         data={Array.isArray(users) ? users : []}
         highlightOnHover
         striped
+        pointerOnHover
         persistTableHead
       />
       {isModalOpen && selectedUser && (

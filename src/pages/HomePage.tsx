@@ -29,7 +29,7 @@ const HomePage: React.FC = () => {
       toast.error("Network Error");
       return;
     }
-    setSlideImages(response?.data?.crouselData);
+    setSlideImages(response?.data?.crousel);
   }
   useEffect(() => {
     fetchSliderImages();

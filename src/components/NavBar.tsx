@@ -128,6 +128,7 @@ const Navbar: React.FC = () => {
 
           {/* Desktop Menu */}
           <div className="hidden lg:flex space-x-6 items-center">
+          <div className="hidden lg:flex space-x-6 items-center">
             <NavLink
               to="/pincode"
               onClick={() => setIsModalOpen(true)}

@@ -1,7 +1,7 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import { AxiosRequestConfig, AxiosResponse } from "axios";
 import { baseURL } from "../env";
 import apiClient from "../api/apiClient";
-
+ 
 const useApi = () => {
   const makeAPICallWithData = async (
     method: "post" | "put" | "patch",
@@ -10,7 +10,7 @@ const useApi = () => {
     headers?: AxiosRequestConfig
   ): Promise<{ isError: boolean; response?: AxiosResponse; error?: any }> => {
     try {
-      const response = await axios[method](
+      const response = await apiClient[method](
         `${baseURL}${path}`,
         body,
         headers
@@ -20,7 +20,7 @@ const useApi = () => {
       return { isError: true, error };
     }
   };
-
+ 
   const makeAPICallWithOutData = async (
     method: "get" | "delete",
     path: string,
@@ -30,11 +30,12 @@ const useApi = () => {
       const response = await apiClient[method](`${baseURL}${path}`, headers);
       return { isError: false, response };
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       return { isError: true, error };
     }
   };
   return { makeAPICallWithData, makeAPICallWithOutData };
 };
-
+ 
 export default useApi;
+ 

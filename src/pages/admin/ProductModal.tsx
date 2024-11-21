@@ -119,8 +119,8 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
   };
 
   const handleClose = () => {
-    if(!product){
-      reset({})
+    if (!product) {
+      reset({});
     }
     onClose();
     setSelectedFile(null);
@@ -135,7 +135,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-     <div className="bg-white p-6 rounded-lg shadow-lg w-[800px] max-h-[80vh] overflow-auto pb-8">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-[800px] max-h-[80vh] overflow-auto pb-8">
         <h2 className="text-2xl mb-4 text-center font-semibold">
           {product ? "Edit Product" : "Add Product"}
         </h2>
@@ -201,11 +201,10 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex items-center">
-              <span className="mr-2 text-gray-700">Rs.</span>
               <ProductInputField
                 label="Price"
-                type="number"
-                placeholder="Enter product price"
+                type="text"
+                placeholder="Rs."
                 {...register("price", {
                   required: "Price is required",
                   valueAsNumber: true,

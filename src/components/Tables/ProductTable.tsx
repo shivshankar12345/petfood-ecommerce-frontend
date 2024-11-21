@@ -7,6 +7,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
   products,
   onEdit,
   onDelete,
+  toggleFeatured,
 }) => {
   const columns: TableColumn<Product>[] = [
     {
@@ -44,6 +45,25 @@ const ProductTable: React.FC<ProductTableProps> = ({
       selector: (row: Product) => row.description || "",
       sortable: false,
     },
+    {
+      name: "IsFeatured",
+      cell: (row: Product) => (
+        <button
+          onClick={()=>toggleFeatured(row.id as string,row.IsFeatured)}
+          style={{
+            backgroundColor: row.IsFeatured ? 'green' : 'red',
+            color: 'white',
+            border: 'none',
+            padding: '5px 10px',
+            borderRadius: '5px',
+            cursor: 'pointer'
+          }}
+        >
+          {row.IsFeatured ? 'True' : 'False'}
+        </button>
+      )
+    },
+    
     {
       name: "Image",
       cell: (row: Product) => {

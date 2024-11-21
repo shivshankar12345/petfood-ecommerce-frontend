@@ -46,7 +46,7 @@ const CartPage = () => {
   return (
     <section className="py-16 bg-gray-100">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-        {products.map((product: any) => (
+        {products.filter((product)=>product.IsFeatured).map((product: any) => (
           <div
             key={product.id}
             className="border rounded-lg p-6 bg-white shadow-lg transform transition-transform duration-300 hover:scale-105 relative"

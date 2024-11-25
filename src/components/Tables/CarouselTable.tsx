@@ -3,24 +3,8 @@ import DataTable, { TableColumn } from "react-data-table-component";
 import { FaTrash, FaEdit } from "react-icons/fa";
 import { Carousel, CarouselTableProps } from "../../types/Carousel.types";
 
-// interface Carousel {
-//   id: string;
-//   name: string;
-//   imageUrl: string;
-// }
-
-// interface CarouselTableProps {
-//   carousels: Carousel[];
-//   loading: boolean;
-//   error: string | null;
-//   onEdit: (carousel: Carousel) => void;
-//   onDelete: (id: string) => void;
-// }
-
 const CarouselTable: React.FC<CarouselTableProps> = ({
   carousels,
-  loading,
-  error,
   onEdit,
   onDelete,
 }) => {

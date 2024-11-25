@@ -1,9 +1,12 @@
 import axios, { AxiosResponse } from "axios";
  
+import axios, { AxiosResponse } from "axios";
+ 
 // Create an instance of axios
 const apiClient = axios.create({
   baseURL: "http://localhost:4000",
 });
+ 
  
 // Flag to indicate whether a token refresh is in progress
 let isRefreshing = false;
@@ -14,22 +17,27 @@ function subscribeTokenRefresh(cb: (token: string) => void) {
   refreshSubscribers.push(cb);
 }
  
+ 
 // Function to notify all subscribers
 function onRefreshed(token: string) {
   refreshSubscribers.forEach(cb => cb(token));
   refreshSubscribers = []; // Clear the subscribers after notifying
 }
  
+ 
 // Response interceptor to handle 403 errors and refresh token
 apiClient.interceptors.response.use(
+  (response: AxiosResponse) => response,
   (response: AxiosResponse) => response,
   async error => {
     const { config, response } = error;
     const originalRequest = config;
  
+ 
     // Check for 403 Forbidden error and retry with refreshed token
     if (response && response.status === 403 && response.data.tokenExpired) {
       if (!isRefreshing) {
+        originalRequest._retry = true;
         originalRequest._retry = true;
         isRefreshing = true;
         try {
@@ -60,14 +68,17 @@ apiClient.interceptors.response.use(
           subscribeTokenRefresh((token: string) => {
             originalRequest.headers["Authorization"] = `Bearer ${token}`;
             resolve(apiClient(originalRequest));
+            resolve(apiClient(originalRequest));
           });
         });
       }
     }
  
+ 
     return Promise.reject(error);
   }
 );
+ 
  
 export default apiClient;
  

@@ -8,7 +8,9 @@ import "swiper/css/autoplay";
 import Footer from "../components/Footer";
 import useApi from "../hooks/useApi";
 import { toast } from "react-toastify";
-import CartPage from "./CartPage";
+import CartPage from "../components/Cart";
+import Cart from "../components/Cart";
+
 
 
 type SwiperSlideType = {
@@ -134,7 +136,7 @@ const HomePage: React.FC = () => {
           <h2 className="text-3xl font-semibold text-center mb-8">
             Featured Products
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+          {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
             {cartobj.map((product, idx) => (
               <div
                 key={idx}
@@ -152,8 +154,8 @@ const HomePage: React.FC = () => {
                 </button>
               </div>
             ))}
-          </div>
-          <CartPage></CartPage>
+          </div> */}
+          <Cart></Cart>
         </section>
 
         {/* Footer Section */}

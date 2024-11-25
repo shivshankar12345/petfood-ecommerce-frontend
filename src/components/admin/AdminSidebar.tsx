@@ -12,7 +12,10 @@ import {
   FaChartLine,
   FaSignOutAlt,
   FaAddressBook,
+  FaUsersCog,
 } from "react-icons/fa";
+import { MdOutlinePets, MdViewCarousel } from "react-icons/md";
+import { FaUsersRays } from "react-icons/fa6";
 
 const AdminSidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -51,7 +54,7 @@ const AdminSidebar: React.FC = () => {
                 }
               >
                 <FaUsers className="mr-2" /> {/* Users Icon */}
-                Manage Users
+                Users
               </NavLink>
             </li>
             <li>
@@ -63,8 +66,8 @@ const AdminSidebar: React.FC = () => {
                     : "flex items-center p-2 rounded-lg hover:bg-gray-700 transition-all duration-300"
                 }
               >
-                <FaUserShield className="mr-2" /> {/* Sellers Icon */}
-                Manage Sellers
+                <FaUsersRays className="mr-2" />
+                Sellers
               </NavLink>
             </li>
             <li>
@@ -77,7 +80,7 @@ const AdminSidebar: React.FC = () => {
                 }
               >
                 <FaProductHunt className="mr-2" /> {/* Product Icon */}
-                Manage Products
+                Products
               </NavLink>
             </li>
             <li>
@@ -90,7 +93,7 @@ const AdminSidebar: React.FC = () => {
                 }
               >
                 <FaTasks className="mr-2" /> {/* Orders Icon */}
-                Manage Orders
+                Orders
               </NavLink>
             </li>
             <li>
@@ -102,8 +105,8 @@ const AdminSidebar: React.FC = () => {
                     : "flex items-center p-2 rounded-lg hover:bg-gray-700 transition-all duration-300"
                 }
               >
-                <FaUserShield className="mr-2" /> {/* Roles Icon */}
-                ManagePets
+                <MdOutlinePets className="mr-2" />
+                Pets
               </NavLink>
             </li>
             <li>
@@ -115,7 +118,7 @@ const AdminSidebar: React.FC = () => {
                     : "flex items-center p-2 rounded-lg hover:bg-gray-700 transition-all duration-300"
                 }
               >
-                <FaUserShield className="mr-2" /> {/* Roles Icon */}
+                <FaUsersCog className="mr-2" />
                 Roles
               </NavLink>
             </li>
@@ -128,7 +131,7 @@ const AdminSidebar: React.FC = () => {
                     : "flex items-center p-2 rounded-lg hover:bg-gray-700 transition-all duration-300"
                 }
               >
-                <FaBell className="mr-2" /> {/* Permissions Icon */}
+                <FaUserShield className="mr-2" /> {/* Roles Icon */}
                 Permissions
               </NavLink>
             </li>
@@ -141,8 +144,8 @@ const AdminSidebar: React.FC = () => {
                     : "flex items-center p-2 rounded-lg hover:bg-gray-700 transition-all duration-300"
                 }
               >
-                <FaBell className="mr-2" /> {/* Notifications Icon */}
-                Manage Carousel
+                <MdViewCarousel className="mr-2" />
+                Carousel
               </NavLink>
             </li>
             <li>
@@ -155,7 +158,7 @@ const AdminSidebar: React.FC = () => {
                 }
               >
                 <FaAddressBook className="mr-2" />
-                Manage Contacts
+                Support
               </NavLink>
             </li>
             <li>

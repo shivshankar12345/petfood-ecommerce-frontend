@@ -1,4 +1,6 @@
 export interface Product {
+  discounted_price: number;
+  discounted_percentage:number;
   IsFeatured: any;
   id?: string;
   name: string;

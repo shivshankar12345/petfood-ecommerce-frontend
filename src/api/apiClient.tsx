@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
  
-import axios, { AxiosResponse } from "axios";
+
  
 // Create an instance of axios
 const apiClient = axios.create({
@@ -28,7 +28,7 @@ function onRefreshed(token: string) {
 // Response interceptor to handle 403 errors and refresh token
 apiClient.interceptors.response.use(
   (response: AxiosResponse) => response,
-  (response: AxiosResponse) => response,
+ 
   async error => {
     const { config, response } = error;
     const originalRequest = config;

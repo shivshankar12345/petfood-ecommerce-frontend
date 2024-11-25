@@ -153,21 +153,6 @@ const UserTable: React.FC<UserTableProps> = ({
       sortable: true,
     },
     {
-      name: "Email",
-      selector: (row: User) => row.email,
-      sortable: true,
-    },
-    {
-      name: "Email",
-      selector: (row: User) => row.email,
-      sortable: true,
-    },
-    {
-      name: "Email",
-      selector: (row: User) => row.email,
-      sortable: true,
-    },
-    {
       name: "Phone",
       selector: (row: User) => row.phone,
       sortable: true,

@@ -101,12 +101,12 @@ const Navbar: React.FC = () => {
         <div className="container mx-auto flex justify-between items-center">
           {/* Logo */}
           <div className="flex items-center space-x-4 cursor-pointer">
-          <button
+          {/* <button
               onClick={toggleAdminSidebar}
               className="lg:hidden text-white mr-2"
             >
               {isAdminPage && (<FaBars className="text-2xl" />)}
-            </button>
+            </button> */}
             {/* Logo with conditional image source */}
             <img
               src={theme === "light" ? lightlogo : darklogo} // Use light logo in light mode, dark logo otherwise
@@ -283,9 +283,9 @@ const Navbar: React.FC = () => {
           </button>
         </div>
       </nav>
-      {!isLargeScreen && isAdminPage && (
+      {/* {!isLargeScreen && isAdminPage && (
         <AdminSidebar isOpen={isAdminSidebarOpen} toggleSidebar={toggleAdminSidebar} />
-      )}
+      )} */}
 
       {/* Sidebar */}
       <Sidebar

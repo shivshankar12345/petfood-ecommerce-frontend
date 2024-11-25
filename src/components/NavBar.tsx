@@ -1,4 +1,4 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import useNavbar from "../hooks/useNavBar";
 import PincodeModal from "../pages/PincodePage";
@@ -79,22 +79,24 @@ const Navbar: React.FC = () => {
       >
         <div className="container mx-auto flex justify-between items-center">
           {/* Logo */}
-          <div className="flex items-center space-x-4 cursor-pointer">
-            {/* Logo with conditional image source */}
-            <img
-              src={theme === "light" ? lightlogo : darklogo} // Use light logo in light mode, dark logo otherwise
-              alt="Logo"
-              className={`h-10 ${theme === "light" ? "max-h-14" : ""}`} // Increased logo height for better visibility in light mode
-              onClick={handleClick}
-            />
-            
-            {/* Text Logo - Only visible in light mode */}
-            {theme === "light" && (
-              <span className="text-3xl font-extrabold text-black drop-shadow-lg">
-                SuperTails
-              </span>
-            )}
-          </div>
+          <Link to="/">
+            <div className="flex items-center space-x-4 cursor-pointer">
+              {/* Logo with conditional image source */}
+              <img
+                src={theme === "light" ? lightlogo : darklogo} // Use light logo in light mode, dark logo otherwise
+                alt="Logo"
+                className={`h-10 ${theme === "light" ? "max-h-14" : ""}`} // Increased logo height for better visibility in light mode
+                onClick={handleClick}
+              />
+
+              {/* Text Logo - Only visible in light mode */}
+              {theme === "light" && (
+                <span className="text-3xl font-extrabold text-black drop-shadow-lg">
+                  SuperTails
+                </span>
+              )}
+            </div>
+          </Link>
 
           {/* Search */}
           {!isAdminPage && (
@@ -212,9 +214,15 @@ const Navbar: React.FC = () => {
               className="cursor-pointer transition duration-300"
             >
               {theme === "light" ? (
-                <FaMoon className="text-gray-600 hover:text-gray-800" size={20} />
+                <FaMoon
+                  className="text-gray-600 hover:text-gray-800"
+                  size={20}
+                />
               ) : (
-                <FaSun className="text-gray-300 hover:text-gray-100" size={20} />
+                <FaSun
+                  className="text-gray-300 hover:text-gray-100"
+                  size={20}
+                />
               )}
             </div>
 

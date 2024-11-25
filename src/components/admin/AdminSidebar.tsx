@@ -51,7 +51,7 @@ const AdminSidebar: React.FC = () => {
                 }
               >
                 <FaUsers className="mr-2" /> {/* Users Icon */}
-                Manage Users
+                Users
               </NavLink>
             </li>
             <li>
@@ -64,7 +64,7 @@ const AdminSidebar: React.FC = () => {
                 }
               >
                 <FaUserShield className="mr-2" /> {/* Sellers Icon */}
-                Manage Sellers
+                Sellers
               </NavLink>
             </li>
             <li>
@@ -77,7 +77,7 @@ const AdminSidebar: React.FC = () => {
                 }
               >
                 <FaProductHunt className="mr-2" /> {/* Product Icon */}
-                Manage Products
+                Products
               </NavLink>
             </li>
             <li>
@@ -90,7 +90,7 @@ const AdminSidebar: React.FC = () => {
                 }
               >
                 <FaTasks className="mr-2" /> {/* Orders Icon */}
-                Manage Orders
+                Orders
               </NavLink>
             </li>
             <li>
@@ -103,7 +103,7 @@ const AdminSidebar: React.FC = () => {
                 }
               >
                 <FaUserShield className="mr-2" /> {/* Roles Icon */}
-                ManagePets
+                Pets
               </NavLink>
             </li>
             <li>
@@ -142,7 +142,7 @@ const AdminSidebar: React.FC = () => {
                 }
               >
                 <FaBell className="mr-2" /> {/* Notifications Icon */}
-                Manage Carousel
+                Carousel
               </NavLink>
             </li>
             <li>
@@ -155,7 +155,7 @@ const AdminSidebar: React.FC = () => {
                 }
               >
                 <FaAddressBook className="mr-2" />
-                Manage Contacts
+                Support
               </NavLink>
             </li>
             <li>

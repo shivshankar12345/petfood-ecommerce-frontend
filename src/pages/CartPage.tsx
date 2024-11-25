@@ -234,8 +234,6 @@
 
 // export default CartPage;
 
-
-
 // import React, { useState } from "react";
 
 // const CartPage = () => {
@@ -356,7 +354,6 @@
 
 // export default CartPage;
 
-
 import React, { useState } from "react";
 import { FaTrash } from "react-icons/fa"; // Using FontAwesome for the delete icon
 
@@ -388,19 +385,18 @@ const CartPage = () => {
 
   // Handle quantity change
   const handleQuantityChange = (id: number, delta: number) => {
-    setCart((prevCart) =>
-      prevCart.map((item) =>
+    setCart(prevCart =>
+      prevCart.map(item =>
         item.id === id
           ? { ...item, quantity: Math.max(1, item.quantity + delta) }
           : item
       )
     );
   };
-  
 
   // Remove cart item (API functionality is commented)
   const removeCartItem = (id: number) => {
-    setCart((prevCart) => prevCart.filter((item) => item.id !== id));
+    setCart(prevCart => prevCart.filter(item => item.id !== id));
 
     // Uncomment below to integrate with backend API
     /*
@@ -413,7 +409,10 @@ const CartPage = () => {
   };
 
   // Calculate total price
-  const totalPrice = cart.reduce((total, item) => total + item.price * item.quantity, 0);
+  const totalPrice = cart.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0
+  );
 
   return (
     <div className="flex flex-col lg:flex-row gap-8 max-w-7xl mx-auto px-4 py-10 bg-gray-50">
@@ -421,7 +420,7 @@ const CartPage = () => {
       <div className="flex-grow">
         <h2 className="text-2xl font-semibold mb-6 text-gray-800">Your Cart</h2>
         <div className="grid gap-6">
-          {cart.map((product) => (
+          {cart.map(product => (
             <div
               key={product.id}
               className="border rounded-lg p-6 bg-white shadow-md flex flex-col sm:flex-row items-center sm:items-start gap-4 relative"
@@ -443,7 +442,9 @@ const CartPage = () => {
 
               {/* Product Details */}
               <div className="flex-grow text-center sm:text-left">
-                <h3 className="text-lg font-semibold text-gray-800">{product.name}</h3>
+                <h3 className="text-lg font-semibold text-gray-800">
+                  {product.name}
+                </h3>
                 <p className="text-gray-700 mt-2">
                   <span className="font-bold text-xl text-green-600">
                     ${product.price.toFixed(2)}
@@ -474,7 +475,9 @@ const CartPage = () => {
 
       {/* Price Details Section */}
       <div className="w-full lg:w-1/3 bg-white rounded-lg shadow-md p-6 sticky top-4">
-        <h3 className="text-xl font-semibold mb-4 text-gray-800">Price Details</h3>
+        <h3 className="text-xl font-semibold mb-4 text-gray-800">
+          Price Details
+        </h3>
         <div className="flex justify-between text-gray-700 mb-3">
           <span>Subtotal</span>
           <span>${totalPrice.toFixed(2)}</span>
@@ -500,6 +503,3 @@ const CartPage = () => {
 };
 
 export default CartPage;
-
-
-

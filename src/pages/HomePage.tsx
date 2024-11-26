@@ -112,7 +112,7 @@ const HomePage: React.FC = () => {
           <h2 className="text-3xl font-semibold text-center mb-8">
             Explore Our Categories
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">                                                        
             {caregoryobj.map((item, idx) => (
               <div
                 key={idx}

@@ -51,7 +51,8 @@ const CartPage = () => {
   // Calculate total price
   const totalPrice = cart.reduce((total, item) => {
     console.log();
-    const price = Number(item.product_id.price);
+    const price = Number(item.product_id.discounted_price
+      );
     const quantity = item.qty || 0;
     return total + price * quantity;
   }, 0);
@@ -117,9 +118,13 @@ const CartPage = () => {
                   <p className="text-gray-700 mt-2">
                     <span className="font-bold text-xl text-green-600">
                       {/* ${product.price.toPrecision(2)} */}
-                      {Number(item.product_id.price) &&
-                      !isNaN(item.product_id.price)
-                        ? Number(item.product_id.price).toFixed(2)
+                      {Number(item.product_id.discounted_price) &&
+                      !isNaN(item.product_id.
+                        discounted_price
+                        )
+                        ? Number(item.product_id.
+                          discounted_price
+                          ).toFixed(2)
                         : "N/A"}
                     </span>
                   </p>
@@ -151,8 +156,7 @@ const CartPage = () => {
               </h3>
               <button
                 onClick={handleGoHome}
-                className="w-60 bg-gradient-to-r from-orange-500 to-red-500 text-white py-3 rounded-lg font-semibold hover:bg-gradient-to-l hover:from-red-500 hover:to-orange-500 transition duration-300"
-              >
+                className="w-60 bg-gradient-to-r from-orange-500 to-red-500 text-white py-3 rounded-lg font-semibold hover:bg-gradient-to-l hover:from-red-500 hover:to-orange-500 transition duration-300">
                 Continue Shopping
               </button>
             </div>
@@ -195,9 +199,11 @@ const CartPage = () => {
                 : "N/A"}
             </span>
           </div>
+          <a href="/details">
           <button className="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white py-3 rounded-lg font-semibold hover:bg-gradient-to-l hover:from-red-500 hover:to-orange-500 transition duration-300">
-            Proceed to Payment
+            Proceed Further 
           </button>
+          </a>
         </div>
       )}
     </div>

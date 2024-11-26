@@ -14,6 +14,8 @@ import CouponFAQ from "../pages/Contact/CouponFAQ";
 import GeneralFAQ from "../pages/Contact/GeneralFAQ";
 import Cart from "../components/Cart";
 import CartPage from "../pages/CartPage";
+import DetailsPage from "../pages/DetailsPage";
+import PaymentPage from "../pages/PaymentPage";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -40,6 +42,8 @@ const AppRoutes: React.FC = () => {
       <Route path="/payments-refunds" element={< PaymentFAQ />} />
       <Route path="/coupons-discounts" element={< CouponFAQ />} />
       <Route path="/general-enquiry" element={< GeneralFAQ />} />
+      <Route path="/details" element={<DetailsPage />}></Route>
+      <Route path="/payment-details" element={<PaymentPage />}></Route>
     </Routes>
   );
 };

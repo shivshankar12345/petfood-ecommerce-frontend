@@ -26,6 +26,15 @@ const ProductTable: React.FC<ProductTableProps> = ({
       sortable: true,
     },
     {
+      name:"Discounted Price",
+      selector:(row:Product) => row.discounted_price,
+      sortable:true,
+    },
+    {
+      name:"Discounted percentage",
+      selector:(row:Product) => row.discounted_percentage
+    },
+    {
       name: "Category",
       selector: (row: Product) => row.category?.name || "",
       sortable: true,

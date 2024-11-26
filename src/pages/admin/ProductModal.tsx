@@ -230,38 +230,61 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
             {...register("description")}
           />
 
-          <div className="flex items-center mb-4">
-            <label className="block text-gray-700 font-bold mb-2 mr-4">
-              Image Upload
-            </label>
-            <input
-              type="file"
-              accept="image/*"
-              {...register("imageUrl", {
-                required: !product?.imageUrl ? "Image file is required" : false,
-              })}
-              className="hidden"
-              onChange={handleFileChange}
-              id="image-upload"
-            />
-            <label
-              htmlFor="image-upload"
-              className="border rounded py-2 px-3 mb-4 flex items-center cursor-pointer"
-            >
-              {imageName ? imageName : "No file chosen"}{" "}
-              {/* Show the image name or default text */}
-            </label>
-            {preview && (
-              <img
-                src={preview}
-                alt="Preview"
-                className="w-24 h-24 object-cover rounded ml-4"
+          <div className="flex items-center justify-between">
+            {/* Image Upload Section */}
+            <div className="flex items-center">
+              <label className="block text-gray-700 font-bold mb-2 mr-4">
+                Image Upload
+              </label>
+              <input
+                type="file"
+                accept="image/*"
+                {...register("imageUrl", {
+                  required: !product?.imageUrl
+                    ? "Image file is required"
+                    : false,
+                })}
+                className="hidden"
+                onChange={handleFileChange}
+                id="image-upload"
               />
+              <label
+                htmlFor="image-upload"
+                className="border rounded py-2 px-3 flex items-center cursor-pointer"
+              >
+                {imageName ? imageName : "No file chosen"}
+              </label>
+              {preview && (
+                <img
+                  src={preview}
+                  alt="Preview"
+                  className="w-24 h-24 object-cover rounded ml-4"
+                />
+              )}
+            </div>
+            {errors.imageUrl && (
+              <p className="text-red-500">{errors.imageUrl.message}</p>
             )}
+
+            {/* Discounted Price Section */}
+            <div className="ml-2 flex flex-col">
+              <label className="block text-gray-700 font-bold mb-2">
+                Discounted Percentage
+              </label>
+              <input
+                type="number"
+                {...register("discounted_percentage", {
+                  required: "Discounted price is required",
+                  min: { value: 0, message: "Price must be positive" },
+                })}
+                placeholder="Enter discounted price"
+                className="border rounded py-2 px-3 w-48"
+              />
+              {errors.discounted_percentage && (
+                <p className="text-red-500">{errors.discounted_percentage.message}</p>
+              )}
+            </div>
           </div>
-          {errors.imageUrl && (
-            <p className="text-red-500">{errors.imageUrl.message}</p>
-          )}
 
           {/* Use CustomDropdown for Pet Type selection */}
           <div className="flex items-center mb-4">

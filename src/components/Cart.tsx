@@ -37,7 +37,6 @@ const Cart = () => {
     }
   };
   const products = useSelector((state: RootState) => state.products.products);
-  const [cart, setCart] = useState<any[]>([]);
 
   useEffect(() => {
     fetchProducts();

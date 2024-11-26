@@ -1,191 +1,3 @@
-// import React, { useState } from "react";
-// import { NavLink } from "react-router-dom";
-// import {
-//   FaUsers, FaProductHunt, FaUserShield, FaBell, FaTasks, FaBars, FaTimes, FaCogs, FaChartLine, FaSignOutAlt, FaAddressBook,
-// } from "react-icons/fa";
-// import { useSelector } from "react-redux";
-// import { RootState } from "../../Redux/store";
-
-// const AdminSidebar: React.FC<{ isOpen?: boolean, toggleSidebar?: () => void }> = ({ isOpen, toggleSidebar }) => {
- 
-//   const handleLinkClick = () => {
-//     if (isOpen && toggleSidebar) {
-//       toggleSidebar();  // Close the sidebar when a link is clicked
-//     }
-//   };
-  
-//   return (
-//     <div
-//       className={`fixed top-0 left-0 h-full w-[20%] bg-gray-800 text-white z-50 transition-transform transform ${
-//         isOpen ? "translate-x-0" : "-translate-x-full"
-//       } lg:translate-x-0 lg:static`}
-//       style={{ flexShrink: 0 }}
-//     >
-      
-//       <button className="p-2 text-white lg:hidden" onClick={toggleSidebar}>
-//         {isOpen ? <FaTimes /> : <FaBars />}
-//       </button>
-
-//       <div className="flex flex-col h-full overflow-y-auto">
-//         <div className="flex items-center justify-center h-16 bg-gray-900">
-//           <NavLink to="">
-//             <h1 className="text-2xl font-bold">Admin Panel</h1>
-//           </NavLink>
-//         </div>
-//         <div className="flex-1 space-y-4 p-4">
-//           <ul className="space-y-4">
-//             {/* Sidebar Links */}
-//             <li>
-//               <NavLink to="/admin-dashboard/manage-users" className="flex items-center p-2 rounded-lg hover:bg-gray-700"  onClick={handleLinkClick}>
-//                 <FaUsers className="mr-2" /> Manage Users
-//               </NavLink>
-//             </li>
-//             {/* Additional Sidebar Links */}
-//             <li>
-//               <NavLink
-//                 to="manage-sellers"
-//                 className={({ isActive }) =>
-//                   isActive
-//                     ? "flex items-center bg-gray-600 p-2 rounded-lg transition-all duration-300"
-//                     : "flex items-center p-2 rounded-lg hover:bg-gray-700 transition-all duration-300"
-//                 }  onClick={handleLinkClick}
-//               >
-//                 <FaUserShield className="mr-2" /> {/* Sellers Icon */}
-//                 Manage Sellers
-//               </NavLink>
-//             </li>
-//             <li>
-//               <NavLink
-//                 to="manage-product"
-//                 className={({ isActive }) =>
-//                   isActive
-//                     ? "flex items-center bg-gray-600 p-2 rounded-lg transition-all duration-300"
-//                     : "flex items-center p-2 rounded-lg hover:bg-gray-700 transition-all duration-300"
-//                 }  onClick={handleLinkClick}
-//               >
-//                 <FaProductHunt className="mr-2" /> {/* Product Icon */}
-//                 Manage Products
-//               </NavLink>
-//             </li>
-//             <li>
-//               <NavLink
-//                 to="manage-orders"
-//                 className={({ isActive }) =>
-//                   isActive
-//                     ? "flex items-center bg-gray-600 p-2 rounded-lg transition-all duration-300"
-//                     : "flex items-center p-2 rounded-lg hover:bg-gray-700 transition-all duration-300"
-//                 }  onClick={handleLinkClick}
-//               >
-//                 <FaTasks className="mr-2" /> {/* Orders Icon */}
-//                 Manage Orders
-//               </NavLink>
-//             </li>
-//             <li>
-//               <NavLink
-//                 to="manage-pet"
-//                 className={({ isActive }) =>
-//                   isActive
-//                     ? "flex items-center bg-gray-600 p-2 rounded-lg transition-all duration-300"
-//                     : "flex items-center p-2 rounded-lg hover:bg-gray-700 transition-all duration-300"
-//                 }  onClick={handleLinkClick}
-//               >
-//                 <FaUserShield className="mr-2" /> {/* Roles Icon */}
-//                 ManagePets
-//               </NavLink>
-//             </li>
-//             <li>
-//               <NavLink
-//                 to="manage-roles"
-//                 className={({ isActive }) =>
-//                   isActive
-//                     ? "flex items-center bg-gray-600 p-2 rounded-lg transition-all duration-300"
-//                     : "flex items-center p-2 rounded-lg hover:bg-gray-700 transition-all duration-300"
-//                 }  onClick={handleLinkClick}
-//               >
-//                 <FaUserShield className="mr-2" /> {/* Roles Icon */}
-//                 Roles
-//               </NavLink>
-//             </li>
-//             <li>
-//               <NavLink
-//                 to="manage-permissions"
-//                 className={({ isActive }) =>
-//                   isActive
-//                     ? "flex items-center bg-gray-600 p-2 rounded-lg transition-all duration-300"
-//                     : "flex items-center p-2 rounded-lg hover:bg-gray-700 transition-all duration-300"
-//                 }  onClick={handleLinkClick}
-//               >
-//                 <FaBell className="mr-2" /> {/* Permissions Icon */}
-//                 Permissions
-//               </NavLink>
-//             </li>
-//             <li>
-//               <NavLink
-//                 to="manage-carousel"
-//                 className={({ isActive }) =>
-//                   isActive
-//                     ? "flex items-center bg-gray-600 p-2 rounded-lg transition-all duration-300"
-//                     : "flex items-center p-2 rounded-lg hover:bg-gray-700 transition-all duration-300"
-//                 }  onClick={handleLinkClick}
-//               >
-//                 <FaBell className="mr-2" /> {/* Notifications Icon */}
-//                 Manage Carousel
-//               </NavLink>
-//             </li>
-//             <li>
-//               <NavLink
-//                 to="manage-contact"
-//                 className={({ isActive }) =>
-//                   isActive
-//                     ? "flex items-center bg-gray-600 p-2 rounded-lg transition-all duration-300"
-//                     : "flex items-center p-2 rounded-lg hover:bg-gray-700 transition-all duration-300"
-//                 }  onClick={handleLinkClick}
-//               >
-//                 <FaAddressBook className="mr-2" />
-//                 Manage Contacts
-//               </NavLink>
-//             </li>
-//             <li>
-//               <NavLink
-//                 to="manage-reports"
-//                 className={({ isActive }) =>
-//                   isActive
-//                     ? "flex items-center bg-gray-600 p-2 rounded-lg transition-all duration-300"
-//                     : "flex items-center p-2 rounded-lg hover:bg-gray-700 transition-all duration-300"
-//                 }  onClick={handleLinkClick}
-//               >
-//                 <FaChartLine className="mr-2" /> {/* Reporting Icon */}
-//                 Reports
-//               </NavLink>
-//             </li>
-//             <li>
-//               <NavLink
-//                 to="settings"
-//                 className={({ isActive }) =>
-//                   isActive
-//                     ? "flex items-center bg-gray-600 p-2 rounded-lg transition-all duration-300"
-//                     : "flex items-center p-2 rounded-lg hover:bg-gray-700 transition-all duration-300"
-//                 } onClick={handleLinkClick}
-//               >
-//                 <FaCogs className="mr-2" /> {/* Settings Icon */}
-//                 Settings
-//               </NavLink>
-//             </li>
-//           </ul>
-//         </div>
-//         <div className="p-4 border-t border-gray-700">
-//           <NavLink to="/logout" className="flex items-center p-2 rounded-lg hover:bg-gray-700">
-//             <FaSignOutAlt className="mr-2" /> Logout
-//           </NavLink>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default AdminSidebar;
-
-
 
 
 
@@ -201,11 +13,13 @@ import {
   FaTimes,
   FaBars,
   FaTasks,
-  FaBell,
+  FaUsersCog,
   FaAddressBook,
-  FaChartLine,
   FaCogs,
+  FaChartLine,
 } from "react-icons/fa";
+import { FaUsersRays } from "react-icons/fa6";
+import { MdOutlinePets, MdViewCarousel } from "react-icons/md";
 
 const AdminSidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(true); // Sidebar visibility
@@ -214,7 +28,11 @@ const AdminSidebar: React.FC = () => {
 
   // Handle screen resizing
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 1024);
+    const handleResize = () => {
+      const mobileView = window.innerWidth < 1024;
+      setIsMobile(mobileView);
+      if (!mobileView) setIsOpen(true); // Expand on larger screens
+    };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -235,23 +53,25 @@ const AdminSidebar: React.FC = () => {
         } lg:translate-x-0 lg:static`}
         style={{
           width: isCollapsed ? "8rem" : "16rem",
-          flexShrink: 0, // Adjust width based on collapse state
+          flexShrink: 0,
         }}
       >
         {/* Toggle Button for Small Devices */}
         <button
-         className="absolute   top-4 right-[-35px] bg-gray-900 text-white rounded-full p-2 hover:bg-gray-700 lg:hidden"
-        onClick={toggleSidebar}
-      >
-        {isOpen ? <FaTimes /> : <FaBars />}
-      </button> 
-        {/* Collapse Button (visible only on larger screens) */}
-        {!isMobile && (
+          className="absolute top-4 right-[-35px] bg-gray-900 text-white rounded-full p-2 hover:bg-gray-700 lg:hidden"
+          onClick={toggleSidebar}
+        >
+          {isOpen ? <FaTimes /> : <FaBars />}
+        </button>
+
+        {/* Collapse Button */}
+        {(
           <button
-            className="absolute  right-[-1px] bg-gray-900 text-white rounded-full p-2 hover:bg-gray-700"
+            className={`absolute top-[1rem] right-[-0.5px] bg-gray-900 text-white rounded-full p-2 hover:bg-gray-700 
+            }`}
             onClick={toggleCollapse}
           >
-            {isCollapsed ? <FaChevronRight size={20}  /> : <FaChevronLeft size={20} />}
+            {isCollapsed ? <FaChevronRight size={18} /> : <FaChevronLeft size={18} />}
           </button>
         )}
 
@@ -282,7 +102,7 @@ const AdminSidebar: React.FC = () => {
                 className="flex items-center p-2 rounded-lg hover:bg-gray-700"
                 onClick={handleLinkClick}
               >
-                <FaUserShield className="mr-2" />
+                <FaUsersRays className="mr-2" />
                 <span className={`${isCollapsed ? "hidden" : ""}`}>Sellers</span>
               </NavLink>
             </li>
@@ -312,7 +132,7 @@ const AdminSidebar: React.FC = () => {
                 className="flex items-center p-2 rounded-lg hover:bg-gray-700"
                 onClick={handleLinkClick}
               >
-                <FaUserShield className="mr-2" />
+                <MdOutlinePets className="mr-2" />
                 <span className={`${isCollapsed ? "hidden" : ""}`}>Pets</span>
               </NavLink>
             </li>
@@ -322,57 +142,57 @@ const AdminSidebar: React.FC = () => {
                 className="flex items-center p-2 rounded-lg hover:bg-gray-700"
                 onClick={handleLinkClick}
               >
-                <FaUserShield className="mr-2" />
+                <FaUsersCog className="mr-2" />
                 <span className={`${isCollapsed ? "hidden" : ""}`}>Roles</span>
               </NavLink>
             </li>
             <li>
-              <NavLink
+               <NavLink
                 to="manage-permissions"
-                className="flex items-center p-2 rounded-lg hover:bg-gray-700"
-                onClick={handleLinkClick}
-              >
-                <FaBell className="mr-2" />
-                <span className={`${isCollapsed ? "hidden" : ""}`}>Permissions</span>
-              </NavLink>
-            </li>
+                 className="flex items-center p-2 rounded-lg hover:bg-gray-700"
+                 onClick={handleLinkClick}
+               >
+                 <FaUserShield className="mr-2" />
+                 <span className={`${isCollapsed ? "hidden" : ""}`}>Permissions</span>
+               </NavLink>
+             </li>
             <li>
               <NavLink
                 to="manage-carousel"
                 className="flex items-center p-2 rounded-lg hover:bg-gray-700"
                 onClick={handleLinkClick}
               >
-                <FaBell className="mr-2" />
+                <MdViewCarousel className="mr-2" />
                 <span className={`${isCollapsed ? "hidden" : ""}`}>Carousel</span>
               </NavLink>
             </li>
             <li>
               <NavLink
-                to="manage-contact"
-                className="flex items-center p-2 rounded-lg hover:bg-gray-700"
+                 to="manage-contact"
+                 className="flex items-center p-2 rounded-lg hover:bg-gray-700"
+                 onClick={handleLinkClick}
+               >
+                 <FaAddressBook className="mr-2" />
+                 <span className={`${isCollapsed ? "hidden" : ""}`}>Contacts</span>
+               </NavLink>
+             </li>
+             <li>
+               <NavLink
+                 to="manage-reports"
+                 className="flex items-center p-2 rounded-lg hover:bg-gray-700"
                 onClick={handleLinkClick}
-              >
-                <FaAddressBook className="mr-2" />
-                <span className={`${isCollapsed ? "hidden" : ""}`}>Contacts</span>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="manage-reports"
-                className="flex items-center p-2 rounded-lg hover:bg-gray-700"
-                onClick={handleLinkClick}
-              >
-                <FaChartLine className="mr-2" />
-                <span className={`${isCollapsed ? "hidden" : ""}`}>Reports</span>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="settings"
-                className="flex items-center p-2 rounded-lg hover:bg-gray-700"
-                onClick={handleLinkClick}
-              >
-                <FaCogs className="mr-2" />
+               >
+                 <FaChartLine className="mr-2" />
+                 <span className={`${isCollapsed ? "hidden" : ""}`}>Reports</span>
+               </NavLink>
+             </li>
+             <li>
+               <NavLink
+                 to="settings"
+              className="flex items-center p-2 rounded-lg hover:bg-gray-700"
+                 onClick={handleLinkClick}
+               >
+                 <FaCogs className="mr-2" />
                 <span className={`${isCollapsed ? "hidden" : ""}`}>Settings</span>
               </NavLink>
             </li>
@@ -396,7 +216,4 @@ const AdminSidebar: React.FC = () => {
 };
 
 export default AdminSidebar;
-
-
-
 

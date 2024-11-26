@@ -11,8 +11,6 @@ import {
   clearRole,
 } from "../Redux/Slice/auth.slice";
 import { userConfirm } from "../utils/Confirmation";
-import { FaBars } from "react-icons/fa";
-import AdminSidebar from "./admin/AdminSidebar";
 import { toggleTheme } from "../Redux/Slice/theme.slice";
 import { FaMoon, FaSun } from "react-icons/fa";
 import darklogo from "../../src/assets/supertails-logo-for-dark-theme_200x_2x_200x_2x_909b1df1-0f68-4734-9eeb-1d0e0a39c91f.avif";
@@ -26,22 +24,6 @@ const Navbar: React.FC = () => {
     handleSearchChange,
     handleSearchSubmit,
   } = useNavbar();
-
-  const [isAdminSidebarOpen,setIsAdminSidebar]=useState(false);
-  const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 1024);
-  const toggleAdminSidebar = () => {
-    setIsAdminSidebar(!isAdminSidebarOpen);
-  };
-  useEffect(() => {
-    // Update isLargeScreen state based on window width
-    const handleResize = () => setIsLargeScreen(window.innerWidth >= 1024);
-    
-    window.addEventListener("resize", handleResize);
-    
-    // Clean up event listener on component unmount
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
   const { role, isAuth } = useSelector((state: RootState) => state.auth);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
@@ -101,12 +83,6 @@ const Navbar: React.FC = () => {
         <div className="container mx-auto flex justify-between items-center">
           {/* Logo */}
           <div className="flex items-center space-x-4 cursor-pointer">
-          {/* <button
-              onClick={toggleAdminSidebar}
-              className="lg:hidden text-white mr-2"
-            >
-              {isAdminPage && (<FaBars className="text-2xl" />)}
-            </button> */}
             {/* Logo with conditional image source */}
             <img
               src={theme === "light" ? lightlogo : darklogo} // Use light logo in light mode, dark logo otherwise
@@ -282,10 +258,7 @@ const Navbar: React.FC = () => {
             </svg>
           </button>
         </div>
-      </nav>
-      {/* {!isLargeScreen && isAdminPage && (
-        <AdminSidebar isOpen={isAdminSidebarOpen} toggleSidebar={toggleAdminSidebar} />
-      )} */}
+      </nav>                                                                                   
 
       {/* Sidebar */}
       <Sidebar

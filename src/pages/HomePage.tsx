@@ -11,8 +11,6 @@ import { toast } from "react-toastify";
 import CartPage from "../components/Cart";
 import Cart from "../components/Cart";
 
-
-
 type SwiperSlideType = {
   id: string;
   name: string;
@@ -22,7 +20,7 @@ type SwiperSlideType = {
 const HomePage: React.FC = () => {
   const { makeAPICallWithOutData } = useApi();
   const [sliderImages, setSlideImages] = useState<SwiperSlideType[]>([]);
-  const caregoryobj= [
+  const caregoryobj = [
     {
       img: "https://supertails.com/cdn/shop/files/7th_Oct_Popular_Categories-min_1429c56f-23c6-47b7-b6a7-3c0178c2fb9a_480x.png?v=1728279390",
       label: "Dog Food",
@@ -36,8 +34,6 @@ const HomePage: React.FC = () => {
       label: "Accessories",
     },
   ];
-
-  
 
   async function fetchSliderImages() {
     const { response, isError } = await makeAPICallWithOutData(
@@ -57,7 +53,6 @@ const HomePage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-200">
-
       <main className="bg-gray-50 dark:bg-gray-900">
         {/* Hero Section with Carousel */}
         <section className="relative bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
@@ -103,7 +98,9 @@ const HomePage: React.FC = () => {
                   className="h-90 w-full object-cover hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                  <h3 className="text-white text-2xl font-bold">{item.label}</h3>
+                  <h3 className="text-white text-2xl font-bold">
+                    {item.label}
+                  </h3>
                 </div>
               </div>
             ))}
@@ -115,8 +112,8 @@ const HomePage: React.FC = () => {
           <h2 className="text-3xl font-semibold text-center mb-8">
             Featured Products
           </h2>
-         
-          <CartPage></CartPage>
+
+          <CartPage />
         </section>
 
         {/* Footer Section */}

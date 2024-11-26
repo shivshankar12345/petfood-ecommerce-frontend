@@ -2,7 +2,7 @@ import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import ContactPage from "../pages/ContactPage";
 import SignUpPage from "../pages/user/SignUpPage";
-import CartPage from "../pages/CartPage";
+// import CartPage from "../pages/CartPage";
 import PincodeModal from "../pages/PincodePage";
 import LogOutPage from "../pages/user/LogOutPage";
 import { useSelector } from "react-redux";
@@ -14,6 +14,8 @@ import ReturnsAndCancellationsFAQ from "../pages/Contact/ReturnFAQ";
 import PaymentFAQ from "../pages/Contact/PaymentFAQ";
 import CouponFAQ from "../pages/Contact/CouponFAQ";
 import GeneralFAQ from "../pages/Contact/GeneralFAQ";
+import Cart from "../components/Cart";
+import CartPage from "../pages/CartPage";
 
 const AppRoutes: React.FC = () => {
     const isAuthenticated =Boolean( useSelector((state: RootState) => state.auth.role));

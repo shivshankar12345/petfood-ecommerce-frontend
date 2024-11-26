@@ -1,6 +1,3 @@
-
-
-
 import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import {
@@ -65,21 +62,29 @@ const AdminSidebar: React.FC = () => {
         </button>
 
         {/* Collapse Button */}
-        {(
+        {
           <button
             className={`absolute top-[1rem] right-[-0.5px] bg-gray-900 text-white rounded-full p-2 hover:bg-gray-700 
             }`}
             onClick={toggleCollapse}
           >
-            {isCollapsed ? <FaChevronRight size={18} /> : <FaChevronLeft size={18} />}
+            {isCollapsed ? (
+              <FaChevronRight size={18} />
+            ) : (
+              <FaChevronLeft size={18} />
+            )}
           </button>
-        )}
+        }
 
         {/* Sidebar Content */}
         <div className="flex flex-col h-full overflow-y-auto">
           {/* Header */}
           <div className="flex items-center h-16 bg-gray-900">
-            <h1 className={`text-3xl font-bold ml-4 ${isCollapsed ? "hidden" : ""}`}>
+            <h1
+              className={`text-3xl font-bold ml-4 ${
+                isCollapsed ? "hidden" : ""
+              }`}
+            >
               Admin Panel
             </h1>
           </div>
@@ -147,7 +152,7 @@ const AdminSidebar: React.FC = () => {
               </NavLink>
             </li>
             <li>
-               <NavLink
+              <NavLink
                 to="manage-permissions"
                  className="flex items-center p-2 rounded-lg hover:bg-gray-700"
                  onClick={handleLinkClick}
@@ -216,4 +221,3 @@ const AdminSidebar: React.FC = () => {
 };
 
 export default AdminSidebar;
-

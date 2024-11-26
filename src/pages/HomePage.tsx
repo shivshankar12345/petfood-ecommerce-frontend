@@ -8,7 +8,9 @@ import "swiper/css/autoplay";
 import Footer from "../components/Footer";
 import useApi from "../hooks/useApi";
 import { toast } from "react-toastify";
-import CartPage from "./CartPage";
+import CartPage from "../components/Cart";
+import Cart from "../components/Cart";
+
 
 
 type SwiperSlideType = {

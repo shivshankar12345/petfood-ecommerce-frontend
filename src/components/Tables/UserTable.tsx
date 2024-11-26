@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import DataTable from "react-data-table-component";
 import { User, UserTableProps } from "../../types/user.types";
 import useApi from "../../hooks/useApi";
-import {  useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import ActionButtons from "../admin/ActionButtons";
@@ -17,7 +17,7 @@ const UserTable: React.FC<UserTableProps> = ({
   selectedStatus,
 }) => {
   const { makeAPICallWithOutData, makeAPICallWithData } = useApi();
- 
+
   const { startLoader, stopLoader } = useLoaderService();
 
   const [isModalOpen, setModalOpen] = useState(false);
@@ -78,8 +78,7 @@ const UserTable: React.FC<UserTableProps> = ({
 
   const handleDeactivate = async (id: string) => {
     startLoader();
-
-    const { isError, error} = await makeAPICallWithData(
+    const { isError, error } = await makeAPICallWithData(
       "patch",
       "/users/modifyUser",
       {

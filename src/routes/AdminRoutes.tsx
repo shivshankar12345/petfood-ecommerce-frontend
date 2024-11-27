@@ -4,18 +4,20 @@ import AdminLayout from "../layout/AdminLayout";
 import Roles from "../pages/admin/ManageRolesPage";
 import ManageUsersPage from "../pages/admin/ManageUsersPage";
 import ManageSellersPage from "../pages/admin/ManageSellersPage";
-
 import ManageProductPage from "../pages/admin/ManageProductPage";
 import ManageContactPage from "../pages/admin/ManageContactPage";
 import ManagePetPage from "../pages/admin/ManagePetPage";
 import ManageCarouselPage from "../pages/admin/ManageCarouselPage";
+import ProtectedRoute from "./ProtectAdminRoutes";
 import AdminPage from "../pages/admin/AdminPage";
 import ManageOrderPage from "../pages/admin/ManageOrderPage";
 
 const AdminRoutes: React.FC = () => {
   return (
     <Routes>
-      <Route path="" element={<AdminLayout />}>
+      <Route element={<ProtectedRoute />}>
+      <Route path="/*" element={<AdminLayout />}>
+      {/* <Route path="/*" element={<AdminPage />}> */}
         <Route index={true} element={<AdminPage />} />
         <Route path="manage-users" element={<ManageUsersPage />} />
         <Route path="manage-sellers" element={<ManageSellersPage />} />
@@ -51,6 +53,8 @@ const AdminRoutes: React.FC = () => {
           }
         />
         <Route element={<>Hello</>} />
+      </Route>
+      {/* </Route> */}
       </Route>
     </Routes>
   );

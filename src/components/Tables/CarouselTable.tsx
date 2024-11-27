@@ -72,6 +72,7 @@ const CarouselTable: React.FC<CarouselTableProps> = ({
       data={Array.isArray(carousels) ? carousels : []}
       highlightOnHover
       pointerOnHover
+      striped
       persistTableHead
     />
   );

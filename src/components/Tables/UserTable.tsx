@@ -204,6 +204,7 @@ const UserTable: React.FC<UserTableProps> = ({
         data={Array.isArray(users) ? users : []}
         highlightOnHover
         striped
+        pointerOnHover
         persistTableHead
       />
       {isModalOpen && selectedUser && (

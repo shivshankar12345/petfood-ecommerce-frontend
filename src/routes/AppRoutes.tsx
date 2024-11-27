@@ -1,10 +1,12 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import ContactPage from "../pages/ContactPage";
 import SignUpPage from "../pages/user/SignUpPage";
 // import CartPage from "../pages/CartPage";
 import PincodeModal from "../pages/PincodePage";
 import LogOutPage from "../pages/user/LogOutPage";
+import { useSelector } from "react-redux";
+import { RootState } from "../Redux/store";
 import ReturnOrder from "../pages/Contact/ReturnOrder";
 import TrackOrder from "../pages/Contact/TrackOrder";
 import OrderFAQ from "../pages/Contact/OrderFAQ";
@@ -16,6 +18,9 @@ import Cart from "../components/Cart";
 import CartPage from "../pages/CartPage";
 
 const AppRoutes: React.FC = () => {
+    const isAuthenticated =Boolean( useSelector((state: RootState) => state.auth.role));
+    const isClicked = Boolean(localStorage.getItem("onClick"));
+    console.log(isAuthenticated);
   return (
     <Routes>
       <Route
@@ -30,8 +35,13 @@ const AppRoutes: React.FC = () => {
         }
       />
       <Route path="contact" element={<ContactPage />} />
-      <Route path="signup" element={<SignUpPage />} />
-      <Route path="signout" element={<LogOutPage />} />
+      <Route path="signup" element={ isAuthenticated ? (
+            <Navigate to="/" replace />
+          ) : (
+            <SignUpPage />)} />
+      <Route path="signout" element={isAuthenticated ? (
+            <Navigate to="/" replace />
+          ) :(<LogOutPage /> )}  />
       <Route path="cart" element={<CartPage />} />
       <Route path="/track-order" element={<TrackOrder></TrackOrder>} />
       <Route path="/return-order" element={<ReturnOrder></ReturnOrder>} />
@@ -45,3 +55,4 @@ const AppRoutes: React.FC = () => {
 };
 
 export default AppRoutes;
+

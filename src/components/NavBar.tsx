@@ -43,6 +43,7 @@ const Navbar: React.FC = () => {
     navigate("/");
   };
 
+
   async function handleLogout(
     e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
   ) {
@@ -62,6 +63,8 @@ const Navbar: React.FC = () => {
     dispatch(clearAccessToken());
     dispatch(clearRefreshToken());
     dispatch(clearRole());
+    //localStorage.setItem("onClick","clicked");
+    localStorage.removeItem("onClick");
     navigate("/signout");
   }
 
@@ -263,7 +266,7 @@ const Navbar: React.FC = () => {
             </svg>
           </button>
         </div>
-      </nav>
+      </nav>                                                                                   
 
       {/* Sidebar */}
       <Sidebar
@@ -284,3 +287,7 @@ const Navbar: React.FC = () => {
 };
 
 export default Navbar;
+
+
+
+

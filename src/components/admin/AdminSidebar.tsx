@@ -77,7 +77,7 @@ const AdminSidebar: React.FC = () => {
         }
 
         {/* Sidebar Content */}
-        <div className="flex flex-col h-full overflow-y-auto">
+        <div className="flex flex-col h-full overflow-y-auto  admin-sidebar">
           {/* Header */}
           <div className="flex items-center h-16 bg-gray-900">
             <h1
@@ -108,7 +108,9 @@ const AdminSidebar: React.FC = () => {
                 onClick={handleLinkClick}
               >
                 <FaUsersRays className="mr-2" />
-                <span className={`${isCollapsed ? "hidden" : ""}`}>Sellers</span>
+                <span className={`${isCollapsed ? "hidden" : ""}`}>
+                  Sellers
+                </span>
               </NavLink>
             </li>
             <li>
@@ -118,7 +120,9 @@ const AdminSidebar: React.FC = () => {
                 onClick={handleLinkClick}
               >
                 <FaProductHunt className="mr-2" />
-                <span className={`${isCollapsed ? "hidden" : ""}`}>Products</span>
+                <span className={`${isCollapsed ? "hidden" : ""}`}>
+                  Products
+                </span>
               </NavLink>
             </li>
             <li>
@@ -154,13 +158,15 @@ const AdminSidebar: React.FC = () => {
             <li>
               <NavLink
                 to="manage-permissions"
-                 className="flex items-center p-2 rounded-lg hover:bg-gray-700"
-                 onClick={handleLinkClick}
-               >
-                 <FaUserShield className="mr-2" />
-                 <span className={`${isCollapsed ? "hidden" : ""}`}>Permissions</span>
-               </NavLink>
-             </li>
+                className="flex items-center p-2 rounded-lg hover:bg-gray-700"
+                onClick={handleLinkClick}
+              >
+                <FaUserShield className="mr-2" />
+                <span className={`${isCollapsed ? "hidden" : ""}`}>
+                  Permissions
+                </span>
+              </NavLink>
+            </li>
             <li>
               <NavLink
                 to="manage-carousel"
@@ -168,37 +174,45 @@ const AdminSidebar: React.FC = () => {
                 onClick={handleLinkClick}
               >
                 <MdViewCarousel className="mr-2" />
-                <span className={`${isCollapsed ? "hidden" : ""}`}>Carousel</span>
+                <span className={`${isCollapsed ? "hidden" : ""}`}>
+                  Carousel
+                </span>
               </NavLink>
             </li>
             <li>
               <NavLink
-                 to="manage-contact"
-                 className="flex items-center p-2 rounded-lg hover:bg-gray-700"
-                 onClick={handleLinkClick}
-               >
-                 <FaAddressBook className="mr-2" />
-                 <span className={`${isCollapsed ? "hidden" : ""}`}>Contacts</span>
-               </NavLink>
-             </li>
-             <li>
-               <NavLink
-                 to="manage-reports"
-                 className="flex items-center p-2 rounded-lg hover:bg-gray-700"
+                to="manage-contact"
+                className="flex items-center p-2 rounded-lg hover:bg-gray-700"
                 onClick={handleLinkClick}
-               >
-                 <FaChartLine className="mr-2" />
-                 <span className={`${isCollapsed ? "hidden" : ""}`}>Reports</span>
-               </NavLink>
-             </li>
-             <li>
-               <NavLink
-                 to="settings"
-              className="flex items-center p-2 rounded-lg hover:bg-gray-700"
-                 onClick={handleLinkClick}
-               >
-                 <FaCogs className="mr-2" />
-                <span className={`${isCollapsed ? "hidden" : ""}`}>Settings</span>
+              >
+                <FaAddressBook className="mr-2" />
+                <span className={`${isCollapsed ? "hidden" : ""}`}>
+                  Contacts
+                </span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="manage-reports"
+                className="flex items-center p-2 rounded-lg hover:bg-gray-700"
+                onClick={handleLinkClick}
+              >
+                <FaChartLine className="mr-2" />
+                <span className={`${isCollapsed ? "hidden" : ""}`}>
+                  Reports
+                </span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="settings"
+                className="flex items-center p-2 rounded-lg hover:bg-gray-700"
+                onClick={handleLinkClick}
+              >
+                <FaCogs className="mr-2" />
+                <span className={`${isCollapsed ? "hidden" : ""}`}>
+                  Settings
+                </span>
               </NavLink>
             </li>
           </ul>
